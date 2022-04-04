@@ -8,15 +8,44 @@ open Fable.Core.JsInterop
 
 importSideEffects "./styles/global.scss"
 
-type FirstName = FirstName of string
-type LastName = LastName of string
-type Age = Age of int
+type ShipId = ShipId of System.Guid
+type ShipName = ShipName of string
 
+type ShipSizeKind =
+    | Light
+    | Medium
+    | Heavy
+    | Flag
+
+type ShipSize = ShipSize of ShipSizeKind
+
+type ShipClass =
+    | Cutter
+    | Sloop
+    | Brig
+    | Junk
+    | Galleon
+    | WarGalleon
+    | Frigate
+    | ``Man O' War``
+    | SecondRate
+    | FirstRate
+
+type Ship =
+    { Id: ShipId
+      Name: ShipName
+      Size: ShipSizeKind
+      Class: ShipClass }
+
+type PlayerFirstName = PlayerFirstName of string
+type PlayerLastName = PlayerLastName of string
+type PlayerAge = PlayerAge of int
 
 type Player =
-    { FirstName: FirstName
-      LastName: LastName
-      Age: Age }
+    { FirstName: PlayerFirstName
+      LastName: PlayerLastName
+      Age: PlayerAge
+      OwnedShip: Ship option }
 
 type MusicVolume = MusicVolume of int
 type Settings = { MusicVolume: MusicVolume }
@@ -77,7 +106,7 @@ let init =
 let update msg model =
     match msg with
     | OnFailure err ->
-        printfn "%A" err
+        printfn "%s" err
         (model, Cmd.none)
     | UrlChanged segment -> ({ model with CurrentUrl = segment }, Cmd.none)
     | OnAboutClicked -> (model, Cmd.none)
