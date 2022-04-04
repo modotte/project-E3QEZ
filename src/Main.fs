@@ -64,9 +64,12 @@ module Storage =
 
 
 let init =
-    ({ Player = None
-       Settings = { MusicVolume = MusicVolume 50 } },
-     Cmd.none)
+    function
+    | Some oldModel -> (oldModel, Cmd.none)
+    | None ->
+        ({ Player = None
+           Settings = { MusicVolume = MusicVolume 50 } },
+         Cmd.none)
 
 let update msg model =
     match msg with
@@ -76,9 +79,11 @@ let update msg model =
     | OnAboutClicked -> (model, Cmd.none)
 
 module View =
+    open Feliz.Router
+
     [<ReactComponent>]
     let mainView () =
-        let model, dispatch = React.useElmish (init, update, [||])
+        let (model, dispatch) = React.useElmish (Storage.load >> init, update, [||])
 
         Html.div [ Html.h1 $"Hearties"
                    Html.button [ prop.text "Start Game" ]
