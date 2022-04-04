@@ -23,10 +23,12 @@ type Settings = { MusicVolume: MusicVolume }
 
 type Model =
     { Player: Player option
-      Settings: Settings }
+      Settings: Settings
+      CurrentUrl: string list }
 
 type Msg =
     | OnFailure of string
+    | UrlChanged of string list
     | OnAboutClicked
 
 module Storage =
@@ -68,7 +70,8 @@ let init =
     | Some oldModel -> (oldModel, Cmd.none)
     | None ->
         ({ Player = None
-           Settings = { MusicVolume = MusicVolume 50 } },
+           Settings = { MusicVolume = MusicVolume 50 }
+           CurrentUrl = Router.Router.currentUrl () },
          Cmd.none)
 
 let update msg model =
@@ -76,18 +79,30 @@ let update msg model =
     | OnFailure err ->
         printfn "%A" err
         (model, Cmd.none)
+    | UrlChanged segment -> ({ model with CurrentUrl = segment }, Cmd.none)
     | OnAboutClicked -> (model, Cmd.none)
 
 module View =
     open Feliz.Router
 
+    let header =
+        Html.div [ Html.h1 "Hearties"
+                   Html.hr [] ]
+
+    let mainMenu dispatch model =
+        Html.div [ header
+                   Html.button [ prop.text "Start Game" ]
+                   Html.button [ prop.text "Settings" ]
+                   Html.button [ prop.text "About"
+                                 prop.onClick (fun _ -> dispatch OnAboutClicked) ] ]
+
     [<ReactComponent>]
     let mainView () =
         let (model, dispatch) = React.useElmish (Storage.load >> init, update, [||])
 
-        Html.div [ Html.h1 $"Hearties"
-                   Html.button [ prop.text "Start Game" ]
-                   Html.button [ prop.text "Settings" ]
-                   Html.button [ prop.text "About" ] ]
+        React.router [ router.onUrlChanged (UrlChanged >> dispatch)
+                       router.children [ match model.CurrentUrl with
+                                         | [] -> mainMenu dispatch model
+                                         | _ -> Html.h1 "Not found" ] ]
 
 ReactDOM.render (View.mainView, document.getElementById "feliz-app")
