@@ -2,6 +2,7 @@ module Main
 
 open Feliz
 open Feliz.UseElmish
+open Feliz.Router
 open Elmish
 open Browser.Dom
 open Fable.Core.JsInterop
@@ -39,11 +40,13 @@ type Ship =
 
 type PlayerFirstName = PlayerFirstName of string
 type PlayerLastName = PlayerLastName of string
+type PlayerCoins = PlayerCoins of int
 type PlayerAge = PlayerAge of int
 
 type Player =
     { FirstName: PlayerFirstName
       LastName: PlayerLastName
+      Coins: PlayerCoins
       Age: PlayerAge
       OwnedShip: Ship option }
 
@@ -57,7 +60,10 @@ type Model =
 
 type Msg =
     | OnFailure of string
-    | UrlChanged of string list
+    | OnUrlChanged of string list
+    | OnMainMenuClicked
+    | OnStartGameClicked
+    | OnSettingsClicked
     | OnAboutClicked
 
 module Storage =
@@ -78,7 +84,8 @@ module Storage =
         )
 
     let save (model: Model) =
-        localStorage.setItem (dbName, Encode.Auto.toString (1, model))
+        let space = 1
+        localStorage.setItem (dbName, Encode.Auto.toString (space, model))
 
     let updateStorage update (message: Msg) (model: Model) =
         let setStorage (model: Model) =
@@ -100,7 +107,7 @@ let init =
     | None ->
         ({ Player = None
            Settings = { MusicVolume = MusicVolume 50 }
-           CurrentUrl = Router.Router.currentUrl () },
+           CurrentUrl = Router.currentUrl () },
          Cmd.none)
 
 let update msg model =
@@ -108,11 +115,13 @@ let update msg model =
     | OnFailure err ->
         printfn "%s" err
         (model, Cmd.none)
-    | UrlChanged segment -> ({ model with CurrentUrl = segment }, Cmd.none)
-    | OnAboutClicked -> (model, Cmd.none)
+    | OnUrlChanged segment -> ({ model with CurrentUrl = segment }, Cmd.none)
+    | OnMainMenuClicked -> (model, Cmd.navigate "")
+    | OnStartGameClicked -> (model, Cmd.navigate "newCharacterPage")
+    | OnSettingsClicked -> (model, Cmd.navigate "settingsPage")
+    | OnAboutClicked -> (model, Cmd.navigate "aboutPage")
 
 module View =
-    open Feliz.Router
 
     let header =
         Html.div [ Html.h1 "Hearties"
@@ -120,18 +129,40 @@ module View =
 
     let mainMenu dispatch model =
         Html.div [ header
-                   Html.button [ prop.text "Start Game" ]
-                   Html.button [ prop.text "Settings" ]
+                   Html.button [ prop.text "Start Game"
+                                 prop.onClick (fun _ -> dispatch OnStartGameClicked) ]
+                   Html.button [ prop.text "Settings"
+                                 prop.onClick (fun _ -> dispatch OnSettingsClicked) ]
                    Html.button [ prop.text "About"
                                  prop.onClick (fun _ -> dispatch OnAboutClicked) ] ]
+
+    let newCharacterPage dispatch model =
+        Html.div [ header
+                   Html.button [ prop.text "Continue" ] ]
+
+    // TODO: Fill in character background customization
+
+    let settingsPage dispatch model =
+        Html.div [ header
+                   Html.button [ prop.text "Music On/Off" ]
+                   Html.button [ prop.text "Back"
+                                 prop.onClick (fun _ -> dispatch OnMainMenuClicked) ] ]
+
+    let aboutPage dispatch model =
+        Html.div [ header
+                   Html.button [ prop.text "Back"
+                                 prop.onClick (fun _ -> dispatch OnMainMenuClicked) ] ]
 
     [<ReactComponent>]
     let mainView () =
         let (model, dispatch) = React.useElmish (Storage.load >> init, update, [||])
 
-        React.router [ router.onUrlChanged (UrlChanged >> dispatch)
+        React.router [ router.onUrlChanged (OnUrlChanged >> dispatch)
                        router.children [ match model.CurrentUrl with
                                          | [] -> mainMenu dispatch model
+                                         | [ "newCharacterPage" ] -> newCharacterPage dispatch model
+                                         | [ "settingsPage" ] -> settingsPage dispatch model
+                                         | [ "aboutPage" ] -> aboutPage dispatch model
                                          | _ -> Html.h1 "Not found" ] ]
 
 ReactDOM.render (View.mainView, document.getElementById "feliz-app")
