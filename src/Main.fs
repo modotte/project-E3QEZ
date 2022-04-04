@@ -25,8 +25,43 @@ type Model =
     { Player: Player option
       Settings: Settings }
 
+type Msg =
+    | OnFailure of string
+    | OnAboutClicked
 
-type Msg = | OnAboutClicked
+module Storage =
+    open Browser.WebStorage
+    open Thoth.Json
+
+    let private dbName = "hearties-db"
+    let private decoder = Decode.Auto.generateDecoder<Model> ()
+
+    let load () =
+        localStorage.getItem (dbName)
+        |> unbox
+        |> Option.bind (
+            Decode.fromString decoder
+            >> function
+                | Ok model -> Some model
+                | _ -> None
+        )
+
+    let save (model: Model) =
+        localStorage.setItem (dbName, Encode.Auto.toString (1, model))
+
+    let updateStorage update (message: Msg) (model: Model) =
+        let setStorage (model: Model) =
+            Cmd.OfFunc.attempt save model (string >> OnFailure)
+
+        match message with
+        | OnFailure _ -> (model, Cmd.none)
+        | _ ->
+            let (newModel, commands) = update message model
+
+            (newModel,
+             Cmd.batch [ setStorage newModel
+                         commands ])
+
 
 let init =
     ({ Player = None
@@ -35,7 +70,10 @@ let init =
 
 let update msg model =
     match msg with
-    | OnAboutClicked -> model, Cmd.none
+    | OnFailure err ->
+        printfn "%A" err
+        (model, Cmd.none)
+    | OnAboutClicked -> (model, Cmd.none)
 
 module View =
     [<ReactComponent>]
