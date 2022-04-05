@@ -122,6 +122,7 @@ let update msg model =
     | OnAboutClicked -> (model, Cmd.navigate "aboutPage")
 
 module View =
+    let simpleLabel (text: string) = Html.label [ prop.text text ]
 
     let header =
         Html.div [ Html.h1 "Hearties"
@@ -143,13 +144,13 @@ module View =
     let newCharacterPage dispatch model =
         Html.div [ header
                    Html.br []
-                   Html.label [ prop.text "First Name" ]
+                   simpleLabel "First Name"
                    Html.input []
                    Html.br []
-                   Html.label [ prop.text "Last Name" ]
+                   simpleLabel "Last Name"
                    Html.input []
                    Html.br []
-                   Html.label [ prop.text "Age" ]
+                   simpleLabel "Age"
                    Html.input [ prop.type'.range
                                 prop.min 18
                                 prop.min 75 ]
