@@ -140,9 +140,21 @@ module View =
                    Html.button [ prop.text "About"
                                  prop.onClick (fun _ -> dispatch OnAboutClicked) ] ]
 
-    let newCharacterPage dispatch model = Html.div [ header ]
-
-    // TODO: Fill in character background customization
+    let newCharacterPage dispatch model =
+        Html.div [ header
+                   Html.br []
+                   Html.label [ prop.text "First Name" ]
+                   Html.input []
+                   Html.br []
+                   Html.label [ prop.text "Last Name" ]
+                   Html.input []
+                   Html.br []
+                   Html.label [ prop.text "Age" ]
+                   Html.input [ prop.type'.range
+                                prop.min 18
+                                prop.min 75 ]
+                   Html.br []
+                   Html.button [ prop.text "Continue" ] ]
 
     let settingsPage dispatch model =
         Html.div [ header
