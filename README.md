@@ -1,6 +1,6 @@
 # Hearties
 
-A naval combat & trading text game based in the 1650s Pacific, Eastern Mediterranean and Atlantic oceans.
+A naval combat & trading text game based in the 1650s.
 
 
 ## Requirements

@@ -38,6 +38,11 @@ type Ship =
       Size: ShipSizeKind
       Class: ShipClass }
 
+type Location =
+    | Barbados
+    | PortRoyal
+    | Nassau
+
 type PlayerFirstName = PlayerFirstName of string
 type PlayerLastName = PlayerLastName of string
 type PlayerCoins = PlayerCoins of int
@@ -48,7 +53,8 @@ type Player =
       LastName: PlayerLastName
       Coins: PlayerCoins
       Age: PlayerAge
-      OwnedShip: Ship option }
+      OwnedShip: Ship option
+      CurrentLocation: Location }
 
 type MusicVolume = MusicVolume of int
 type Settings = { MusicVolume: MusicVolume }
@@ -63,6 +69,7 @@ type Msg =
     | OnUrlChanged of string list
     | OnMainMenuClicked
     | OnStartGameClicked
+    | OnMainNavigationClicked
     | OnSettingsClicked
     | OnAboutClicked
 
@@ -117,7 +124,12 @@ let update msg model =
         (model, Cmd.none)
     | OnUrlChanged segment -> ({ model with CurrentUrl = segment }, Cmd.none)
     | OnMainMenuClicked -> (model, Cmd.navigate "")
+
+
     | OnStartGameClicked -> (model, Cmd.navigate "newCharacterPage")
+    | OnMainNavigationClicked -> (model, Cmd.navigate "mainNavigationPage")
+
+
     | OnSettingsClicked -> (model, Cmd.navigate "settingsPage")
     | OnAboutClicked -> (model, Cmd.navigate "aboutPage")
 
@@ -166,6 +178,10 @@ module View =
         Html.div [ header
                    backToMainMenuButton "Back" dispatch ]
 
+    let mainNavigationPage dispatch model =
+        Html.div [ header
+                   Html.button [ prop.text "" ] ]
+
     [<ReactComponent>]
     let mainView () =
         let (model, dispatch) = React.useElmish (Storage.load >> init, update, [||])
@@ -174,6 +190,7 @@ module View =
                        router.children [ match model.CurrentUrl with
                                          | [] -> mainMenuPage dispatch model
                                          | [ "newCharacterPage" ] -> newCharacterPage dispatch model
+                                         | [ "mainNavigationPage" ]
                                          | [ "settingsPage" ] -> settingsPage dispatch model
                                          | [ "aboutPage" ] -> aboutPage dispatch model
                                          | _ -> Html.h1 "Not found" ] ]
