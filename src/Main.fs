@@ -127,7 +127,11 @@ module View =
         Html.div [ Html.h1 "Hearties"
                    Html.hr [] ]
 
-    let mainMenu dispatch model =
+    let backToMainMenuButton (text: string) dispatch =
+        Html.div [ Html.button [ prop.text text
+                                 prop.onClick (fun _ -> dispatch OnMainMenuClicked) ] ]
+
+    let mainMenuPage dispatch model =
         Html.div [ header
                    Html.button [ prop.text "Start Game"
                                  prop.onClick (fun _ -> dispatch OnStartGameClicked) ]
@@ -136,22 +140,18 @@ module View =
                    Html.button [ prop.text "About"
                                  prop.onClick (fun _ -> dispatch OnAboutClicked) ] ]
 
-    let newCharacterPage dispatch model =
-        Html.div [ header
-                   Html.button [ prop.text "Continue" ] ]
+    let newCharacterPage dispatch model = Html.div [ header ]
 
     // TODO: Fill in character background customization
 
     let settingsPage dispatch model =
         Html.div [ header
                    Html.button [ prop.text "Music On/Off" ]
-                   Html.button [ prop.text "Back"
-                                 prop.onClick (fun _ -> dispatch OnMainMenuClicked) ] ]
+                   backToMainMenuButton "Back" dispatch ]
 
     let aboutPage dispatch model =
         Html.div [ header
-                   Html.button [ prop.text "Back"
-                                 prop.onClick (fun _ -> dispatch OnMainMenuClicked) ] ]
+                   backToMainMenuButton "Back" dispatch ]
 
     [<ReactComponent>]
     let mainView () =
@@ -159,7 +159,7 @@ module View =
 
         React.router [ router.onUrlChanged (OnUrlChanged >> dispatch)
                        router.children [ match model.CurrentUrl with
-                                         | [] -> mainMenu dispatch model
+                                         | [] -> mainMenuPage dispatch model
                                          | [ "newCharacterPage" ] -> newCharacterPage dispatch model
                                          | [ "settingsPage" ] -> settingsPage dispatch model
                                          | [ "aboutPage" ] -> aboutPage dispatch model
