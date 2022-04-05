@@ -117,6 +117,9 @@ let init =
            CurrentUrl = Router.currentUrl () },
          Cmd.none)
 
+let withOnMainNagivationClicked model =
+    (model, Cmd.navigate "mainNavigationPage")
+
 let update msg model =
     match msg with
     | OnFailure err ->
@@ -127,7 +130,7 @@ let update msg model =
 
 
     | OnStartGameClicked -> (model, Cmd.navigate "newCharacterPage")
-    | OnMainNavigationClicked -> (model, Cmd.navigate "mainNavigationPage")
+    | OnMainNavigationClicked -> withOnMainNagivationClicked model
 
 
     | OnSettingsClicked -> (model, Cmd.navigate "settingsPage")
@@ -136,8 +139,11 @@ let update msg model =
 module View =
     let simpleLabel (text: string) = Html.label [ prop.text text ]
 
-    let header =
+    let header dispatch =
         Html.div [ Html.h1 "Hearties"
+                   Html.br []
+                   Html.button [ prop.text "Back to main menu"
+                                 prop.onClick (fun _ -> dispatch OnMainMenuClicked) ]
                    Html.hr [] ]
 
     let backToMainMenuButton (text: string) dispatch =
@@ -145,7 +151,7 @@ module View =
                                  prop.onClick (fun _ -> dispatch OnMainMenuClicked) ] ]
 
     let mainMenuPage dispatch model =
-        Html.div [ header
+        Html.div [ header dispatch
                    Html.button [ prop.text "Start Game"
                                  prop.onClick (fun _ -> dispatch OnStartGameClicked) ]
                    Html.button [ prop.text "Settings"
@@ -154,7 +160,7 @@ module View =
                                  prop.onClick (fun _ -> dispatch OnAboutClicked) ] ]
 
     let newCharacterPage dispatch model =
-        Html.div [ header
+        Html.div [ header dispatch
                    Html.br []
                    simpleLabel "First Name"
                    Html.input []
@@ -167,20 +173,23 @@ module View =
                                 prop.min 18
                                 prop.min 75 ]
                    Html.br []
-                   Html.button [ prop.text "Continue" ] ]
+                   Html.button [ prop.text "Continue"
+                                 prop.onClick (fun _ -> dispatch OnMainNavigationClicked) ] ]
 
     let settingsPage dispatch model =
-        Html.div [ header
+        Html.div [ header dispatch
                    Html.button [ prop.text "Music On/Off" ]
                    backToMainMenuButton "Back" dispatch ]
 
     let aboutPage dispatch model =
-        Html.div [ header
+        Html.div [ header dispatch
                    backToMainMenuButton "Back" dispatch ]
 
     let mainNavigationPage dispatch model =
-        Html.div [ header
-                   Html.button [ prop.text "" ] ]
+        Html.div [ header dispatch
+                   Html.button [ prop.text "Profile" ]
+                   Html.button [ prop.text "Skirmish" ]
+                   Html.button [ prop.text "Dock" ] ]
 
     [<ReactComponent>]
     let mainView () =
@@ -190,7 +199,7 @@ module View =
                        router.children [ match model.CurrentUrl with
                                          | [] -> mainMenuPage dispatch model
                                          | [ "newCharacterPage" ] -> newCharacterPage dispatch model
-                                         | [ "mainNavigationPage" ]
+                                         | [ "mainNavigationPage" ] -> mainNavigationPage dispatch model
                                          | [ "settingsPage" ] -> settingsPage dispatch model
                                          | [ "aboutPage" ] -> aboutPage dispatch model
                                          | _ -> Html.h1 "Not found" ] ]
