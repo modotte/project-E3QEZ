@@ -163,10 +163,10 @@ module View =
         Html.div [ header dispatch
                    Html.br []
                    simpleLabel "First Name"
-                   Html.input []
+                   Html.input [ prop.required true ]
                    Html.br []
                    simpleLabel "Last Name"
-                   Html.input []
+                   Html.input [ prop.required true ]
                    Html.br []
                    simpleLabel "Age"
                    Html.input [ prop.type'.range
