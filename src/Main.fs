@@ -114,9 +114,9 @@ module View =
                                                  { ship with
                                                      Class =
                                                          match sc with
-                                                         | "Sloop" -> Sloop
                                                          | "Brig" -> Brig
-                                                         | _ -> Junk }
+                                                         | "Junk" -> Junk
+                                                         | _ -> Sloop }
 
                                              { model.Player with OwnedShip = Some ship' }
                                      )) ]
