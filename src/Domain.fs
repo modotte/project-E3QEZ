@@ -31,6 +31,7 @@ type Location =
     | Barbados
     | PortRoyal
     | Nassau
+    | Havana
 
 type PlayerFirstName = PlayerFirstName of string
 type PlayerLastName = PlayerLastName of string
@@ -40,8 +41,8 @@ type PlayerAge = PlayerAge of int
 type Player =
     { FirstName: PlayerFirstName
       LastName: PlayerLastName
-      Coins: PlayerCoins
       Age: PlayerAge
+      Coins: PlayerCoins
       OwnedShip: Ship option
       CurrentLocation: Location }
 
