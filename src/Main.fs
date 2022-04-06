@@ -74,6 +74,8 @@ module View =
                    Html.button [ prop.text "About"
                                  prop.onClick (fun _ -> dispatch OnAboutClicked) ] ]
 
+    let k (PlayerFirstName n) = n
+
     let newCharacterPage dispatch model =
         Html.div [ header dispatch
                    Html.br []
@@ -92,10 +94,35 @@ module View =
                    simpleLabel "Age"
                    Html.input [ prop.type'.range
                                 prop.min 18
-                                prop.min 75
+                                prop.max 75
                                 prop.onChange (fun a ->
                                     dispatch
                                     <| OnNewCharacterEntriesUpdated { model.Player with Age = PlayerAge a }) ]
+                   Html.br []
+                   simpleLabel "Ship Class"
+                   Html.select [ prop.children [ Html.option [ prop.value "Sloop"
+                                                               prop.text "Sloop" ]
+                                                 Html.option [ prop.value "Brig"
+                                                               prop.text "Brig" ]
+                                                 Html.option [ prop.value "Junk"
+                                                               prop.text "Junk" ] ]
+                                 prop.onChange (fun (sc: string) ->
+                                     dispatch
+                                     <| OnNewCharacterEntriesUpdated(
+                                         match model.Player.OwnedShip with
+                                         | None -> model.Player
+                                         | Some ship ->
+                                             let ship' =
+                                                 { ship with
+                                                     Class =
+                                                         match sc with
+                                                         | "Sloop" -> Sloop
+                                                         | "Brig" -> Brig
+                                                         | _ -> Junk }
+
+                                             { model.Player with OwnedShip = Some ship' }
+                                     )) ]
+
                    Html.br []
                    Html.button [ prop.text "Continue"
                                  prop.onClick (fun _ -> dispatch OnMainNavigationClicked) ] ]
