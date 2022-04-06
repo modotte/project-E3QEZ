@@ -3,13 +3,11 @@ module Domain
 type ShipId = ShipId of System.Guid
 type ShipName = ShipName of string
 
-type ShipSizeKind =
+type ShipSize =
     | Light
     | Medium
     | Heavy
     | Flag
-
-type ShipSize = ShipSize of ShipSizeKind
 
 type ShipClass =
     | Cutter
@@ -26,7 +24,7 @@ type ShipClass =
 type Ship =
     { Id: ShipId
       Name: ShipName
-      Size: ShipSizeKind
+      Size: ShipSize
       Class: ShipClass }
 
 type Location =

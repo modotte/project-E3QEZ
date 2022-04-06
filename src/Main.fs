@@ -20,7 +20,12 @@ let init =
               LastName = PlayerLastName "Smith"
               Age = PlayerAge 18
               Coins = PlayerCoins 250
-              OwnedShip = None
+              OwnedShip =
+                Some
+                    { Id = ShipId <| System.Guid.NewGuid()
+                      Name = ShipName "Heart of Ocean"
+                      Size = Light
+                      Class = Sloop }
               CurrentLocation = PortRoyal }
            Settings = { MusicVolume = MusicVolume 50 }
            CurrentUrl = Router.currentUrl () },
