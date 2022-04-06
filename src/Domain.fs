@@ -19,7 +19,7 @@ type ShipClass =
     | Galleon
     | WarGalleon
     | Frigate
-    | ``Man O' War``
+    | ManOWar
     | SecondRate
     | FirstRate
 
@@ -51,7 +51,7 @@ type MusicVolume = MusicVolume of int
 type Settings = { MusicVolume: MusicVolume }
 
 type Model =
-    { Player: Player option
+    { Player: Player
       Settings: Settings
       CurrentUrl: string list }
 
@@ -59,7 +59,11 @@ type Msg =
     | OnFailure of string
     | OnUrlChanged of string list
     | OnMainMenuClicked
+
     | OnStartGameClicked
     | OnMainNavigationClicked
+
+    | OnNewCharacterEntriesUpdated of Player
+
     | OnSettingsClicked
     | OnAboutClicked

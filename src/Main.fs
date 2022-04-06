@@ -15,7 +15,13 @@ let init =
     function
     | Some oldModel -> (oldModel, Cmd.none)
     | None ->
-        ({ Player = None
+        ({ Player =
+            { FirstName = PlayerFirstName "Johnathan"
+              LastName = PlayerLastName "Smith"
+              Age = PlayerAge 18
+              Coins = PlayerCoins 250
+              OwnedShip = None
+              CurrentLocation = PortRoyal }
            Settings = { MusicVolume = MusicVolume 50 }
            CurrentUrl = Router.currentUrl () },
          Cmd.none)
@@ -34,6 +40,7 @@ let update msg model =
 
     | OnStartGameClicked -> (model, Cmd.navigate "newCharacterPage")
     | OnMainNavigationClicked -> withOnMainNagivationClicked model
+    | OnNewCharacterEntriesUpdated player -> { model with Player = player }, Cmd.none
 
 
     | OnSettingsClicked -> (model, Cmd.navigate "settingsPage")
@@ -66,18 +73,29 @@ module View =
         Html.div [ header dispatch
                    Html.br []
                    simpleLabel "First Name"
-                   Html.input [ prop.required true ]
+                   Html.input [ prop.required true
+                                prop.onTextChange (fun fn ->
+                                    dispatch
+                                    <| OnNewCharacterEntriesUpdated { model.Player with FirstName = PlayerFirstName fn }) ]
                    Html.br []
                    simpleLabel "Last Name"
-                   Html.input [ prop.required true ]
+                   Html.input [ prop.required true
+                                prop.onTextChange (fun ln ->
+                                    dispatch
+                                    <| OnNewCharacterEntriesUpdated { model.Player with LastName = PlayerLastName ln }) ]
                    Html.br []
                    simpleLabel "Age"
                    Html.input [ prop.type'.range
                                 prop.min 18
-                                prop.min 75 ]
+                                prop.min 75
+                                prop.onChange (fun a ->
+                                    dispatch
+                                    <| OnNewCharacterEntriesUpdated { model.Player with Age = PlayerAge a }) ]
                    Html.br []
                    Html.button [ prop.text "Continue"
                                  prop.onClick (fun _ -> dispatch OnMainNavigationClicked) ] ]
+
+
 
     let settingsPage dispatch model =
         Html.div [ header dispatch
