@@ -114,7 +114,9 @@ module View =
 
     [<ReactComponent>]
     let mainView () =
-        let (model, dispatch) = React.useElmish (Storage.load >> init, update, [||])
+        let (model, dispatch) =
+            // TODO: Turn below into manual save
+            React.useElmish (Storage.load >> init, Storage.updateStorage update, [||])
 
         React.router [ router.onUrlChanged (OnUrlChanged >> dispatch)
                        router.children [ match model.CurrentUrl with
