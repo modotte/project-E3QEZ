@@ -74,8 +74,6 @@ module View =
                    Html.button [ prop.text "About"
                                  prop.onClick (fun _ -> dispatch OnAboutClicked) ] ]
 
-    let k (PlayerFirstName n) = n
-
     let newCharacterPage dispatch model =
         Html.div [ header dispatch
                    Html.br []
