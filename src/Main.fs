@@ -72,8 +72,12 @@ module View =
                    Html.hr [] ]
 
     let backToMainMenuButton (text: string) dispatch =
-        Html.div [ Html.button [ prop.text text
-                                 prop.onClick (fun _ -> dispatch OnMainMenuClicked) ] ]
+        Html.button [ prop.text text
+                      prop.onClick (fun _ -> dispatch OnMainMenuClicked) ]
+
+    let backToMainNavigationButton (text: string) dispatch =
+        Html.button [ prop.text text
+                      prop.onClick (fun _ -> dispatch OnMainNavigationClicked) ]
 
     let mainMenuPage dispatch model =
         Html.div [ header dispatch
@@ -154,18 +158,15 @@ module View =
 
     let profilePage dispatch model =
         Html.div [ header dispatch
-                   Html.button [ prop.text "Back"
-                                 prop.onClick (fun _ -> dispatch OnMainNavigationClicked) ] ]
+                   backToMainNavigationButton "Back" dispatch ]
 
     let skirmishPage dispatch model =
         Html.div [ header dispatch
-                   Html.button [ prop.text "Back"
-                                 prop.onClick (fun _ -> dispatch OnMainNavigationClicked) ] ]
+                   backToMainNavigationButton "Back" dispatch ]
 
     let dockPage dispatch model =
         Html.div [ header dispatch
-                   Html.button [ prop.text "Back"
-                                 prop.onClick (fun _ -> dispatch OnMainNavigationClicked) ]
+                   backToMainNavigationButton "Back" dispatch
                    Html.hr []
                    metaInfoSection dispatch model ]
 
