@@ -191,11 +191,19 @@ module View =
         Html.div [ header dispatch
                    backToMainNavigationButton "Back" dispatch ]
 
+    let marketCargosSection dispatch model =
+        Html.ul [ Html.li []
+                  Html.li []
+                  Html.li [] ]
+
     let marketPage dispatch model =
         Html.div [ header dispatch
                    Html.button [ prop.text "Back"
                                  prop.onClick (fun _ -> dispatch OnDockClicked) ]
-                   metaInfoSection dispatch model ]
+                   metaInfoSection dispatch model
+
+                   Html.hr []
+                   marketCargosSection dispatch model ]
 
     let dockPage dispatch model =
         Html.div [ header dispatch
