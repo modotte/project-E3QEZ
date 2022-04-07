@@ -1,5 +1,16 @@
 module Domain
 
+type CargoKind =
+    | Wood
+    | Sugar
+    | Fish
+    | DriedMeat
+
+type Cargo =
+    { Kind: CargoKind
+      BasePrice: int
+      Unit: int }
+
 type ShipId = ShipId of System.Guid
 type ShipName = ShipName of string
 
@@ -25,7 +36,9 @@ type Ship =
     { Id: ShipId
       Name: ShipName
       Size: ShipSize
-      Class: ShipClass }
+      Class: ShipClass
+      CargoCapacity: int
+      OwnedCargo: Cargo array }
 
 type Location =
     | Barbados

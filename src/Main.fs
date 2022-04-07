@@ -25,7 +25,12 @@ let init =
                     { Id = ShipId <| System.Guid.NewGuid()
                       Name = ShipName "Heart of Ocean"
                       Size = Light
-                      Class = Sloop }
+                      Class = Sloop
+                      CargoCapacity = 250
+                      OwnedCargo =
+                        [| { Kind = Wood
+                             BasePrice = 20
+                             Unit = 2 } |] }
               CurrentLocation = PortRoyal }
            Settings = { MusicVolume = MusicVolume 50 }
            CurrentUrl = Router.currentUrl () },
