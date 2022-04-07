@@ -57,6 +57,16 @@ let update msg model =
     | OnSkirmishClicked -> (model, Cmd.navigate "skirmishPage")
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
 
+    | OnUpdateOwnedShipClass shipClass ->
+        let player =
+            match model.Player.OwnedShip with
+            | None -> model.Player
+            | Some ship ->
+                let ship' = { ship with Class = shipClass }
+
+                { model.Player with OwnedShip = Some ship' }
+
+        ({ model with Player = player }, Cmd.none)
     | OnUpdateLocation location ->
         let player = { model.Player with CurrentLocation = location }
         ({ model with Player = player }, Cmd.none)
@@ -125,19 +135,11 @@ module View =
                                                                prop.text "Junk" ] ]
                                  prop.onChange (fun (sc: string) ->
                                      dispatch
-                                     <| OnNewCharacterEntriesUpdated(
-                                         match model.Player.OwnedShip with
-                                         | None -> model.Player
-                                         | Some ship ->
-                                             let ship' =
-                                                 { ship with
-                                                     Class =
-                                                         match sc with
-                                                         | "Brig" -> Brig
-                                                         | "Junk" -> Junk
-                                                         | _ -> Sloop }
-
-                                             { model.Player with OwnedShip = Some ship' }
+                                     <| OnUpdateOwnedShipClass(
+                                         match sc with
+                                         | "Brig" -> Brig
+                                         | "Junk" -> Junk
+                                         | _ -> Sloop
                                      )) ]
 
                    Html.br []
@@ -159,7 +161,13 @@ module View =
         Html.div [ Html.p [ prop.text $"Docked at Port of {model.Player.CurrentLocation}" ]
 
                    let (PlayerCoins coins) = model.Player.Coins
-                   Html.p [ prop.text $"Coins: {coins}" ] ]
+                   Html.p [ prop.text $"Coins: {coins}" ]
+
+                   Html.p [ match model.Player.OwnedShip with
+                            | None -> prop.text ""
+                            | Some ship ->
+                                let (ShipName sn) = ship.Name
+                                prop.text $"Current ship named {sn} of {ship.Class.ToString()} class" ] ]
 
     let profilePage dispatch model =
         Html.div [ header dispatch

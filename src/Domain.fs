@@ -91,6 +91,7 @@ type Msg =
     | OnSkirmishClicked
     | OnDockClicked
 
+    | OnUpdateOwnedShipClass of ShipClass
     | OnUpdateLocation of Location
     | OnNewCharacterEntriesUpdated of Player
 
