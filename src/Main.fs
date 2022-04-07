@@ -161,7 +161,13 @@ module View =
                    Html.button [ prop.text "Skirmish"
                                  prop.onClick (fun _ -> dispatch OnSkirmishClicked) ]
                    Html.button [ prop.text "Dock"
-                                 prop.onClick (fun _ -> dispatch OnDockClicked) ] ]
+                                 prop.onClick (fun _ -> dispatch OnDockClicked) ]
+                   Html.hr []
+
+                   Html.ul [ Html.li [ Html.button [ prop.text "Barbados" ] ]
+                             Html.li [ Html.button [ prop.text "Port Royal" ] ]
+                             Html.li [ Html.button [ prop.text "Nassau" ] ]
+                             Html.li [ Html.button [ prop.text "Havana" ] ] ] ]
 
     [<ReactComponent>]
     let mainView () =
