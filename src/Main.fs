@@ -39,9 +39,6 @@ let init =
            CurrentUrl = Router.currentUrl () },
          Cmd.none)
 
-let withOnMainNagivationClicked model =
-    (model, Cmd.navigate "mainNavigationPage")
-
 let update msg model =
     match msg with
     | OnFailure err ->
@@ -52,7 +49,7 @@ let update msg model =
 
 
     | OnStartGameClicked -> (model, Cmd.navigate "newCharacterPage")
-    | OnMainNavigationClicked -> withOnMainNagivationClicked model
+    | OnMainNavigationClicked -> (model, Cmd.navigate "mainNavigationPage")
     | OnProfileClicked -> (model, Cmd.navigate "profilePage")
     | OnSkirmishClicked -> (model, Cmd.navigate "skirmishPage")
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
