@@ -37,13 +37,18 @@ type ShipClass =
     | SecondRate
     | FirstRate
 
+type CrewCapacity = CrewCapacity of int
+type OwnedCrew = OwnedCrew of int
+
 type Ship =
     { Id: ShipId
       Name: ShipName
       Size: ShipSize
       Class: ShipClass
       CargoCapacity: CargoCapacity
-      OwnedCargo: Cargo array }
+      OwnedCargo: Cargo array
+      CrewCapacity: CrewCapacity
+      OwnedCrew: OwnedCrew }
 
 type Location =
     | Barbados

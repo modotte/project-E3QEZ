@@ -30,7 +30,9 @@ let init =
                       OwnedCargo =
                         [| { Kind = Wood
                              BasePrice = CargoBasePrice 20
-                             Unit = CargoUnit 8 } |] }
+                             Unit = CargoUnit 8 } |]
+                      CrewCapacity = CrewCapacity 18
+                      OwnedCrew = OwnedCrew 6 }
               CurrentLocation = PortRoyal }
            Settings = { MusicVolume = MusicVolume 50 }
            CurrentUrl = Router.currentUrl () },
