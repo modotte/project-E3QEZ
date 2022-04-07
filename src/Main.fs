@@ -57,6 +57,16 @@ let update msg model =
     | OnSkirmishClicked -> (model, Cmd.navigate "skirmishPage")
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
 
+    | OnUpdateOwnedShipName name ->
+        let player =
+            match model.Player.OwnedShip with
+            | None -> model.Player
+            | Some ship ->
+                let ship' = { ship with Name = name }
+                { model.Player with OwnedShip = Some ship' }
+
+        ({ model with Player = player }, Cmd.none)
+
     | OnUpdateOwnedShipClass shipClass ->
         let player =
             match model.Player.OwnedShip with
@@ -125,6 +135,11 @@ module View =
                                 prop.onChange (fun a ->
                                     dispatch
                                     <| OnNewCharacterEntriesUpdated { model.Player with Age = PlayerAge a }) ]
+
+                   Html.br []
+                   simpleLabel "Ship Name"
+                   Html.input [ prop.required true
+                                prop.onTextChange (fun n -> dispatch <| OnUpdateOwnedShipName(ShipName n)) ]
                    Html.br []
                    simpleLabel "Ship Class"
                    Html.select [ prop.children [ Html.option [ prop.value "Sloop"
