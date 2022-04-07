@@ -45,7 +45,7 @@ let update msg model =
 
     | OnStartGameClicked -> (model, Cmd.navigate "newCharacterPage")
     | OnMainNavigationClicked -> withOnMainNagivationClicked model
-    | OnDockingClicked -> (model, Cmd.navigate "dockingPage")
+    | OnDockClicked -> (model, Cmd.navigate "dockPage")
     | OnNewCharacterEntriesUpdated player -> { model with Player = player }, Cmd.none
 
 
@@ -137,7 +137,7 @@ module View =
         Html.div [ header dispatch
                    backToMainMenuButton "Back" dispatch ]
 
-    let dockingPage dispatch model =
+    let dockPage dispatch model =
         Html.div [ header dispatch
                    Html.button [ prop.text "Back"
                                  prop.onClick (fun _ -> dispatch OnMainNavigationClicked) ] ]
@@ -147,7 +147,7 @@ module View =
                    Html.button [ prop.text "Profile" ]
                    Html.button [ prop.text "Skirmish" ]
                    Html.button [ prop.text "Dock"
-                                 prop.onClick (fun _ -> dispatch OnDockingClicked) ] ]
+                                 prop.onClick (fun _ -> dispatch OnDockClicked) ] ]
 
     [<ReactComponent>]
     let mainView () =
@@ -160,7 +160,7 @@ module View =
                                          | [] -> mainMenuPage dispatch model
                                          | [ "newCharacterPage" ] -> newCharacterPage dispatch model
                                          | [ "mainNavigationPage" ] -> mainNavigationPage dispatch model
-                                         | [ "dockingPage" ] -> dockingPage dispatch model
+                                         | [ "dockPage" ] -> dockPage dispatch model
                                          | [ "settingsPage" ] -> settingsPage dispatch model
                                          | [ "aboutPage" ] -> aboutPage dispatch model
                                          | _ -> Html.h1 "Not found" ] ]
