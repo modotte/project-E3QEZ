@@ -146,6 +146,12 @@ module View =
         Html.div [ header dispatch
                    backToMainMenuButton "Back" dispatch ]
 
+    let metaInfoSection dispatch model =
+        Html.div [ Html.p [ prop.text $"Docked at Port of {model.Player.CurrentLocation}" ]
+
+                   let (PlayerCoins coins) = model.Player.Coins
+                   Html.p [ prop.text $"Coins: {coins}" ] ]
+
     let profilePage dispatch model =
         Html.div [ header dispatch
                    Html.button [ prop.text "Back"
@@ -159,7 +165,9 @@ module View =
     let dockPage dispatch model =
         Html.div [ header dispatch
                    Html.button [ prop.text "Back"
-                                 prop.onClick (fun _ -> dispatch OnMainNavigationClicked) ] ]
+                                 prop.onClick (fun _ -> dispatch OnMainNavigationClicked) ]
+                   Html.hr []
+                   metaInfoSection dispatch model ]
 
     let mainNavigationPage dispatch model =
         Html.div [ header dispatch
@@ -170,9 +178,8 @@ module View =
                    Html.button [ prop.text "Dock"
                                  prop.onClick (fun _ -> dispatch OnDockClicked) ]
                    Html.hr []
-                   Html.p [ prop.text $"Current location: {model.Player.CurrentLocation}" ]
-                   let (PlayerCoins coins) = model.Player.Coins
-                   Html.p [ prop.text $"Coins: {coins}" ]
+
+                   metaInfoSection dispatch model
 
                    Html.ul [ Html.li [ Html.button [ prop.text "Barbados" ] ]
                              Html.li [ Html.button [ prop.text "Port Royal" ] ]
