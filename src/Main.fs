@@ -26,11 +26,11 @@ let init =
                       Name = ShipName "Heart of Ocean"
                       Size = Light
                       Class = Sloop
-                      CargoCapacity = 250
+                      CargoCapacity = CargoCapacity 350
                       OwnedCargo =
                         [| { Kind = Wood
-                             BasePrice = 20
-                             Unit = 2 } |] }
+                             BasePrice = CargoBasePrice 20
+                             Unit = CargoUnit 8 } |] }
               CurrentLocation = PortRoyal }
            Settings = { MusicVolume = MusicVolume 50 }
            CurrentUrl = Router.currentUrl () },
@@ -168,6 +168,9 @@ module View =
                    Html.button [ prop.text "Dock"
                                  prop.onClick (fun _ -> dispatch OnDockClicked) ]
                    Html.hr []
+                   Html.p [ prop.text $"Current location: {model.Player.CurrentLocation}" ]
+                   let (PlayerCoins coins) = model.Player.Coins
+                   Html.p [ prop.text $"Coins: {coins}" ]
 
                    Html.ul [ Html.li [ Html.button [ prop.text "Barbados" ] ]
                              Html.li [ Html.button [ prop.text "Port Royal" ] ]

@@ -6,10 +6,15 @@ type CargoKind =
     | Fish
     | DriedMeat
 
+type CargoBasePrice = CargoBasePrice of int
+type CargoUnit = CargoUnit of int
+
+type CargoCapacity = CargoCapacity of int
+
 type Cargo =
     { Kind: CargoKind
-      BasePrice: int
-      Unit: int }
+      BasePrice: CargoBasePrice
+      Unit: CargoUnit }
 
 type ShipId = ShipId of System.Guid
 type ShipName = ShipName of string
@@ -37,7 +42,7 @@ type Ship =
       Name: ShipName
       Size: ShipSize
       Class: ShipClass
-      CargoCapacity: int
+      CargoCapacity: CargoCapacity
       OwnedCargo: Cargo array }
 
 type Location =
