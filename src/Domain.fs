@@ -72,8 +72,11 @@ type Player =
 type MusicVolume = MusicVolume of int
 type Settings = { MusicVolume: MusicVolume }
 
+type DaysPassed = DaysPassed of int
+
 type Model =
-    { Player: Player
+    { DaysPassed: DaysPassed
+      Player: Player
       Settings: Settings
       CurrentUrl: string list }
 
@@ -88,6 +91,7 @@ type Msg =
     | OnSkirmishClicked
     | OnDockClicked
 
+    | OnUpdateLocation of Location
     | OnNewCharacterEntriesUpdated of Player
 
     | OnSettingsClicked

@@ -15,25 +15,26 @@ let init =
     function
     | Some oldModel -> (oldModel, Cmd.none)
     | None ->
-        ({ Player =
-            { FirstName = PlayerFirstName "Johnathan"
-              LastName = PlayerLastName "Smith"
-              Age = PlayerAge 18
-              Coins = PlayerCoins 250
-              OwnedShip =
-                Some
-                    { Id = ShipId <| System.Guid.NewGuid()
-                      Name = ShipName "Heart of Ocean"
-                      Size = Light
-                      Class = Sloop
-                      CargoCapacity = CargoCapacity 350
-                      OwnedCargo =
-                        [| { Kind = Wood
-                             BasePrice = CargoBasePrice 20
-                             Unit = CargoUnit 8 } |]
-                      CrewCapacity = CrewCapacity 18
-                      OwnedCrew = OwnedCrew 6 }
-              CurrentLocation = PortRoyal }
+        ({ DaysPassed = DaysPassed 1 // Every location change should pass at least 1 day
+           Player =
+             { FirstName = PlayerFirstName "Johnathan"
+               LastName = PlayerLastName "Smith"
+               Age = PlayerAge 18
+               Coins = PlayerCoins 250
+               OwnedShip =
+                 Some
+                     { Id = ShipId <| System.Guid.NewGuid()
+                       Name = ShipName "Heart of Ocean"
+                       Size = Light
+                       Class = Sloop
+                       CargoCapacity = CargoCapacity 350
+                       OwnedCargo =
+                         [| { Kind = Wood
+                              BasePrice = CargoBasePrice 20
+                              Unit = CargoUnit 8 } |]
+                       CrewCapacity = CrewCapacity 18
+                       OwnedCrew = OwnedCrew 6 }
+               CurrentLocation = PortRoyal }
            Settings = { MusicVolume = MusicVolume 50 }
            CurrentUrl = Router.currentUrl () },
          Cmd.none)
@@ -55,6 +56,10 @@ let update msg model =
     | OnProfileClicked -> (model, Cmd.navigate "profilePage")
     | OnSkirmishClicked -> (model, Cmd.navigate "skirmishPage")
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
+
+    | OnUpdateLocation location ->
+        let player = { model.Player with CurrentLocation = location }
+        ({ model with Player = player }, Cmd.none)
     | OnNewCharacterEntriesUpdated player -> { model with Player = player }, Cmd.none
 
 
@@ -182,10 +187,14 @@ module View =
 
                    metaInfoSection dispatch model
 
-                   Html.ul [ Html.li [ Html.button [ prop.text "Barbados" ] ]
-                             Html.li [ Html.button [ prop.text "Port Royal" ] ]
-                             Html.li [ Html.button [ prop.text "Nassau" ] ]
-                             Html.li [ Html.button [ prop.text "Havana" ] ] ] ]
+                   Html.ul [ Html.li [ Html.button [ prop.text "Barbados"
+                                                     prop.onClick (fun _ -> dispatch <| OnUpdateLocation Barbados) ] ]
+                             Html.li [ Html.button [ prop.text "Port Royal"
+                                                     prop.onClick (fun _ -> dispatch <| OnUpdateLocation PortRoyal) ] ]
+                             Html.li [ Html.button [ prop.text "Nassau"
+                                                     prop.onClick (fun _ -> dispatch <| OnUpdateLocation Nassau) ] ]
+                             Html.li [ Html.button [ prop.text "Havana"
+                                                     prop.onClick (fun _ -> dispatch <| OnUpdateLocation Havana) ] ] ] ]
 
     [<ReactComponent>]
     let mainView () =
