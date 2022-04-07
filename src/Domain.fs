@@ -89,7 +89,9 @@ type Msg =
     | OnMainNavigationClicked
     | OnProfileClicked
     | OnSkirmishClicked
+
     | OnDockClicked
+    | OnMarketClicked
 
     | OnUpdateOwnedShipName of ShipName
     | OnUpdateOwnedShipClass of ShipClass

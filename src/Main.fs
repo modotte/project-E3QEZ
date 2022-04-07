@@ -52,7 +52,9 @@ let update msg model =
     | OnMainNavigationClicked -> (model, Cmd.navigate "mainNavigationPage")
     | OnProfileClicked -> (model, Cmd.navigate "profilePage")
     | OnSkirmishClicked -> (model, Cmd.navigate "skirmishPage")
+
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
+    | OnMarketClicked -> (model, Cmd.navigate "marketPage")
 
     | OnUpdateOwnedShipName name ->
         let player =
@@ -189,11 +191,23 @@ module View =
         Html.div [ header dispatch
                    backToMainNavigationButton "Back" dispatch ]
 
+    let marketPage dispatch model =
+        Html.div [ header dispatch
+                   Html.button [ prop.text "Back"
+                                 prop.onClick (fun _ -> dispatch OnDockClicked) ]
+                   metaInfoSection dispatch model ]
+
     let dockPage dispatch model =
         Html.div [ header dispatch
                    backToMainNavigationButton "Back" dispatch
                    Html.hr []
-                   metaInfoSection dispatch model ]
+                   metaInfoSection dispatch model
+                   Html.hr []
+                   Html.button [ prop.text "Tavern" ]
+                   Html.button [ prop.text "Shipyard" ]
+                   Html.button [ prop.text "Market"
+                                 prop.onClick (fun _ -> dispatch OnMarketClicked) ]
+                   Html.button [ prop.text "Governor" ] ]
 
     let mainNavigationPage dispatch model =
         Html.div [ header dispatch
@@ -229,8 +243,11 @@ module View =
                                          | [ "mainNavigationPage" ] -> mainNavigationPage dispatch model
                                          | [ "profilePage" ] -> profilePage dispatch model
                                          | [ "skirmishPage" ] -> skirmishPage dispatch model
+
                                          | [ "dockPage" ] -> dockPage dispatch model
+                                         | [ "marketPage" ] -> marketPage dispatch model
                                          | [ "settingsPage" ] -> settingsPage dispatch model
+
                                          | [ "aboutPage" ] -> aboutPage dispatch model
                                          | _ -> Html.h1 "Not found" ] ]
 
