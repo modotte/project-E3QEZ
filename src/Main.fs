@@ -45,6 +45,8 @@ let update msg model =
 
     | OnStartGameClicked -> (model, Cmd.navigate "newCharacterPage")
     | OnMainNavigationClicked -> withOnMainNagivationClicked model
+    | OnProfileClicked -> (model, Cmd.navigate "profilePage")
+    | OnSkirmishClicked -> (model, Cmd.navigate "skirmishPage")
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
     | OnNewCharacterEntriesUpdated player -> { model with Player = player }, Cmd.none
 
@@ -137,6 +139,16 @@ module View =
         Html.div [ header dispatch
                    backToMainMenuButton "Back" dispatch ]
 
+    let profilePage dispatch model =
+        Html.div [ header dispatch
+                   Html.button [ prop.text "Back"
+                                 prop.onClick (fun _ -> dispatch OnMainNavigationClicked) ] ]
+
+    let skirmishPage dispatch model =
+        Html.div [ header dispatch
+                   Html.button [ prop.text "Back"
+                                 prop.onClick (fun _ -> dispatch OnMainNavigationClicked) ] ]
+
     let dockPage dispatch model =
         Html.div [ header dispatch
                    Html.button [ prop.text "Back"
@@ -144,8 +156,10 @@ module View =
 
     let mainNavigationPage dispatch model =
         Html.div [ header dispatch
-                   Html.button [ prop.text "Profile" ]
-                   Html.button [ prop.text "Skirmish" ]
+                   Html.button [ prop.text "Profile"
+                                 prop.onClick (fun _ -> dispatch OnProfileClicked) ]
+                   Html.button [ prop.text "Skirmish"
+                                 prop.onClick (fun _ -> dispatch OnSkirmishClicked) ]
                    Html.button [ prop.text "Dock"
                                  prop.onClick (fun _ -> dispatch OnDockClicked) ] ]
 
@@ -160,6 +174,8 @@ module View =
                                          | [] -> mainMenuPage dispatch model
                                          | [ "newCharacterPage" ] -> newCharacterPage dispatch model
                                          | [ "mainNavigationPage" ] -> mainNavigationPage dispatch model
+                                         | [ "profilePage" ] -> profilePage dispatch model
+                                         | [ "skirmishPage" ] -> skirmishPage dispatch model
                                          | [ "dockPage" ] -> dockPage dispatch model
                                          | [ "settingsPage" ] -> settingsPage dispatch model
                                          | [ "aboutPage" ] -> aboutPage dispatch model

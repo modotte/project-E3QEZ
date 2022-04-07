@@ -61,6 +61,8 @@ type Msg =
 
     | OnStartGameClicked
     | OnMainNavigationClicked
+    | OnProfileClicked
+    | OnSkirmishClicked
     | OnDockClicked
 
     | OnNewCharacterEntriesUpdated of Player
