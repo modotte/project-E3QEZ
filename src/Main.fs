@@ -233,9 +233,18 @@ module View =
                    backToMainNavigationButton "Back" dispatch ]
 
     let marketCargosSection dispatch model =
-        Html.ul [ Html.li []
-                  Html.li []
-                  Html.li [] ]
+        // TODO: For now, let's just print all data but let's polish it later
+        match model.Player.CurrentLocation with
+        | PortRoyal p ->
+            Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
+                      Html.li [ Html.p $"{p.Cargo.Sugar}" ] ]
+        | Barbados p ->
+            Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
+                      Html.li [ Html.p $"{p.Cargo.Sugar}" ] ]
+        | Nassau p ->
+            Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
+                      Html.li [ Html.p $"{p.Cargo.Sugar}" ] ]
+
 
     let marketPage dispatch model =
         Html.div [ header dispatch
