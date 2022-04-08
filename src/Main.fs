@@ -22,18 +22,17 @@ let init =
                Age = PlayerAge 18
                Coins = PlayerCoins 250
                OwnedShip =
-                 Some
-                     { Id = ShipId <| System.Guid.NewGuid()
-                       Name = ShipName "Heart of Ocean"
-                       Size = Light
-                       Class = Sloop
-                       CargoCapacity = CargoCapacity 350
-                       OwnedCargo =
-                         [| { Kind = Wood
-                              BasePrice = CargoBasePrice 20
-                              Unit = CargoUnit 8 } |]
-                       CrewCapacity = CrewCapacity 18
-                       OwnedCrew = OwnedCrew 6 }
+                 { Id = ShipId <| System.Guid.NewGuid()
+                   Name = ShipName "Heart of Ocean"
+                   Size = Light
+                   Class = Sloop
+                   CargoCapacity = CargoCapacity 350
+                   OwnedCargo =
+                     [| { Kind = Wood
+                          BasePrice = CargoBasePrice 20
+                          Unit = CargoUnit 8 } |]
+                   CrewCapacity = CrewCapacity 18
+                   OwnedCrew = OwnedCrew 6 }
                CurrentLocation = PortRoyal }
            Settings = { MusicVolume = MusicVolume 50 }
            CurrentUrl = Router.currentUrl () },
@@ -58,22 +57,18 @@ let update msg model =
 
     | OnUpdateOwnedShipName name ->
         let player =
-            match model.Player.OwnedShip with
-            | None -> model.Player
-            | Some ship ->
-                let ship' = { ship with Name = name }
-                { model.Player with OwnedShip = Some ship' }
+            let ship = model.Player.OwnedShip
+            let ship' = { ship with Name = name }
+            { model.Player with OwnedShip = ship' }
 
         ({ model with Player = player }, Cmd.none)
 
     | OnUpdateOwnedShipClass shipClass ->
         let player =
-            match model.Player.OwnedShip with
-            | None -> model.Player
-            | Some ship ->
-                let ship' = { ship with Class = shipClass }
+            let ship = model.Player.OwnedShip
+            let ship' = { ship with Class = shipClass }
 
-                { model.Player with OwnedShip = Some ship' }
+            { model.Player with OwnedShip = ship' }
 
         ({ model with Player = player }, Cmd.none)
     | OnUpdateLocation location ->
@@ -177,11 +172,9 @@ module View =
                    let (PlayerCoins coins) = model.Player.Coins
                    Html.p [ prop.text $"Coins: {coins}" ]
 
-                   Html.p [ match model.Player.OwnedShip with
-                            | None -> prop.text ""
-                            | Some ship ->
-                                let (ShipName sn) = ship.Name
-                                prop.text $"Current ship named {sn} of {ship.Class.ToString()} class" ] ]
+                   Html.p [ let ship = model.Player.OwnedShip
+                            let (ShipName sn) = ship.Name
+                            prop.text $"Current ship named {sn} of {ship.Class.ToString()} class" ] ]
 
     let profilePage dispatch model =
         Html.div [ header dispatch

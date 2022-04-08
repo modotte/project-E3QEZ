@@ -66,7 +66,7 @@ type Player =
       LastName: PlayerLastName
       Age: PlayerAge
       Coins: PlayerCoins
-      OwnedShip: Ship option
+      OwnedShip: Ship
       CurrentLocation: Location }
 
 type MusicVolume = MusicVolume of int
