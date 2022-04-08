@@ -11,24 +11,47 @@ open Domain
 
 importSideEffects "./styles/global.scss"
 
+module Cargo =
+    let wood =
+        { Name = CargoName "Wood"
+          Description = CargoDescription "Used to repair ship hull and buildings"
+          BasePrice = CargoBasePrice 20
+          Unit = CargoUnit 7 }
+
+    let sugar =
+        { Name = CargoName "Sugar"
+          Description = CargoDescription "Used in tea and coffee"
+          BasePrice = CargoBasePrice 57
+          Unit = CargoUnit 3 }
+
 module Port =
     let portRoyal =
         { Name = PortName "Port Royal"
           Description = PortDescription "A rich port"
           Size = Large
-          Nationality = British }
+          Nationality = British
+          Cargo =
+            { Wood = Cargo.wood
+              Sugar = Cargo.sugar } }
 
     let barbados =
         { Name = PortName "Barbados"
           Description = PortDescription "A wealthy port"
           Size = Medium
-          Nationality = British }
+          Nationality = British
+          Cargo =
+            { Wood = Cargo.wood
+              Sugar = Cargo.sugar } }
 
     let nassau =
         { Name = PortName "Nassau"
           Description = PortDescription "A poor port"
           Size = Small
-          Nationality = British }
+          Nationality = British
+          Cargo =
+            { Wood = Cargo.wood
+              Sugar = Cargo.sugar } }
+
 
 let init =
     function
@@ -47,9 +70,8 @@ let init =
                    Class = Sloop
                    CargoCapacity = CargoCapacity 350
                    OwnedCargo =
-                     [| { Kind = Wood
-                          BasePrice = CargoBasePrice 20
-                          Unit = CargoUnit 8 } |]
+                     { Wood = Cargo.wood
+                       Sugar = Cargo.sugar }
                    CrewCapacity = CrewCapacity 18
                    OwnedCrew = OwnedCrew 6 }
                CurrentLocation = (PortRoyal Port.portRoyal) }

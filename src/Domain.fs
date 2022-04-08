@@ -5,21 +5,20 @@ type Nationality =
     | Spanish
     | French
 
-type CargoKind =
-    | Wood
-    | Sugar
-    | Fish
-    | DriedMeat
-
+type CargoName = CargoName of string
+type CargoDescription = CargoDescription of string
 type CargoBasePrice = CargoBasePrice of int
 type CargoUnit = CargoUnit of int
 
 type CargoCapacity = CargoCapacity of int
 
-type Cargo =
-    { Kind: CargoKind
+type CargoItem =
+    { Name: CargoName
+      Description: CargoDescription
       BasePrice: CargoBasePrice
       Unit: CargoUnit }
+
+type Cargo = { Wood: CargoItem; Sugar: CargoItem }
 
 type ShipId = ShipId of System.Guid
 type ShipName = ShipName of string
@@ -51,7 +50,7 @@ type Ship =
       Size: ShipSize
       Class: ShipClass
       CargoCapacity: CargoCapacity
-      OwnedCargo: Cargo array
+      OwnedCargo: Cargo
       CrewCapacity: CrewCapacity
       OwnedCrew: OwnedCrew }
 
@@ -67,7 +66,8 @@ type Port =
     { Name: PortName
       Description: PortDescription
       Size: PortSize
-      Nationality: Nationality }
+      Nationality: Nationality
+      Cargo: Cargo }
 
 type Location =
     | Barbados of Port
