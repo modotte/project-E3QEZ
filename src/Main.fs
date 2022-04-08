@@ -57,16 +57,14 @@ let update msg model =
 
     | OnUpdateOwnedShipName name ->
         let player =
-            let ship = model.Player.OwnedShip
-            let ship' = { ship with Name = name }
+            let ship' = { model.Player.OwnedShip with Name = name }
             { model.Player with OwnedShip = ship' }
 
         ({ model with Player = player }, Cmd.none)
 
     | OnUpdateOwnedShipClass shipClass ->
         let player =
-            let ship = model.Player.OwnedShip
-            let ship' = { ship with Class = shipClass }
+            let ship' = { model.Player.OwnedShip with Class = shipClass }
 
             { model.Player with OwnedShip = ship' }
 
