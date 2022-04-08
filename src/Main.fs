@@ -31,8 +31,8 @@ module Port =
           Size = Large
           Nationality = British
           Cargo =
-            { Wood = Cargo.wood
-              Sugar = Cargo.sugar } }
+            { Wood = { Cargo.wood with Unit = CargoUnit 270 }
+              Sugar = { Cargo.sugar with Unit = CargoUnit 100 } } }
 
     let barbados =
         { Name = PortName "Barbados"
@@ -40,8 +40,8 @@ module Port =
           Size = Medium
           Nationality = British
           Cargo =
-            { Wood = Cargo.wood
-              Sugar = Cargo.sugar } }
+            { Wood = { Cargo.wood with Unit = CargoUnit 167 }
+              Sugar = { Cargo.sugar with Unit = CargoUnit 82 } } }
 
     let nassau =
         { Name = PortName "Nassau"
@@ -49,8 +49,8 @@ module Port =
           Size = Small
           Nationality = British
           Cargo =
-            { Wood = Cargo.wood
-              Sugar = Cargo.sugar } }
+            { Wood = { Cargo.wood with Unit = CargoUnit 60 }
+              Sugar = { Cargo.sugar with Unit = CargoUnit 20 } } }
 
 
 let init =
@@ -68,10 +68,10 @@ let init =
                    Name = ShipName "Heart of Ocean"
                    Size = Light
                    Class = Sloop
-                   CargoCapacity = CargoCapacity 350
+                   CargoCapacity = CargoCapacity 82
                    OwnedCargo =
-                     { Wood = Cargo.wood
-                       Sugar = Cargo.sugar }
+                     { Wood = { Cargo.wood with Unit = CargoUnit 18 }
+                       Sugar = { Cargo.sugar with Unit = CargoUnit 4 } }
                    CrewCapacity = CrewCapacity 18
                    OwnedCrew = OwnedCrew 6 }
                CurrentLocation = (PortRoyal Port.portRoyal) }
