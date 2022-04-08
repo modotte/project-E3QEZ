@@ -11,6 +11,25 @@ open Domain
 
 importSideEffects "./styles/global.scss"
 
+module Port =
+    let portRoyal =
+        { Name = PortName "Port Royal"
+          Description = PortDescription "A rich port"
+          Size = Large
+          Nationality = British }
+
+    let barbados =
+        { Name = PortName "Barbados"
+          Description = PortDescription "A wealthy port"
+          Size = Medium
+          Nationality = British }
+
+    let nassau =
+        { Name = PortName "Nassau"
+          Description = PortDescription "A poor port"
+          Size = Small
+          Nationality = British }
+
 let init =
     function
     | Some oldModel -> (oldModel, Cmd.none)
@@ -33,7 +52,7 @@ let init =
                           Unit = CargoUnit 8 } |]
                    CrewCapacity = CrewCapacity 18
                    OwnedCrew = OwnedCrew 6 }
-               CurrentLocation = PortRoyal }
+               CurrentLocation = (PortRoyal Port.portRoyal) }
            Settings = { MusicVolume = MusicVolume 50 }
            CurrentUrl = Router.currentUrl () },
          Cmd.none)
@@ -57,16 +76,16 @@ let update msg model =
 
     | OnUpdateOwnedShipName name ->
         let player =
-            let ship' = { model.Player.OwnedShip with Name = name }
-            { model.Player with OwnedShip = ship' }
+            let ship = { model.Player.OwnedShip with Name = name }
+            { model.Player with OwnedShip = ship }
 
         ({ model with Player = player }, Cmd.none)
 
     | OnUpdateOwnedShipClass shipClass ->
         let player =
-            let ship' = { model.Player.OwnedShip with Class = shipClass }
+            let ship = { model.Player.OwnedShip with Class = shipClass }
 
-            { model.Player with OwnedShip = ship' }
+            { model.Player with OwnedShip = ship }
 
         ({ model with Player = player }, Cmd.none)
     | OnUpdateLocation location ->
@@ -164,8 +183,17 @@ module View =
         Html.div [ header dispatch
                    backToMainMenuButton "Back" dispatch ]
 
+    let currentLocation location =
+        let Pn (PortName pn) = pn
+
+        match location with
+        | Barbados p -> Pn p.Name
+        | PortRoyal p -> Pn p.Name
+        | Nassau p -> Pn p.Name
+
     let metaInfoSection dispatch model =
-        Html.div [ Html.p [ prop.text $"Docked at Port of {model.Player.CurrentLocation}" ]
+        // TODO: Simplify below. Seems unnecesarily complicated
+        Html.div [ Html.p [ prop.text $"{currentLocation model.Player.CurrentLocation}" ]
 
                    let (PlayerCoins coins) = model.Player.Coins
                    Html.p [ prop.text $"Coins: {coins}" ]
@@ -220,14 +248,17 @@ module View =
 
                    metaInfoSection dispatch model
 
-                   Html.ul [ Html.li [ Html.button [ prop.text "Barbados"
-                                                     prop.onClick (fun _ -> dispatch <| OnUpdateLocation Barbados) ] ]
-                             Html.li [ Html.button [ prop.text "Port Royal"
-                                                     prop.onClick (fun _ -> dispatch <| OnUpdateLocation PortRoyal) ] ]
+                   Html.ul [ Html.li [ Html.button [ prop.text "Port Royal"
+                                                     prop.onClick (fun _ ->
+                                                         dispatch
+                                                         <| OnUpdateLocation(PortRoyal Port.portRoyal)) ] ]
+                             Html.li [ Html.button [ prop.text "Barbados"
+                                                     prop.onClick (fun _ ->
+                                                         dispatch
+                                                         <| OnUpdateLocation(Barbados Port.barbados)) ] ]
                              Html.li [ Html.button [ prop.text "Nassau"
-                                                     prop.onClick (fun _ -> dispatch <| OnUpdateLocation Nassau) ] ]
-                             Html.li [ Html.button [ prop.text "Havana"
-                                                     prop.onClick (fun _ -> dispatch <| OnUpdateLocation Havana) ] ] ] ]
+                                                     prop.onClick (fun _ ->
+                                                         dispatch <| OnUpdateLocation(Nassau Port.nassau)) ] ] ] ]
 
     [<ReactComponent>]
     let mainView () =

@@ -1,5 +1,10 @@
 module Domain
 
+type Nationality =
+    | British
+    | Spanish
+    | French
+
 type CargoKind =
     | Wood
     | Sugar
@@ -50,11 +55,24 @@ type Ship =
       CrewCapacity: CrewCapacity
       OwnedCrew: OwnedCrew }
 
+type PortName = PortName of string
+type PortDescription = PortDescription of string
+
+type PortSize =
+    | Small
+    | Medium
+    | Large
+
+type Port =
+    { Name: PortName
+      Description: PortDescription
+      Size: PortSize
+      Nationality: Nationality }
+
 type Location =
-    | Barbados
-    | PortRoyal
-    | Nassau
-    | Havana
+    | Barbados of Port
+    | PortRoyal of Port
+    | Nassau of Port
 
 type PlayerFirstName = PlayerFirstName of string
 type PlayerLastName = PlayerLastName of string
