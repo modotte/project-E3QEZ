@@ -13,69 +13,69 @@ importSideEffects "./styles/global.scss"
 
 module Cargo =
     let wood =
-        { Name = CargoName "Wood"
-          Description = CargoDescription "Used to repair ship hull and buildings"
-          Price = CargoPrice 20
-          Unit = CargoUnit 7 }
+        { Name = CargoName.New("Wood")
+          Description = CargoDescription.New("Used to repair ship hull and buildings")
+          Price = CargoPrice.New(20)
+          Unit = CargoUnit.New(7) }
 
     let sugar =
-        { Name = CargoName "Sugar"
-          Description = CargoDescription "Used in tea and coffee"
-          Price = CargoPrice 57
-          Unit = CargoUnit 3 }
+        { Name = CargoName.New("Sugar")
+          Description = CargoDescription.New("Used in tea and coffee")
+          Price = CargoPrice.New(57)
+          Unit = CargoUnit.New(3) }
 
 module Port =
     let portRoyal =
-        { Name = PortName "Port Royal"
-          Description = PortDescription "A rich port"
+        { Name = PortName.New("Port Royal")
+          Description = PortDescription.New("A rich port")
           Size = Large
           Nationality = British
           Cargo =
-            { Wood = { Cargo.wood with Unit = CargoUnit 270 }
-              Sugar = { Cargo.sugar with Unit = CargoUnit 100 } } }
+            { Wood = { Cargo.wood with Unit = CargoUnit.New(270) }
+              Sugar = { Cargo.sugar with Unit = CargoUnit.New(100) } } }
 
     let barbados =
-        { Name = PortName "Barbados"
-          Description = PortDescription "A wealthy port"
+        { Name = PortName.New("Barbados")
+          Description = PortDescription.New("A wealthy port")
           Size = Medium
           Nationality = British
           Cargo =
-            { Wood = { Cargo.wood with Unit = CargoUnit 167 }
-              Sugar = { Cargo.sugar with Unit = CargoUnit 82 } } }
+            { Wood = { Cargo.wood with Unit = CargoUnit.New(167) }
+              Sugar = { Cargo.sugar with Unit = CargoUnit.New(82) } } }
 
     let nassau =
-        { Name = PortName "Nassau"
-          Description = PortDescription "A poor port"
+        { Name = PortName.New("Nassau")
+          Description = PortDescription.New("A poor port")
           Size = Small
           Nationality = British
           Cargo =
-            { Wood = { Cargo.wood with Unit = CargoUnit 60 }
-              Sugar = { Cargo.sugar with Unit = CargoUnit 20 } } }
+            { Wood = { Cargo.wood with Unit = CargoUnit.New(60) }
+              Sugar = { Cargo.sugar with Unit = CargoUnit.New(20) } } }
 
 
 let init =
     function
     | Some oldModel -> (oldModel, Cmd.none)
     | None ->
-        ({ DaysPassed = DaysPassed 1 // Every location change should pass at least 1 day
+        ({ DaysPassed = DaysPassed.New(1) // Every location change should pass at least 1 day
            Location = PortRoyal Port.portRoyal
            Player =
-             { FirstName = PlayerFirstName "Johnathan"
-               LastName = PlayerLastName "Smith"
-               Age = PlayerAge 18
-               Coins = PlayerCoins 250
+             { FirstName = PlayerFirstName.New("Johnathan")
+               LastName = PlayerLastName.New("Smith")
+               Age = PlayerAge.New(18)
+               Coins = PlayerCoins.New(250)
                OwnedShip =
-                 { Id = ShipId <| System.Guid.NewGuid()
-                   Name = ShipName "Heart of Ocean"
+                 { Id = ShipId.New()
+                   Name = ShipName.New("Heart of Ocean")
                    Size = Light
                    Class = Sloop
-                   CargoCapacity = CargoCapacity 82
+                   CargoCapacity = CargoCapacity.New(82)
                    OwnedCargo =
-                     { Wood = { Cargo.wood with Unit = CargoUnit 18 }
-                       Sugar = { Cargo.sugar with Unit = CargoUnit 4 } }
-                   CrewCapacity = CrewCapacity 18
-                   OwnedCrew = OwnedCrew 6 } }
-           Settings = { MusicVolume = MusicVolume 50 }
+                     { Wood = { Cargo.wood with Unit = CargoUnit.New(18) }
+                       Sugar = { Cargo.sugar with Unit = CargoUnit.New(4) } }
+                   CrewCapacity = CrewCapacity.New(18)
+                   OwnedCrew = OwnedCrew.New(6) } }
+           Settings = { MusicVolume = MusicVolume.New(50) }
            CurrentUrl = Router.currentUrl () },
          Cmd.none)
 
@@ -99,14 +99,14 @@ let update msg model =
     | OnWoodCargoBought loc ->
         match loc with
         | PortRoyal p ->
-            let (CargoPrice price) = p.Cargo.Wood.Price
-            let (PlayerCoins coins) = model.Player.Coins
+            let price = CargoPrice.Value(p.Cargo.Wood.Price)
+            let coins = PlayerCoins.Value(model.Player.Coins)
             // TODO: Handle zero coins and cargo
 
-            let (CargoUnit ownedWoodUnit) = model.Player.OwnedShip.OwnedCargo.Wood.Unit
+            let ownedWoodUnit = CargoUnit.Value(model.Player.OwnedShip.OwnedCargo.Wood.Unit)
 
             let ownedWood =
-                { model.Player.OwnedShip.OwnedCargo.Wood with Unit = CargoUnit(ownedWoodUnit + 1) }
+                { model.Player.OwnedShip.OwnedCargo.Wood with Unit = CargoUnit.New(ownedWoodUnit + 1) }
 
             let ownedCargo = { model.Player.OwnedShip.OwnedCargo with Wood = ownedWood }
             let ownedShip = { model.Player.OwnedShip with OwnedCargo = ownedCargo }
@@ -114,11 +114,11 @@ let update msg model =
 
             let player =
                 { model.Player with
-                    Coins = PlayerCoins(coins - price)
+                    Coins = PlayerCoins.New(coins - price)
                     OwnedShip = ownedShip }
 
-            let (CargoUnit portWoodUnit) = p.Cargo.Wood.Unit
-            let portWood = { p.Cargo.Wood with Unit = CargoUnit(portWoodUnit - 1) }
+            let portWoodUnit = CargoUnit.Value(p.Cargo.Wood.Unit)
+            let portWood = { p.Cargo.Wood with Unit = CargoUnit.New(portWoodUnit - 1) }
             let portCargo = { p.Cargo with Wood = portWood }
             let port = { p with Cargo = portCargo }
 
@@ -133,10 +133,10 @@ let update msg model =
     | OnWoodCargoSold loc ->
         match loc with
         | PortRoyal p ->
-            let (CargoPrice price) = p.Cargo.Wood.Price
-            let (PlayerCoins coins) = model.Player.Coins
+            let price = CargoPrice.Value(p.Cargo.Wood.Price)
+            let coins = PlayerCoins.Value(model.Player.Coins)
             // TODO: Handle zero coins or cargo
-            let player = { model.Player with Coins = PlayerCoins(coins + price) }
+            let player = { model.Player with Coins = PlayerCoins.New((coins + price)) }
             ({ model with Player = player }, Cmd.none)
 
         | Barbados p -> (model, Cmd.none)
@@ -197,13 +197,15 @@ module View =
                    Html.input [ prop.required true
                                 prop.onTextChange (fun fn ->
                                     dispatch
-                                    <| OnNewCharacterEntriesUpdated { model.Player with FirstName = PlayerFirstName fn }) ]
+                                    <| OnNewCharacterEntriesUpdated
+                                        { model.Player with FirstName = PlayerFirstName.New(fn) }) ]
                    Html.br []
                    simpleLabel "Last Name"
                    Html.input [ prop.required true
                                 prop.onTextChange (fun ln ->
                                     dispatch
-                                    <| OnNewCharacterEntriesUpdated { model.Player with LastName = PlayerLastName ln }) ]
+                                    <| OnNewCharacterEntriesUpdated
+                                        { model.Player with LastName = PlayerLastName.New(ln) }) ]
                    Html.br []
                    simpleLabel "Age"
                    Html.input [ prop.type'.range
@@ -211,12 +213,12 @@ module View =
                                 prop.max 75
                                 prop.onChange (fun a ->
                                     dispatch
-                                    <| OnNewCharacterEntriesUpdated { model.Player with Age = PlayerAge a }) ]
+                                    <| OnNewCharacterEntriesUpdated { model.Player with Age = PlayerAge.New(a) }) ]
 
                    Html.br []
                    simpleLabel "Ship Name"
                    Html.input [ prop.required true
-                                prop.onTextChange (fun n -> dispatch <| OnUpdateOwnedShipName(ShipName n)) ]
+                                prop.onTextChange (fun n -> dispatch <| OnUpdateOwnedShipName(ShipName.New(n))) ]
                    Html.br []
                    simpleLabel "Ship Class"
                    Html.select [ prop.children [ Html.option [ prop.value "Sloop"
@@ -250,22 +252,19 @@ module View =
                    backToMainMenuButton "Back" dispatch ]
 
     let currentLocation location =
-        let Pn (PortName pn) = pn
-
         match location with
-        | Barbados p -> Pn p.Name
-        | PortRoyal p -> Pn p.Name
-        | Nassau p -> Pn p.Name
+        | Barbados p -> PortName.Value(p.Name)
+        | PortRoyal p -> PortName.Value(p.Name)
+        | Nassau p -> PortName.Value(p.Name)
 
     let metaInfoSection dispatch model =
         // TODO: Simplify below. Seems unnecesarily complicated
         Html.div [ Html.p [ prop.text $"{currentLocation model.Location}" ]
 
-                   let (PlayerCoins coins) = model.Player.Coins
-                   Html.p [ prop.text $"Coins: {coins}" ]
+                   Html.p [ prop.text $"Coins: {PlayerCoins.Value(model.Player.Coins)}" ]
 
                    Html.p [ let ship = model.Player.OwnedShip
-                            let (ShipName sn) = ship.Name
+                            let sn = ShipName.Value(model.Player.OwnedShip.Name)
                             prop.text $"Current ship named {sn} of {ship.Class.ToString()} class" ] ]
 
     let profilePage dispatch model =

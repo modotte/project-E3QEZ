@@ -5,31 +5,31 @@ type Nationality =
     | Spanish
     | French
 
-type CargoName = CargoName of string
+type CargoName = private CargoName of string
 
 module CargoName =
     let New (x: string) = CargoName x
     let Value (CargoName x) = x
 
-type CargoDescription = CargoDescription of string
+type CargoDescription = private CargoDescription of string
 
 module CargoDescription =
     let New (x: string) = CargoDescription x
     let Value (CargoDescription x) = x
 
-type CargoPrice = CargoPrice of int
+type CargoPrice = private CargoPrice of int
 
 module CargoPrice =
     let New (x: int) = CargoPrice x
     let Value (CargoPrice x) = x
 
-type CargoUnit = CargoUnit of int
+type CargoUnit = private CargoUnit of int
 
 module CargoUnit =
     let New (x: int) = CargoUnit x
     let Value (CargoUnit x) = x
 
-type CargoCapacity = CargoCapacity of int
+type CargoCapacity = private CargoCapacity of int
 
 module CargoCapacity =
     let New (x: int) = CargoCapacity x
@@ -43,13 +43,13 @@ type CargoItem =
 
 type Cargo = { Wood: CargoItem; Sugar: CargoItem }
 
-type ShipId = ShipId of System.Guid
+type ShipId = private ShipId of System.Guid
 
 module ShipId =
     let New () = ShipId(System.Guid.NewGuid())
     let Value (ShipId x) = x
 
-type ShipName = ShipName of string
+type ShipName = private ShipName of string
 
 module ShipName =
     let New (x: string) = ShipName x
@@ -73,13 +73,13 @@ type ShipClass =
     | SecondRate
     | FirstRate
 
-type CrewCapacity = CrewCapacity of int
+type CrewCapacity = private CrewCapacity of int
 
 module CrewCapacity =
     let New (x: int) = CrewCapacity x
     let Value (CrewCapacity x) = x
 
-type OwnedCrew = OwnedCrew of int
+type OwnedCrew = private OwnedCrew of int
 
 module OwnedCrew =
     let New (x: int) = OwnedCrew x
@@ -95,13 +95,13 @@ type Ship =
       CrewCapacity: CrewCapacity
       OwnedCrew: OwnedCrew }
 
-type PortName = PortName of string
+type PortName = private PortName of string
 
 module PortName =
     let New (x: string) = PortName x
     let Value (PortName x) = x
 
-type PortDescription = PortDescription of string
+type PortDescription = private PortDescription of string
 
 module PortDescription =
     let New (x: string) = PortDescription x
@@ -124,25 +124,25 @@ type Location =
     | PortRoyal of Port
     | Nassau of Port
 
-type PlayerFirstName = PlayerFirstName of string
+type PlayerFirstName = private PlayerFirstName of string
 
 module PlayerFirstName =
     let New (x: string) = PlayerFirstName x
     let Value (PlayerFirstName x) = x
 
-type PlayerLastName = PlayerLastName of string
+type PlayerLastName = private PlayerLastName of string
 
 module PlayerLastName =
     let New (x: string) = PlayerLastName x
     let Value (PlayerLastName x) = x
 
-type PlayerCoins = PlayerCoins of int
+type PlayerCoins = private PlayerCoins of int
 
 module PlayerCoins =
     let New (x: int) = PlayerCoins x
     let Value (PlayerCoins x) = x
 
-type PlayerAge = PlayerAge of int
+type PlayerAge = private PlayerAge of int
 
 module PlayerAge =
     let New (x: int) = PlayerAge x
@@ -155,7 +155,7 @@ type Player =
       Coins: PlayerCoins
       OwnedShip: Ship }
 
-type MusicVolume = MusicVolume of int
+type MusicVolume = private MusicVolume of int
 
 module MusicVolume =
     let New (x: int) = MusicVolume x
@@ -163,7 +163,7 @@ module MusicVolume =
 
 type Settings = { MusicVolume: MusicVolume }
 
-type DaysPassed = DaysPassed of int
+type DaysPassed = private DaysPassed of int
 
 module DaysPassed =
     let New (x: int) = DaysPassed x
