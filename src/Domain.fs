@@ -195,8 +195,11 @@ type Msg =
     | OnDockClicked
     | OnMarketClicked
 
-    | OnWoodCargoSold of Location
     | OnWoodCargoBought of Location
+    | OnWoodCargoSold of Location
+
+    | OnSugarCargoBought of Location
+    | OnSugarCargoSold of Location
 
     | OnUpdateOwnedShipName of ShipName
     | OnUpdateOwnedShipClass of ShipClass
