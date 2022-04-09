@@ -127,8 +127,16 @@ let update msg model =
                 Location = PortRoyal(removeFromPortCargo p) },
              Cmd.none)
 
-        | Barbados p -> (model, Cmd.none)
-        | Nassau p -> (model, Cmd.none)
+        | Barbados p ->
+            ({ model with
+                Player = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Location = PortRoyal(removeFromPortCargo p) },
+             Cmd.none)
+        | Nassau p ->
+            ({ model with
+                Player = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Location = PortRoyal(removeFromPortCargo p) },
+             Cmd.none)
 
     | OnWoodCargoSold loc ->
         match loc with
@@ -283,14 +291,16 @@ module View =
                                  Html.button [ prop.text "Sell" ] ] ]
         | Barbados p ->
             Html.div [ Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
-                                 Html.button [ prop.text "Buy" ]
+                                 Html.button [ prop.text "Buy"
+                                               prop.onClick (fun _ -> dispatch <| OnWoodCargoBought(Barbados p)) ]
                                  Html.button [ prop.text "Sell" ]
                                  Html.li [ Html.p $"{p.Cargo.Sugar}" ]
                                  Html.button [ prop.text "Buy" ]
                                  Html.button [ prop.text "Sell" ] ] ]
         | Nassau p ->
             Html.div [ Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
-                                 Html.button [ prop.text "Buy" ]
+                                 Html.button [ prop.text "Buy"
+                                               prop.onClick (fun _ -> dispatch <| OnWoodCargoBought(Nassau p)) ]
                                  Html.button [ prop.text "Sell" ]
                                  Html.li [ Html.p $"{p.Cargo.Sugar}" ]
                                  Html.button [ prop.text "Buy" ]
