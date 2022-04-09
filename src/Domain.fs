@@ -169,6 +169,12 @@ module DaysPassed =
     let New (x: int) = DaysPassed x
     let Value (DaysPassed x) = x
 
+let currentLocation location =
+    match location with
+    | Barbados p -> PortName.Value(p.Name)
+    | PortRoyal p -> PortName.Value(p.Name)
+    | Nassau p -> PortName.Value(p.Name)
+
 type Model =
     { DaysPassed: DaysPassed
       Location: Location

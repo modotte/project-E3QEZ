@@ -97,19 +97,24 @@ let update msg model =
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
 
     | OnWoodCargoBought loc ->
+        let addIntoPlayerCargo ownedCargo =
+            // TODO: Handle zero coins and cargo
+
+            let ownedWoodUnit = CargoUnit.Value(ownedCargo.Wood.Unit)
+
+            let ownedCargo =
+                { model.Player.OwnedShip.OwnedCargo.Wood with Unit = CargoUnit.New(ownedWoodUnit + 1) }
+
+            { model.Player.OwnedShip.OwnedCargo with Wood = ownedCargo }
+
         match loc with
         | PortRoyal p ->
             let price = CargoPrice.Value(p.Cargo.Wood.Price)
             let coins = PlayerCoins.Value(model.Player.Coins)
             // TODO: Handle zero coins and cargo
 
-            let ownedWoodUnit = CargoUnit.Value(model.Player.OwnedShip.OwnedCargo.Wood.Unit)
-
-            let ownedWood =
-                { model.Player.OwnedShip.OwnedCargo.Wood with Unit = CargoUnit.New(ownedWoodUnit + 1) }
-
-            let ownedCargo = { model.Player.OwnedShip.OwnedCargo with Wood = ownedWood }
-            let ownedShip = { model.Player.OwnedShip with OwnedCargo = ownedCargo }
+            let ownedShip =
+                { model.Player.OwnedShip with OwnedCargo = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo }
 
 
             let player =
@@ -250,12 +255,6 @@ module View =
     let aboutPage dispatch model =
         Html.div [ header dispatch
                    backToMainMenuButton "Back" dispatch ]
-
-    let currentLocation location =
-        match location with
-        | Barbados p -> PortName.Value(p.Name)
-        | PortRoyal p -> PortName.Value(p.Name)
-        | Nassau p -> PortName.Value(p.Name)
 
     let metaInfoSection dispatch model =
         // TODO: Simplify below. Seems unnecesarily complicated
