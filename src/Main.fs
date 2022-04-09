@@ -97,9 +97,10 @@ let update msg model =
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
 
     | OnWoodCargoBought loc ->
-        let addIntoPlayerCargo ownedCargo =
+        let addIntoPlayerCargo ownedCargo port =
             // TODO: Handle zero coins and cargo
-
+            let coins = PlayerCoins.Value(model.Player.Coins)
+            let price = CargoPrice.Value(port.Cargo.Wood.Price)
             let ownedWoodUnit = CargoUnit.Value(ownedCargo.Wood.Unit)
 
             let ownedCargo =
@@ -107,27 +108,23 @@ let update msg model =
 
             let ownedCargo = { model.Player.OwnedShip.OwnedCargo with Wood = ownedCargo }
 
-            { model.Player.OwnedShip with OwnedCargo = ownedCargo }
+            let ownedShip = { model.Player.OwnedShip with OwnedCargo = ownedCargo }
+
+            { model.Player with
+                Coins = PlayerCoins.New(coins - price)
+                OwnedShip = ownedShip }
+
+        let removeFromPortCargo port =
+            let portWoodUnit = CargoUnit.Value(port.Cargo.Wood.Unit)
+            let portWood = { port.Cargo.Wood with Unit = CargoUnit.New(portWoodUnit - 1) }
+            let portCargo = { port.Cargo with Wood = portWood }
+            { port with Cargo = portCargo }
 
         match loc with
         | PortRoyal p ->
-            let price = CargoPrice.Value(p.Cargo.Wood.Price)
-            let coins = PlayerCoins.Value(model.Player.Coins)
-            // TODO: Handle zero coins and cargo
-
-            let player =
-                { model.Player with
-                    Coins = PlayerCoins.New(coins - price)
-                    OwnedShip = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo }
-
-            let portWoodUnit = CargoUnit.Value(p.Cargo.Wood.Unit)
-            let portWood = { p.Cargo.Wood with Unit = CargoUnit.New(portWoodUnit - 1) }
-            let portCargo = { p.Cargo with Wood = portWood }
-            let port = { p with Cargo = portCargo }
-
             ({ model with
-                Player = player
-                Location = PortRoyal port },
+                Player = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Location = PortRoyal(removeFromPortCargo p) },
              Cmd.none)
 
         | Barbados p -> (model, Cmd.none)
