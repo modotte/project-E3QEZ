@@ -139,16 +139,46 @@ let update msg model =
              Cmd.none)
 
     | OnWoodCargoSold loc ->
+        let removeFromPlayerCargo ownedCargo port =
+            // TODO: Handle zero coins and cargo
+            let coins = PlayerCoins.Value(model.Player.Coins)
+            let price = CargoPrice.Value(port.Cargo.Wood.Price)
+            let ownedWoodUnit = CargoUnit.Value(ownedCargo.Wood.Unit)
+
+            let ownedCargo =
+                { model.Player.OwnedShip.OwnedCargo.Wood with Unit = CargoUnit.New(ownedWoodUnit - 1) }
+
+            let ownedCargo = { model.Player.OwnedShip.OwnedCargo with Wood = ownedCargo }
+
+            let ownedShip = { model.Player.OwnedShip with OwnedCargo = ownedCargo }
+
+            { model.Player with
+                Coins = PlayerCoins.New(coins + price)
+                OwnedShip = ownedShip }
+
+        let addIntoPortCargo port =
+            let portWoodUnit = CargoUnit.Value(port.Cargo.Wood.Unit)
+            let portWood = { port.Cargo.Wood with Unit = CargoUnit.New(portWoodUnit + 1) }
+            let portCargo = { port.Cargo with Wood = portWood }
+            { port with Cargo = portCargo }
+
         match loc with
         | PortRoyal p ->
-            let price = CargoPrice.Value(p.Cargo.Wood.Price)
-            let coins = PlayerCoins.Value(model.Player.Coins)
-            // TODO: Handle zero coins or cargo
-            let player = { model.Player with Coins = PlayerCoins.New((coins + price)) }
-            ({ model with Player = player }, Cmd.none)
+            ({ model with
+                Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Location = PortRoyal(addIntoPortCargo p) },
+             Cmd.none)
 
-        | Barbados p -> (model, Cmd.none)
-        | Nassau p -> (model, Cmd.none)
+        | Barbados p ->
+            ({ model with
+                Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Location = PortRoyal(addIntoPortCargo p) },
+             Cmd.none)
+        | Nassau p ->
+            ({ model with
+                Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Location = PortRoyal(addIntoPortCargo p) },
+             Cmd.none)
 
     | OnUpdateOwnedShipName name ->
         let player =
@@ -293,7 +323,8 @@ module View =
             Html.div [ Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
                                  Html.button [ prop.text "Buy"
                                                prop.onClick (fun _ -> dispatch <| OnWoodCargoBought(Barbados p)) ]
-                                 Html.button [ prop.text "Sell" ]
+                                 Html.button [ prop.text "Sell"
+                                               prop.onClick (fun _ -> dispatch <| OnWoodCargoSold(Barbados p)) ]
                                  Html.li [ Html.p $"{p.Cargo.Sugar}" ]
                                  Html.button [ prop.text "Buy" ]
                                  Html.button [ prop.text "Sell" ] ] ]
@@ -301,7 +332,8 @@ module View =
             Html.div [ Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
                                  Html.button [ prop.text "Buy"
                                                prop.onClick (fun _ -> dispatch <| OnWoodCargoBought(Nassau p)) ]
-                                 Html.button [ prop.text "Sell" ]
+                                 Html.button [ prop.text "Sell"
+                                               prop.onClick (fun _ -> dispatch <| OnWoodCargoSold(Nassau p)) ]
                                  Html.li [ Html.p $"{p.Cargo.Sugar}" ]
                                  Html.button [ prop.text "Buy" ]
                                  Html.button [ prop.text "Sell" ] ] ]
