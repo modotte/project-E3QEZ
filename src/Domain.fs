@@ -7,7 +7,7 @@ type Nationality =
 
 type CargoName = CargoName of string
 type CargoDescription = CargoDescription of string
-type CargoBasePrice = CargoBasePrice of int
+type CargoPrice = CargoPrice of int
 type CargoUnit = CargoUnit of int
 
 type CargoCapacity = CargoCapacity of int
@@ -15,7 +15,7 @@ type CargoCapacity = CargoCapacity of int
 type CargoItem =
     { Name: CargoName
       Description: CargoDescription
-      BasePrice: CargoBasePrice
+      Price: CargoPrice
       Unit: CargoUnit }
 
 type Cargo = { Wood: CargoItem; Sugar: CargoItem }
@@ -111,8 +111,9 @@ type Msg =
     | OnDockClicked
     | OnMarketClicked
 
-    | OnCargoSold of Cargo
-    | OnCargoBought of Cargo
+    | OnWoodCargoSold of Location
+    | OnWoodCargoBought of Location
+
     | OnUpdateOwnedShipName of ShipName
     | OnUpdateOwnedShipClass of ShipClass
     | OnUpdateLocation of Location

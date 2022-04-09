@@ -15,13 +15,13 @@ module Cargo =
     let wood =
         { Name = CargoName "Wood"
           Description = CargoDescription "Used to repair ship hull and buildings"
-          BasePrice = CargoBasePrice 20
+          Price = CargoPrice 20
           Unit = CargoUnit 7 }
 
     let sugar =
         { Name = CargoName "Sugar"
           Description = CargoDescription "Used in tea and coffee"
-          BasePrice = CargoBasePrice 57
+          Price = CargoPrice 57
           Unit = CargoUnit 3 }
 
 module Port =
@@ -95,6 +95,30 @@ let update msg model =
 
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
+
+    | OnWoodCargoBought loc ->
+        match loc with
+        | PortRoyal p ->
+            let (CargoPrice price) = p.Cargo.Wood.Price
+            let (PlayerCoins coins) = model.Player.Coins
+            // TODO: Handle zero coins or cargo
+            let player = { model.Player with Coins = PlayerCoins(coins - price) }
+            ({ model with Player = player }, Cmd.none)
+
+        | Barbados p -> (model, Cmd.none)
+        | Nassau p -> (model, Cmd.none)
+
+    | OnWoodCargoSold loc ->
+        match loc with
+        | PortRoyal p ->
+            let (CargoPrice price) = p.Cargo.Wood.Price
+            let (PlayerCoins coins) = model.Player.Coins
+            // TODO: Handle zero coins or cargo
+            let player = { model.Player with Coins = PlayerCoins(coins + price) }
+            ({ model with Player = player }, Cmd.none)
+
+        | Barbados p -> (model, Cmd.none)
+        | Nassau p -> (model, Cmd.none)
 
     | OnUpdateOwnedShipName name ->
         let player =
@@ -237,8 +261,10 @@ module View =
         match model.Player.CurrentLocation with
         | PortRoyal p ->
             Html.div [ Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
-                                 Html.button [ prop.text "Buy" ]
-                                 Html.button [ prop.text "Sell" ]
+                                 Html.button [ prop.text "Buy"
+                                               prop.onClick (fun _ -> dispatch <| OnWoodCargoBought(PortRoyal p)) ]
+                                 Html.button [ prop.text "Sell"
+                                               prop.onClick (fun _ -> dispatch <| OnWoodCargoSold(PortRoyal p)) ]
                                  Html.li [ Html.p $"{p.Cargo.Sugar}" ]
                                  Html.button [ prop.text "Buy" ]
                                  Html.button [ prop.text "Sell" ] ] ]
