@@ -117,7 +117,15 @@ let update msg model =
                     Coins = PlayerCoins(coins - price)
                     OwnedShip = ownedShip }
 
-            ({ model with Player = player }, Cmd.none)
+            let (CargoUnit portWoodUnit) = p.Cargo.Wood.Unit
+            let portWood = { p.Cargo.Wood with Unit = CargoUnit(portWoodUnit - 1) }
+            let portCargo = { p.Cargo with Wood = portWood }
+            let port = { p with Cargo = portCargo }
+
+            ({ model with
+                Player = player
+                Location = PortRoyal port },
+             Cmd.none)
 
         | Barbados p -> (model, Cmd.none)
         | Nassau p -> (model, Cmd.none)
