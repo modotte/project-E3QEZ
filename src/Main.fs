@@ -101,8 +101,21 @@ let update msg model =
         | PortRoyal p ->
             let (CargoPrice price) = p.Cargo.Wood.Price
             let (PlayerCoins coins) = model.Player.Coins
-            // TODO: Handle zero coins or cargo
-            let player = { model.Player with Coins = PlayerCoins(coins - price) }
+            // TODO: Handle zero coins and cargo
+
+            let (CargoUnit ownedWoodUnit) = model.Player.OwnedShip.OwnedCargo.Wood.Unit
+
+            let ownedWood =
+                { model.Player.OwnedShip.OwnedCargo.Wood with Unit = CargoUnit(ownedWoodUnit + 1) }
+
+            let ownedCargo = { model.Player.OwnedShip.OwnedCargo with Wood = ownedWood }
+            let ownedShip = { model.Player.OwnedShip with OwnedCargo = ownedCargo }
+
+            let player =
+                { model.Player with
+                    Coins = PlayerCoins(coins - price)
+                    OwnedShip = ownedShip }
+
             ({ model with Player = player }, Cmd.none)
 
         | Barbados p -> (model, Cmd.none)
