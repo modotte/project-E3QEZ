@@ -105,7 +105,9 @@ let update msg model =
             let ownedCargo =
                 { model.Player.OwnedShip.OwnedCargo.Wood with Unit = CargoUnit.New(ownedWoodUnit + 1) }
 
-            { model.Player.OwnedShip.OwnedCargo with Wood = ownedCargo }
+            let ownedCargo = { model.Player.OwnedShip.OwnedCargo with Wood = ownedCargo }
+
+            { model.Player.OwnedShip with OwnedCargo = ownedCargo }
 
         match loc with
         | PortRoyal p ->
@@ -113,14 +115,10 @@ let update msg model =
             let coins = PlayerCoins.Value(model.Player.Coins)
             // TODO: Handle zero coins and cargo
 
-            let ownedShip =
-                { model.Player.OwnedShip with OwnedCargo = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo }
-
-
             let player =
                 { model.Player with
                     Coins = PlayerCoins.New(coins - price)
-                    OwnedShip = ownedShip }
+                    OwnedShip = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo }
 
             let portWoodUnit = CargoUnit.Value(p.Cargo.Wood.Unit)
             let portWood = { p.Cargo.Wood with Unit = CargoUnit.New(portWoodUnit - 1) }
