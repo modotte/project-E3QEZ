@@ -111,6 +111,8 @@ type Msg =
     | OnDockClicked
     | OnMarketClicked
 
+    | OnCargoSold of Cargo
+    | OnCargoBought of Cargo
     | OnUpdateOwnedShipName of ShipName
     | OnUpdateOwnedShipClass of ShipClass
     | OnUpdateLocation of Location

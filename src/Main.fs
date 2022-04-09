@@ -236,14 +236,26 @@ module View =
         // TODO: For now, let's just print all data but let's polish it later
         match model.Player.CurrentLocation with
         | PortRoyal p ->
-            Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
-                      Html.li [ Html.p $"{p.Cargo.Sugar}" ] ]
+            Html.div [ Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
+                                 Html.button [ prop.text "Buy" ]
+                                 Html.button [ prop.text "Sell" ]
+                                 Html.li [ Html.p $"{p.Cargo.Sugar}" ]
+                                 Html.button [ prop.text "Buy" ]
+                                 Html.button [ prop.text "Sell" ] ] ]
         | Barbados p ->
-            Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
-                      Html.li [ Html.p $"{p.Cargo.Sugar}" ] ]
+            Html.div [ Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
+                                 Html.button [ prop.text "Buy" ]
+                                 Html.button [ prop.text "Sell" ]
+                                 Html.li [ Html.p $"{p.Cargo.Sugar}" ]
+                                 Html.button [ prop.text "Buy" ]
+                                 Html.button [ prop.text "Sell" ] ] ]
         | Nassau p ->
-            Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
-                      Html.li [ Html.p $"{p.Cargo.Sugar}" ] ]
+            Html.div [ Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
+                                 Html.button [ prop.text "Buy" ]
+                                 Html.button [ prop.text "Sell" ]
+                                 Html.li [ Html.p $"{p.Cargo.Sugar}" ]
+                                 Html.button [ prop.text "Buy" ]
+                                 Html.button [ prop.text "Sell" ] ] ]
 
 
     let marketPage dispatch model =
