@@ -294,10 +294,12 @@ module View =
         Html.div [ Html.p [ prop.text $"{currentLocation model.Location}" ]
 
                    Html.p [ prop.text $"Coins: {PlayerCoins.Value(model.Player.Coins)}" ]
+                   let ship = model.Player.OwnedShip
 
-                   Html.p [ let ship = model.Player.OwnedShip
-                            let sn = ShipName.Value(model.Player.OwnedShip.Name)
-                            prop.text $"Current ship named {sn} of {ship.Class.ToString()} class" ] ]
+                   Html.p [ let sn = ShipName.Value(model.Player.OwnedShip.Name)
+                            prop.text $"Current ship named {sn} of {ship.Class.ToString()} class" ]
+
+                   Html.p [ prop.text $"Your cargo: ${ship.OwnedCargo.ToString()}" ] ]
 
     let profilePage dispatch model =
         Html.div [ header dispatch
