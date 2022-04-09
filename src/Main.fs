@@ -58,6 +58,7 @@ let init =
     | Some oldModel -> (oldModel, Cmd.none)
     | None ->
         ({ DaysPassed = DaysPassed 1 // Every location change should pass at least 1 day
+           Location = PortRoyal Port.portRoyal
            Player =
              { FirstName = PlayerFirstName "Johnathan"
                LastName = PlayerLastName "Smith"
@@ -73,8 +74,7 @@ let init =
                      { Wood = { Cargo.wood with Unit = CargoUnit 18 }
                        Sugar = { Cargo.sugar with Unit = CargoUnit 4 } }
                    CrewCapacity = CrewCapacity 18
-                   OwnedCrew = OwnedCrew 6 }
-               CurrentLocation = (PortRoyal Port.portRoyal) }
+                   OwnedCrew = OwnedCrew 6 } }
            Settings = { MusicVolume = MusicVolume 50 }
            CurrentUrl = Router.currentUrl () },
          Cmd.none)
@@ -110,6 +110,7 @@ let update msg model =
 
             let ownedCargo = { model.Player.OwnedShip.OwnedCargo with Wood = ownedWood }
             let ownedShip = { model.Player.OwnedShip with OwnedCargo = ownedCargo }
+
 
             let player =
                 { model.Player with
@@ -147,9 +148,7 @@ let update msg model =
             { model.Player with OwnedShip = ship }
 
         ({ model with Player = player }, Cmd.none)
-    | OnUpdateLocation location ->
-        let player = { model.Player with CurrentLocation = location }
-        ({ model with Player = player }, Cmd.none)
+    | OnUpdateLocation location -> ({ model with Location = location }, Cmd.none)
     | OnNewCharacterEntriesUpdated player -> { model with Player = player }, Cmd.none
 
 
@@ -252,7 +251,7 @@ module View =
 
     let metaInfoSection dispatch model =
         // TODO: Simplify below. Seems unnecesarily complicated
-        Html.div [ Html.p [ prop.text $"{currentLocation model.Player.CurrentLocation}" ]
+        Html.div [ Html.p [ prop.text $"{currentLocation model.Location}" ]
 
                    let (PlayerCoins coins) = model.Player.Coins
                    Html.p [ prop.text $"Coins: {coins}" ]
@@ -271,7 +270,7 @@ module View =
 
     let marketCargosSection dispatch model =
         // TODO: For now, let's just print all data but let's polish it later
-        match model.Player.CurrentLocation with
+        match model.Location with
         | PortRoyal p ->
             Html.div [ Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
                                  Html.button [ prop.text "Buy"

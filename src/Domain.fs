@@ -84,8 +84,7 @@ type Player =
       LastName: PlayerLastName
       Age: PlayerAge
       Coins: PlayerCoins
-      OwnedShip: Ship
-      CurrentLocation: Location }
+      OwnedShip: Ship }
 
 type MusicVolume = MusicVolume of int
 type Settings = { MusicVolume: MusicVolume }
@@ -94,6 +93,7 @@ type DaysPassed = DaysPassed of int
 
 type Model =
     { DaysPassed: DaysPassed
+      Location: Location
       Player: Player
       Settings: Settings
       CurrentUrl: string list }
