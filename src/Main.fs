@@ -13,7 +13,7 @@ importSideEffects "./styles/global.scss"
 module Cargo =
     let wood =
         { Name = CargoName.New("Wood")
-          Description = CargoDescription.New("Used to repair ship hull and buildings")
+          Description = CargoDescription.New("Used in repairing ship hull and buildings")
           Price = CargoPrice.New(20)
           Unit = CargoUnit.New(7) }
 
@@ -38,7 +38,10 @@ module ShipKind =
               Sugar = Cargo.sugar }
           CrewCapacity = CrewCapacity.New(20)
           OwnedCrew = OwnedCrew.New(20)
-          Nationality = British }
+          Nationality = British
+          Hull = ShipHull.New(5)
+          Sail = ShipSail.New(4)
+          ShipToPlayerDistance = ShipToPlayerDistance.New(None) }
 
     let sloop =
         { Id = ShipId.New()
@@ -51,7 +54,10 @@ module ShipKind =
               Sugar = Cargo.sugar }
           CrewCapacity = CrewCapacity.New(40)
           OwnedCrew = OwnedCrew.New(40)
-          Nationality = British }
+          Nationality = British
+          Hull = ShipHull.New(10)
+          Sail = ShipSail.New(7)
+          ShipToPlayerDistance = ShipToPlayerDistance.New(None) }
 
     let junk =
         { Id = ShipId.New()
@@ -64,7 +70,10 @@ module ShipKind =
               Sugar = Cargo.sugar }
           CrewCapacity = CrewCapacity.New(35)
           OwnedCrew = OwnedCrew.New(35)
-          Nationality = British }
+          Nationality = British
+          Hull = ShipHull.New(8)
+          Sail = ShipSail.New(10)
+          ShipToPlayerDistance = ShipToPlayerDistance.New(None) }
 
     let galleon =
         { Id = ShipId.New()
@@ -77,7 +86,10 @@ module ShipKind =
               Sugar = Cargo.sugar }
           CrewCapacity = CrewCapacity.New(64)
           OwnedCrew = OwnedCrew.New(64)
-          Nationality = British }
+          Nationality = British
+          Hull = ShipHull.New(17)
+          Sail = ShipSail.New(8)
+          ShipToPlayerDistance = ShipToPlayerDistance.New(None) }
 
     let frigate =
         { Id = ShipId.New()
@@ -90,7 +102,10 @@ module ShipKind =
               Sugar = Cargo.sugar }
           CrewCapacity = CrewCapacity.New(125)
           OwnedCrew = OwnedCrew.New(125)
-          Nationality = British }
+          Nationality = British
+          Hull = ShipHull.New(30)
+          Sail = ShipSail.New(17)
+          ShipToPlayerDistance = ShipToPlayerDistance.New(None) }
 
 
 module Port =

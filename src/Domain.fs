@@ -81,6 +81,31 @@ module OwnedCrew =
     let New (x: int) = OwnedCrew x
     let Value (OwnedCrew x) = x
 
+type ShipHull = private ShipHull of int
+
+module ShipHull =
+    let New (x: int) = ShipHull x
+    let Value (ShipHull x) = x
+
+type ShipSail = private ShipSail of int
+
+module ShipSail =
+    let New (x: int) = ShipSail x
+    let Value (x: int) = x
+
+type ShipDistance =
+    | Board
+    | Close
+    | Far
+    | Escape
+
+type ShipToPlayerDistance = private ShipToPlayerDistance of ShipDistance option
+
+module ShipToPlayerDistance =
+    let New (x: ShipDistance option) = ShipToPlayerDistance x
+    let Value (ShipToPlayerDistance x) = x
+
+
 type Ship =
     { Id: ShipId
       Name: ShipName
@@ -90,7 +115,10 @@ type Ship =
       OwnedCargo: Cargo
       CrewCapacity: CrewCapacity
       OwnedCrew: OwnedCrew
-      Nationality: Nationality }
+      Nationality: Nationality
+      Hull: ShipHull
+      Sail: ShipSail
+      ShipToPlayerDistance: ShipToPlayerDistance }
 
 type PortName = private PortName of string
 
