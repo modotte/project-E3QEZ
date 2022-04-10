@@ -277,7 +277,11 @@ let update msg model =
             { model.Player with OwnedShip = ship }
 
         ({ model with Player = player }, Cmd.none)
-    | OnUpdateLocation location -> ({ model with Location = location }, Cmd.none)
+    | OnUpdateLocation location ->
+        ({ model with
+            Location = location
+            Date = Date.TomorrowAfterToday(model.Date) },
+         Cmd.none)
     | OnNewCharacterEntriesUpdated player -> { model with Player = player }, Cmd.none
 
 

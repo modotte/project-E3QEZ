@@ -172,6 +172,7 @@ module Date =
     let New () = Date(DateTime(1650, 1, 1, 1, 0, 0))
 
     let Value (Date x) = x
+    let TomorrowAfterToday (Date x) = Date <| x.AddDays(1.0)
     let Formatted (Date x) = string <| x.Format("dd MMMM yyyy")
 
 let currentLocation location =
