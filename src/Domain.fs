@@ -67,11 +67,7 @@ type ShipClass =
     | Brig
     | Junk
     | Galleon
-    | WarGalleon
     | Frigate
-    | ManOWar
-    | SecondRate
-    | FirstRate
 
 type CrewCapacity = private CrewCapacity of int
 

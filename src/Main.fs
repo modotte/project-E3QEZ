@@ -23,6 +23,71 @@ module Cargo =
           Price = CargoPrice.New(57)
           Unit = CargoUnit.New(3) }
 
+[<Literal>]
+let DEFAULT_SHIP_NAME = "Heart of Ocean"
+
+module ShipKind =
+    let cutter =
+        { Id = ShipId.New()
+          Name = ShipName.New(DEFAULT_SHIP_NAME)
+          Size = Light
+          Class = Cutter
+          CargoCapacity = CargoCapacity.New(20)
+          OwnedCargo =
+            { Wood = Cargo.wood
+              Sugar = Cargo.sugar }
+          CrewCapacity = CrewCapacity.New(20)
+          OwnedCrew = OwnedCrew.New(20) }
+
+    let sloop =
+        { Id = ShipId.New()
+          Name = ShipName.New(DEFAULT_SHIP_NAME)
+          Size = Light
+          Class = Sloop
+          CargoCapacity = CargoCapacity.New(82)
+          OwnedCargo =
+            { Wood = Cargo.wood
+              Sugar = Cargo.sugar }
+          CrewCapacity = CrewCapacity.New(40)
+          OwnedCrew = OwnedCrew.New(40) }
+
+    let junk =
+        { Id = ShipId.New()
+          Name = ShipName.New(DEFAULT_SHIP_NAME)
+          Size = Light
+          Class = Junk
+          CargoCapacity = CargoCapacity.New(75)
+          OwnedCargo =
+            { Wood = Cargo.wood
+              Sugar = Cargo.sugar }
+          CrewCapacity = CrewCapacity.New(35)
+          OwnedCrew = OwnedCrew.New(35) }
+
+    let galleon =
+        { Id = ShipId.New()
+          Name = ShipName.New(DEFAULT_SHIP_NAME)
+          Size = Light
+          Class = Galleon
+          CargoCapacity = CargoCapacity.New(152)
+          OwnedCargo =
+            { Wood = Cargo.wood
+              Sugar = Cargo.sugar }
+          CrewCapacity = CrewCapacity.New(64)
+          OwnedCrew = OwnedCrew.New(64) }
+
+    let frigate =
+        { Id = ShipId.New()
+          Name = ShipName.New(DEFAULT_SHIP_NAME)
+          Size = Light
+          Class = Frigate
+          CargoCapacity = CargoCapacity.New(300)
+          OwnedCargo =
+            { Wood = Cargo.wood
+              Sugar = Cargo.sugar }
+          CrewCapacity = CrewCapacity.New(125)
+          OwnedCrew = OwnedCrew.New(125) }
+
+
 module Port =
     let portRoyal =
         { Name = PortName.New("Port Royal")
@@ -63,17 +128,7 @@ let init =
                LastName = PlayerLastName.New("Smith")
                Age = PlayerAge.New(18)
                Coins = PlayerCoins.New(650)
-               OwnedShip =
-                 { Id = ShipId.New()
-                   Name = ShipName.New("Heart of Ocean")
-                   Size = Light
-                   Class = Sloop
-                   CargoCapacity = CargoCapacity.New(82)
-                   OwnedCargo =
-                     { Wood = { Cargo.wood with Unit = CargoUnit.New(18) }
-                       Sugar = { Cargo.sugar with Unit = CargoUnit.New(4) } }
-                   CrewCapacity = CrewCapacity.New(18)
-                   OwnedCrew = OwnedCrew.New(6) } }
+               OwnedShip = ShipKind.sloop }
            Settings = { MusicVolume = MusicVolume.New(50) }
            CurrentUrl = Router.currentUrl () },
          Cmd.none)
