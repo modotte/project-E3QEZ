@@ -89,7 +89,8 @@ type Ship =
       CargoCapacity: CargoCapacity
       OwnedCargo: Cargo
       CrewCapacity: CrewCapacity
-      OwnedCrew: OwnedCrew }
+      OwnedCrew: OwnedCrew
+      Nationality: Nationality }
 
 type PortName = private PortName of string
 

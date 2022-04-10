@@ -37,7 +37,8 @@ module ShipKind =
             { Wood = Cargo.wood
               Sugar = Cargo.sugar }
           CrewCapacity = CrewCapacity.New(20)
-          OwnedCrew = OwnedCrew.New(20) }
+          OwnedCrew = OwnedCrew.New(20)
+          Nationality = British }
 
     let sloop =
         { Id = ShipId.New()
@@ -49,7 +50,8 @@ module ShipKind =
             { Wood = Cargo.wood
               Sugar = Cargo.sugar }
           CrewCapacity = CrewCapacity.New(40)
-          OwnedCrew = OwnedCrew.New(40) }
+          OwnedCrew = OwnedCrew.New(40)
+          Nationality = British }
 
     let junk =
         { Id = ShipId.New()
@@ -61,7 +63,8 @@ module ShipKind =
             { Wood = Cargo.wood
               Sugar = Cargo.sugar }
           CrewCapacity = CrewCapacity.New(35)
-          OwnedCrew = OwnedCrew.New(35) }
+          OwnedCrew = OwnedCrew.New(35)
+          Nationality = British }
 
     let galleon =
         { Id = ShipId.New()
@@ -73,7 +76,8 @@ module ShipKind =
             { Wood = Cargo.wood
               Sugar = Cargo.sugar }
           CrewCapacity = CrewCapacity.New(64)
-          OwnedCrew = OwnedCrew.New(64) }
+          OwnedCrew = OwnedCrew.New(64)
+          Nationality = British }
 
     let frigate =
         { Id = ShipId.New()
@@ -85,7 +89,8 @@ module ShipKind =
             { Wood = Cargo.wood
               Sugar = Cargo.sugar }
           CrewCapacity = CrewCapacity.New(125)
-          OwnedCrew = OwnedCrew.New(125) }
+          OwnedCrew = OwnedCrew.New(125)
+          Nationality = British }
 
 
 module Port =
