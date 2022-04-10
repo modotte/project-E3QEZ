@@ -163,11 +163,16 @@ module MusicVolume =
 
 type Settings = { MusicVolume: MusicVolume }
 
-type DaysPassed = private DaysPassed of int
+type Date = private Date of System.DateTime
 
-module DaysPassed =
-    let New (x: int) = DaysPassed x
-    let Value (DaysPassed x) = x
+module Date =
+    open System
+    open Fable.DateFunctions
+
+    let New () = Date(DateTime(1650, 1, 1, 1, 0, 0))
+
+    let Value (Date x) = x
+    let Formatted (Date x) = string <| x.Format("MMMM dd yyyy")
 
 let currentLocation location =
     match location with
@@ -176,7 +181,7 @@ let currentLocation location =
     | Nassau p -> PortName.Value(p.Name)
 
 type Model =
-    { DaysPassed: DaysPassed
+    { Date: Date
       Location: Location
       Player: Player
       Settings: Settings

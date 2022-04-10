@@ -6,7 +6,6 @@ open Feliz.Router
 open Elmish
 open Browser.Dom
 open Fable.Core.JsInterop
-
 open Domain
 
 importSideEffects "./styles/global.scss"
@@ -57,7 +56,7 @@ let init =
     function
     | Some oldModel -> (oldModel, Cmd.none)
     | None ->
-        ({ DaysPassed = DaysPassed.New(1) // Every location change should pass at least 1 day
+        ({ Date = Date.New() // Every location change should pass at least 1 day
            Location = PortRoyal Port.portRoyal
            Player =
              { FirstName = PlayerFirstName.New("Johnathan")
@@ -375,7 +374,8 @@ module View =
 
     let metaInfoSection dispatch model =
         // TODO: Simplify below. Seems unnecesarily complicated
-        Html.div [ Html.p [ prop.text $"{currentLocation model.Location}" ]
+        Html.div [ simpleLabel <| Date.Formatted(model.Date)
+                   Html.p [ prop.text $"{currentLocation model.Location}" ]
 
                    Html.p [ prop.text $"Coins: {PlayerCoins.Value(model.Player.Coins)}" ]
                    let ship = model.Player.OwnedShip
