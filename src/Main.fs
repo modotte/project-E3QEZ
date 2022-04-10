@@ -222,6 +222,48 @@ let update msg model =
                 Location = PortRoyal(addIntoPortCargo p) },
              Cmd.none)
 
+    | OnSugarCargoSold loc ->
+        let removeFromPlayerCargo ownedCargo port =
+            // TODO: Handle zero coins and cargo
+            let coins = PlayerCoins.Value(model.Player.Coins)
+            let price = CargoPrice.Value(port.Cargo.Sugar.Price)
+            let ownedSugarUnit = CargoUnit.Value(ownedCargo.Sugar.Unit)
+
+            let ownedCargo =
+                { model.Player.OwnedShip.OwnedCargo.Wood with Unit = CargoUnit.New(ownedSugarUnit - 1) }
+
+            let ownedCargo = { model.Player.OwnedShip.OwnedCargo with Sugar = ownedCargo }
+
+            let ownedShip = { model.Player.OwnedShip with OwnedCargo = ownedCargo }
+
+            { model.Player with
+                Coins = PlayerCoins.New(coins + price)
+                OwnedShip = ownedShip }
+
+        let addIntoPortCargo port =
+            let portSugarUnit = CargoUnit.Value(port.Cargo.Sugar.Unit)
+            let portSugar = { port.Cargo.Sugar with Unit = CargoUnit.New(portSugarUnit + 1) }
+            let portCargo = { port.Cargo with Sugar = portSugar }
+            { port with Cargo = portCargo }
+
+        match loc with
+        | PortRoyal p ->
+            ({ model with
+                Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Location = PortRoyal(addIntoPortCargo p) },
+             Cmd.none)
+
+        | Barbados p ->
+            ({ model with
+                Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Location = PortRoyal(addIntoPortCargo p) },
+             Cmd.none)
+        | Nassau p ->
+            ({ model with
+                Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Location = PortRoyal(addIntoPortCargo p) },
+             Cmd.none)
+
     | OnUpdateOwnedShipName name ->
         let player =
             let ship = { model.Player.OwnedShip with Name = name }
@@ -363,7 +405,8 @@ module View =
                                  Html.li [ Html.p $"{p.Cargo.Sugar}" ]
                                  Html.button [ prop.text "Buy"
                                                prop.onClick (fun _ -> dispatch <| OnSugarCargoBought(PortRoyal p)) ]
-                                 Html.button [ prop.text "Sell" ] ] ]
+                                 Html.button [ prop.text "Sell"
+                                               prop.onClick (fun _ -> dispatch <| OnSugarCargoSold(PortRoyal p)) ] ] ]
         | Barbados p ->
             Html.div [ Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
                                  Html.button [ prop.text "Buy"
@@ -373,7 +416,8 @@ module View =
                                  Html.li [ Html.p $"{p.Cargo.Sugar}" ]
                                  Html.button [ prop.text "Buy"
                                                prop.onClick (fun _ -> dispatch <| OnSugarCargoBought(Barbados p)) ]
-                                 Html.button [ prop.text "Sell" ] ] ]
+                                 Html.button [ prop.text "Sell"
+                                               prop.onClick (fun _ -> dispatch <| OnSugarCargoSold(Barbados p)) ] ] ]
         | Nassau p ->
             Html.div [ Html.ul [ Html.li [ Html.p $"{p.Cargo.Wood}" ]
                                  Html.button [ prop.text "Buy"
@@ -383,7 +427,8 @@ module View =
                                  Html.li [ Html.p $"{p.Cargo.Sugar}" ]
                                  Html.button [ prop.text "Buy"
                                                prop.onClick (fun _ -> dispatch <| OnSugarCargoBought(Nassau p)) ]
-                                 Html.button [ prop.text "Sell" ] ] ]
+                                 Html.button [ prop.text "Sell"
+                                               prop.onClick (fun _ -> dispatch <| OnSugarCargoSold(Nassau p)) ] ] ]
 
 
     let marketPage dispatch model =
