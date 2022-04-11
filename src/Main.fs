@@ -27,7 +27,7 @@ module Cargo =
 let DEFAULT_SHIP_NAME = "Heart of Ocean"
 
 module ShipKind =
-    let cutter =
+    let private primary =
         { Id = ShipId.New()
           Name = ShipName.New(DEFAULT_SHIP_NAME)
           Size = Light
@@ -43,69 +43,44 @@ module ShipKind =
           Sail = ShipSail.New(4)
           ShipToPlayerDistance = ShipToPlayerDistance.New(None) }
 
+    let cutter = primary
+
     let sloop =
-        { Id = ShipId.New()
-          Name = ShipName.New(DEFAULT_SHIP_NAME)
-          Size = Light
-          Class = Sloop
-          CargoCapacity = CargoCapacity.New(82)
-          OwnedCargo =
-            { Wood = Cargo.wood
-              Sugar = Cargo.sugar }
-          CrewCapacity = CrewCapacity.New(40)
-          OwnedCrew = OwnedCrew.New(40)
-          Nationality = British
-          Hull = ShipHull.New(10)
-          Sail = ShipSail.New(7)
-          ShipToPlayerDistance = ShipToPlayerDistance.New(None) }
+        { primary with
+            Class = Sloop
+            CargoCapacity = CargoCapacity.New(82)
+            CrewCapacity = CrewCapacity.New(40)
+            OwnedCrew = OwnedCrew.New(40)
+            Hull = ShipHull.New(11)
+            Sail = ShipSail.New(11) }
 
     let junk =
-        { Id = ShipId.New()
-          Name = ShipName.New(DEFAULT_SHIP_NAME)
-          Size = Light
-          Class = Junk
-          CargoCapacity = CargoCapacity.New(75)
-          OwnedCargo =
-            { Wood = Cargo.wood
-              Sugar = Cargo.sugar }
-          CrewCapacity = CrewCapacity.New(35)
-          OwnedCrew = OwnedCrew.New(35)
-          Nationality = British
-          Hull = ShipHull.New(8)
-          Sail = ShipSail.New(10)
-          ShipToPlayerDistance = ShipToPlayerDistance.New(None) }
+        { primary with
+            Class = Junk
+            CargoCapacity = CargoCapacity.New(75)
+            CrewCapacity = CrewCapacity.New(35)
+            OwnedCrew = OwnedCrew.New(35)
+            Hull = ShipHull.New(8)
+            Sail = ShipSail.New(14) }
 
     let galleon =
-        { Id = ShipId.New()
-          Name = ShipName.New(DEFAULT_SHIP_NAME)
-          Size = Light
-          Class = Galleon
-          CargoCapacity = CargoCapacity.New(152)
-          OwnedCargo =
-            { Wood = Cargo.wood
-              Sugar = Cargo.sugar }
-          CrewCapacity = CrewCapacity.New(64)
-          OwnedCrew = OwnedCrew.New(64)
-          Nationality = British
-          Hull = ShipHull.New(17)
-          Sail = ShipSail.New(8)
-          ShipToPlayerDistance = ShipToPlayerDistance.New(None) }
+        { primary with
+            Class = Galleon
+            CargoCapacity = CargoCapacity.New(152)
+            CrewCapacity = CrewCapacity.New(64)
+            OwnedCrew = OwnedCrew.New(64)
+            Hull = ShipHull.New(15)
+            Sail = ShipSail.New(10) }
 
     let frigate =
-        { Id = ShipId.New()
-          Name = ShipName.New(DEFAULT_SHIP_NAME)
-          Size = Light
-          Class = Frigate
-          CargoCapacity = CargoCapacity.New(300)
-          OwnedCargo =
-            { Wood = Cargo.wood
-              Sugar = Cargo.sugar }
-          CrewCapacity = CrewCapacity.New(125)
-          OwnedCrew = OwnedCrew.New(125)
-          Nationality = British
-          Hull = ShipHull.New(30)
-          Sail = ShipSail.New(17)
-          ShipToPlayerDistance = ShipToPlayerDistance.New(None) }
+        { primary with
+            Class = Frigate
+            CargoCapacity = CargoCapacity.New(300)
+            CrewCapacity = CrewCapacity.New(3125)
+            OwnedCrew = OwnedCrew.New(125)
+            Hull = ShipHull.New(30)
+            Sail = ShipSail.New(17) }
+
 
 
 module Port =
