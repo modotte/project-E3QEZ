@@ -76,7 +76,7 @@ module ShipKind =
         { primary with
             Class = Frigate
             CargoCapacity = CargoCapacity.New(300)
-            CrewCapacity = CrewCapacity.New(3125)
+            CrewCapacity = CrewCapacity.New(125)
             OwnedCrew = OwnedCrew.New(125)
             Hull = ShipHull.New(30)
             Sail = ShipSail.New(17) }
