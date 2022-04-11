@@ -140,7 +140,9 @@ let update msg model =
     | OnStartGameClicked -> (model, Cmd.navigate "newCharacterPage")
     | OnMainNavigationClicked -> (model, Cmd.navigate "mainNavigationPage")
     | OnProfileClicked -> (model, Cmd.navigate "profilePage")
-    | OnSkirmishClicked -> (model, Cmd.navigate "skirmishPage")
+    | OnSkirmishClicked ->
+
+        (model, Cmd.navigate "skirmishPage")
 
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
@@ -445,7 +447,9 @@ module View =
 
     let skirmishPage dispatch model =
         Html.div [ header dispatch
-                   backToMainNavigationButton "Back" dispatch ]
+                   Html.button [ prop.text "Evade" ]
+                   Html.button [ prop.text "Chase" ]
+                   Html.button [ prop.text "Broadside" ] ]
 
     let marketCargosSection dispatch model =
         // TODO: For now, let's just print all data but let's polish it later
