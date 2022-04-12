@@ -26,6 +26,9 @@ module Cargo =
 [<Literal>]
 let DEFAULT_SHIP_NAME = "Heart of Ocean"
 
+[<Literal>]
+let SHIP_HULL_MINIMUM = 4
+
 module ShipKind =
     let private primary =
         { Id = ShipId.New()
@@ -39,7 +42,7 @@ module ShipKind =
           CrewCapacity = CrewCapacity.New(20)
           OwnedCrew = OwnedCrew.New(20)
           Nationality = British
-          Hull = ShipHull.New(5)
+          Hull = ShipHull.New(8)
           Sail = ShipSail.New(4)
           Cannon = ShipCannon.New(4) }
 
@@ -51,7 +54,7 @@ module ShipKind =
             CargoCapacity = CargoCapacity.New(82)
             CrewCapacity = CrewCapacity.New(40)
             OwnedCrew = OwnedCrew.New(40)
-            Hull = ShipHull.New(11)
+            Hull = ShipHull.New(16)
             Sail = ShipSail.New(11)
             Cannon = ShipCannon.New(6) }
 
@@ -61,7 +64,7 @@ module ShipKind =
             CargoCapacity = CargoCapacity.New(75)
             CrewCapacity = CrewCapacity.New(35)
             OwnedCrew = OwnedCrew.New(35)
-            Hull = ShipHull.New(8)
+            Hull = ShipHull.New(14)
             Sail = ShipSail.New(14)
             Cannon = ShipCannon.New(8) }
 
@@ -71,7 +74,7 @@ module ShipKind =
             CargoCapacity = CargoCapacity.New(152)
             CrewCapacity = CrewCapacity.New(64)
             OwnedCrew = OwnedCrew.New(64)
-            Hull = ShipHull.New(15)
+            Hull = ShipHull.New(20)
             Sail = ShipSail.New(10)
             Cannon = ShipCannon.New(10) }
 
@@ -81,7 +84,7 @@ module ShipKind =
             CargoCapacity = CargoCapacity.New(300)
             CrewCapacity = CrewCapacity.New(125)
             OwnedCrew = OwnedCrew.New(125)
-            Hull = ShipHull.New(30)
+            Hull = ShipHull.New(38)
             Sail = ShipSail.New(17)
             Cannon = ShipCannon.New(26) }
 
@@ -168,7 +171,7 @@ let update msg model =
         match model.Enemy with
         | None -> (model, Cmd.navigateBack ())
         | Some enemy ->
-            if ShipHull.Value(model.Player.OwnedShip.Hull) < 1 then
+            if ShipHull.Value(model.Player.OwnedShip.Hull) < SHIP_HULL_MINIMUM then
                 ({ model with State = Lose }, Cmd.navigate "")
             // TODO: Randomize damage
             else
@@ -224,7 +227,7 @@ let update msg model =
             let enemyCrew = OwnedCrew.Value(enemy.Ship.OwnedCrew)
             let enemyCannon = ShipCannon.Value(enemy.Ship.Cannon)
 
-            if enemyHull < 1 then
+            if enemyHull < SHIP_HULL_MINIMUM then
                 (model, Cmd.navigate "mainNavigationPage")
             else
                 let updateHull hull =
