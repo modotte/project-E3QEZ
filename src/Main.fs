@@ -237,7 +237,7 @@ let update msg model =
                     if enemySail < SHIP_SAIL_MINIMUM then
                         enemy.Ship
                     else
-                        { enemy.Ship with Sail = ShipSail.New(enemySail - 1) }
+                        { enemy.Ship with Sail = ShipSail.New(enemySail - sail) }
 
                 let updateEnemyHull hull =
                     if enemyHull < SHIP_HULL_MINIMUM then
