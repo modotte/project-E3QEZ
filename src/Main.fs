@@ -159,7 +159,7 @@ let update msg model =
         let enemy =
             Some
             <| { Ship = { ShipKind.junk with Name = ShipName.New("Skeleton Heart") }
-                 Movement = Still
+                 Movement = Chase
                  Distance = randomizedInitialDistance () }
 
 
@@ -168,11 +168,41 @@ let update msg model =
         match model.Enemy with
         | None -> (model, Cmd.navigateBack ())
         | Some enemy ->
-            match enemy.Distance with
-            | Escape -> ({ model with Enemy = None }, Cmd.navigate "mainNavigationPage")
-            | Far -> ({ model with Enemy = Some { enemy with Distance = Escape } }, Cmd.none)
-            | Close -> ({ model with Enemy = Some { enemy with Distance = Far } }, Cmd.none)
-            | Board -> (model, Cmd.none) // TODO: Go to board battle page
+            if ShipHull.Value(model.Player.OwnedShip.Hull) < 1 then
+                ({ model with State = Lose }, Cmd.navigate "")
+            // TODO: Randomize damage
+            else
+                match enemy.Movement with
+                | Chase ->
+                    let player =
+                        ({ model.Player with
+                            OwnedShip =
+                                { model.Player.OwnedShip with
+                                    Hull = ShipHull.New(ShipHull.Value(model.Player.OwnedShip.Hull) - 1) } })
+
+                    match enemy.Distance with
+                    | Escape ->
+                        ({ model with
+                            Enemy = None
+                            Player = player },
+                         Cmd.navigate "mainNavigationPage")
+                    | Far ->
+                        ({ model with
+                            Enemy = Some { enemy with Distance = Escape }
+                            Player = player },
+                         Cmd.none)
+                    | Close ->
+                        ({ model with
+                            Enemy = Some { enemy with Distance = Far }
+                            Player = player },
+                         Cmd.none)
+                    | Board -> (model, Cmd.none) // TODO: Go to board battle page
+                | _ ->
+                    match enemy.Distance with
+                    | Escape -> ({ model with Enemy = None }, Cmd.navigate "mainNavigationPage")
+                    | Far -> ({ model with Enemy = Some { enemy with Distance = Escape } }, Cmd.none)
+                    | Close -> ({ model with Enemy = Some { enemy with Distance = Far } }, Cmd.none)
+                    | Board -> (model, Cmd.none) // TODO: Go to board battle page
 
     | OnSkirmishCloseClicked ->
         match model.Enemy with
@@ -191,6 +221,8 @@ let update msg model =
             let enemyHull = ShipHull.Value(enemy.Ship.Hull)
             // TODO: Handle sail, crew and cannons
             let enemySail = ShipSail.Value(enemy.Ship.Sail)
+            let enemyCrew = OwnedCrew.Value(enemy.Ship.OwnedCrew)
+            let enemyCannon = ShipCannon.Value(enemy.Ship.Cannon)
 
             if enemyHull < 1 then
                 (model, Cmd.navigate "mainNavigationPage")
@@ -510,6 +542,7 @@ module View =
     let skirmishPage dispatch model =
         Html.div [ header dispatch
                    Html.p $"{model.Enemy.ToString()}"
+                   Html.p $"{model.Player.OwnedShip.ToString()}"
                    Html.button [ prop.text "Evade"
                                  prop.onClick (fun _ -> dispatch OnSkirmishEvadeClicked) ]
                    Html.button [ prop.text "Chase"
