@@ -178,6 +178,23 @@ let update msg model =
             | Close -> ({ model with Enemy = Some { enemy with Distance = Board } }, Cmd.none)
             | Board -> (model, Cmd.none) // TODO: Go to board battle page
 
+    | OnSkirmishBroadsideClicked ->
+        match model.Enemy with
+        | None -> (model, Cmd.navigateBack ())
+        | Some enemy ->
+            let enemyHull = ShipHull.Value(enemy.Ship.Hull)
+            let enemySail = ShipSail.Value(enemy.Ship.Sail)
+
+            let updateHull hull =
+                { model with
+                    Enemy = Some { enemy with Ship = { enemy.Ship with Hull = ShipHull.New(enemyHull - hull) } } }
+
+            match enemy.Distance with
+            | Escape -> (updateHull 1, Cmd.none)
+            | Far -> (updateHull 2, Cmd.none)
+            | Close -> (updateHull 3, Cmd.none)
+            | Board -> (model, Cmd.none)
+
 
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
