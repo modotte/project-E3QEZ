@@ -29,6 +29,9 @@ let DEFAULT_SHIP_NAME = "Heart of Ocean"
 [<Literal>]
 let SHIP_HULL_MINIMUM = 4
 
+[<Literal>]
+let SHIP_SAIL_MINIMUM = 2
+
 module ShipKind =
     let private primary =
         { Id = ShipId.New()
@@ -230,14 +233,22 @@ let update msg model =
             if enemyHull < SHIP_HULL_MINIMUM then
                 (model, Cmd.navigate "mainNavigationPage")
             else
-                let updateHull hull =
-                    { model with
-                        Enemy = Some { enemy with Ship = { enemy.Ship with Hull = ShipHull.New(enemyHull - hull) } } }
+                let updateSail sail =
+                    if enemySail < SHIP_SAIL_MINIMUM then
+                        enemy.Ship
+                    else
+                        { enemy.Ship with Sail = ShipSail.New(enemySail - 1) }
+
+                let updateEnemyHull hull =
+                    if enemyHull < SHIP_HULL_MINIMUM then
+                        enemy.Ship
+                    else
+                        { enemy.Ship with Hull = ShipHull.New(enemyHull - hull) }
 
                 match enemy.Distance with
-                | Escape -> (updateHull 1, Cmd.none)
-                | Far -> (updateHull 2, Cmd.none)
-                | Close -> (updateHull 3, Cmd.none)
+                | Escape -> ({ model with Enemy = Some { enemy with Ship = updateEnemyHull 1 } }, Cmd.none)
+                | Far -> ({ model with Enemy = Some { enemy with Ship = updateEnemyHull 2 } }, Cmd.none)
+                | Close -> ({ model with Enemy = Some { enemy with Ship = updateEnemyHull 3 } }, Cmd.none)
                 | Board -> (model, Cmd.none)
 
 
