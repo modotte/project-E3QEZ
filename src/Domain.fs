@@ -93,20 +93,6 @@ module ShipSail =
     let New (x: int) = ShipSail x
     let Value (x: int) = x
 
-type ShipDistance =
-    | Board
-    | Close
-    | Far
-    | Escape
-
-/// Player owned ship's is always None
-type ShipToPlayerDistance = private ShipToPlayerDistance of ShipDistance option
-
-module ShipToPlayerDistance =
-    let New (x: ShipDistance option) = ShipToPlayerDistance x
-    let Value (ShipToPlayerDistance x) = x
-
-
 type Ship =
     { Id: ShipId
       Name: ShipName
@@ -118,8 +104,23 @@ type Ship =
       OwnedCrew: OwnedCrew
       Nationality: Nationality
       Hull: ShipHull
-      Sail: ShipSail
-      ShipToPlayerDistance: ShipToPlayerDistance }
+      Sail: ShipSail }
+
+type ShipMovement =
+    | Chase
+    | Still
+    | Evade
+
+type ShipDistance =
+    | Escape
+    | Far
+    | Close
+    | Board
+
+type EnemyShip =
+    { Ship: Ship
+      Movement: ShipMovement
+      Distance: ShipDistance }
 
 type PortName = private PortName of string
 
@@ -211,7 +212,7 @@ type Model =
     { Date: Date
       Location: Location
       Player: Player
-      EnemyShip: Ship option
+      EnemyShip: EnemyShip option
       Settings: Settings
       CurrentUrl: string list }
 

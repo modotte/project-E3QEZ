@@ -40,8 +40,7 @@ module ShipKind =
           OwnedCrew = OwnedCrew.New(20)
           Nationality = British
           Hull = ShipHull.New(5)
-          Sail = ShipSail.New(4)
-          ShipToPlayerDistance = ShipToPlayerDistance.New(None) }
+          Sail = ShipSail.New(4) }
 
     let cutter = primary
 
@@ -146,10 +145,9 @@ let update msg model =
         // TODO: Randomize ship and name
         let enemyShip =
             Some
-                { ShipKind.junk with
-                    Id = ShipId.New()
-                    Name = ShipName.New("Skeleton Heart")
-                    ShipToPlayerDistance = ShipToPlayerDistance.New(Some Far) }
+            <| { Ship = { ShipKind.junk with Name = ShipName.New("Skeleton Heart") }
+                 Movement = Still
+                 Distance = Far }
 
 
         ({ model with EnemyShip = enemyShip }, Cmd.navigate "skirmishPage")
@@ -157,17 +155,11 @@ let update msg model =
         match model.EnemyShip with
         | None -> (model, Cmd.navigateBack ())
         | Some enemyShip ->
-            match ShipToPlayerDistance.Value(enemyShip.ShipToPlayerDistance) with
-            | None -> (model, Cmd.navigate "mainNavigationPage")
-            | Some sd ->
-                match sd with
-                | Escape -> ({ model with EnemyShip = None }, Cmd.navigate "mainNavigationPage")
-                | Far ->
-                    ({ model with
-                        EnemyShip = Some { enemyShip with ShipToPlayerDistance = ShipToPlayerDistance.New(Some Escape) } },
-                     Cmd.none)
-                | Close -> ({ model with EnemyShip = Some enemyShip }, Cmd.none)
-                | Board -> (model, Cmd.none)
+            match enemyShip.Distance with
+            | Escape -> ({ model with EnemyShip = None }, Cmd.navigate "mainNavigationPage")
+            | Far -> ({ model with EnemyShip = Some { enemyShip with Distance = Escape } }, Cmd.none)
+            | Close -> ({ model with EnemyShip = Some enemyShip }, Cmd.none)
+            | Board -> (model, Cmd.none)
 
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
