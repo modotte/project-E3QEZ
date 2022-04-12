@@ -124,6 +124,7 @@ let init =
                Age = PlayerAge.New(18)
                Coins = PlayerCoins.New(650)
                OwnedShip = ShipKind.sloop }
+           EnemyShip = None
            Settings = { MusicVolume = MusicVolume.New(50) }
            CurrentUrl = Router.currentUrl () },
          Cmd.none)
@@ -141,8 +142,32 @@ let update msg model =
     | OnMainNavigationClicked -> (model, Cmd.navigate "mainNavigationPage")
     | OnProfileClicked -> (model, Cmd.navigate "profilePage")
     | OnSkirmishClicked ->
+        // We initialize battle state
+        // TODO: Randomize ship and name
+        let enemyShip =
+            Some
+                { ShipKind.junk with
+                    Id = ShipId.New()
+                    Name = ShipName.New("Skeleton Heart")
+                    ShipToPlayerDistance = ShipToPlayerDistance.New(Some Far) }
 
-        (model, Cmd.navigate "skirmishPage")
+
+        ({ model with EnemyShip = enemyShip }, Cmd.navigate "skirmishPage")
+    | OnSkirmishEvadeClicked ->
+        match model.EnemyShip with
+        | None -> (model, Cmd.navigateBack ())
+        | Some enemyShip ->
+            match ShipToPlayerDistance.Value(enemyShip.ShipToPlayerDistance) with
+            | None -> (model, Cmd.navigate "mainNavigationPage")
+            | Some sd ->
+                match sd with
+                | Escape -> ({ model with EnemyShip = None }, Cmd.navigate "mainNavigationPage")
+                | Far ->
+                    ({ model with
+                        EnemyShip = Some { enemyShip with ShipToPlayerDistance = ShipToPlayerDistance.New(Some Escape) } },
+                     Cmd.none)
+                | Close -> ({ model with EnemyShip = Some enemyShip }, Cmd.none)
+                | Board -> (model, Cmd.none)
 
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
@@ -447,7 +472,9 @@ module View =
 
     let skirmishPage dispatch model =
         Html.div [ header dispatch
-                   Html.button [ prop.text "Evade" ]
+                   Html.p $"{model.EnemyShip.ToString()}"
+                   Html.button [ prop.text "Evade"
+                                 prop.onClick (fun _ -> dispatch OnSkirmishEvadeClicked) ]
                    Html.button [ prop.text "Chase" ]
                    Html.button [ prop.text "Broadside" ] ]
 

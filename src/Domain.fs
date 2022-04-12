@@ -99,6 +99,7 @@ type ShipDistance =
     | Far
     | Escape
 
+/// Player owned ship's is always None
 type ShipToPlayerDistance = private ShipToPlayerDistance of ShipDistance option
 
 module ShipToPlayerDistance =
@@ -210,6 +211,7 @@ type Model =
     { Date: Date
       Location: Location
       Player: Player
+      EnemyShip: Ship option
       Settings: Settings
       CurrentUrl: string list }
 
@@ -221,7 +223,9 @@ type Msg =
     | OnStartGameClicked
     | OnMainNavigationClicked
     | OnProfileClicked
+
     | OnSkirmishClicked
+    | OnSkirmishEvadeClicked
 
     | OnDockClicked
     | OnMarketClicked
