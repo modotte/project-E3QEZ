@@ -123,7 +123,7 @@ let init =
                Age = PlayerAge.New(18)
                Coins = PlayerCoins.New(650)
                OwnedShip = ShipKind.sloop }
-           EnemyShip = None
+           Enemy = None
            Settings = { MusicVolume = MusicVolume.New(50) }
            CurrentUrl = Router.currentUrl () },
          Cmd.none)
@@ -150,32 +150,32 @@ let update msg model =
             let case = cases[index]
             Reflection.FSharpValue.MakeUnion(case, [||]) :?> ShipDistance
 
-        let enemyShip =
+        let enemy =
             Some
             <| { Ship = { ShipKind.junk with Name = ShipName.New("Skeleton Heart") }
                  Movement = Still
                  Distance = randomizedInitialDistance () }
 
 
-        ({ model with EnemyShip = enemyShip }, Cmd.navigate "skirmishPage")
+        ({ model with Enemy = enemy }, Cmd.navigate "skirmishPage")
     | OnSkirmishEvadeClicked ->
-        match model.EnemyShip with
+        match model.Enemy with
         | None -> (model, Cmd.navigateBack ())
-        | Some enemyShip ->
-            match enemyShip.Distance with
-            | Escape -> ({ model with EnemyShip = None }, Cmd.navigate "mainNavigationPage")
-            | Far -> ({ model with EnemyShip = Some { enemyShip with Distance = Escape } }, Cmd.none)
-            | Close -> ({ model with EnemyShip = Some { enemyShip with Distance = Far } }, Cmd.none)
+        | Some enemy ->
+            match enemy.Distance with
+            | Escape -> ({ model with Enemy = None }, Cmd.navigate "mainNavigationPage")
+            | Far -> ({ model with Enemy = Some { enemy with Distance = Escape } }, Cmd.none)
+            | Close -> ({ model with Enemy = Some { enemy with Distance = Far } }, Cmd.none)
             | Board -> (model, Cmd.none) // TODO: Go to board battle page
 
     | OnSkirmishCloseClicked ->
-        match model.EnemyShip with
+        match model.Enemy with
         | None -> (model, Cmd.navigateBack ())
-        | Some enemyShip ->
-            match enemyShip.Distance with
-            | Escape -> ({ model with EnemyShip = Some { enemyShip with Distance = Far } }, Cmd.none)
-            | Far -> ({ model with EnemyShip = Some { enemyShip with Distance = Close } }, Cmd.none)
-            | Close -> ({ model with EnemyShip = Some { enemyShip with Distance = Board } }, Cmd.none)
+        | Some enemy ->
+            match enemy.Distance with
+            | Escape -> ({ model with Enemy = Some { enemy with Distance = Far } }, Cmd.none)
+            | Far -> ({ model with Enemy = Some { enemy with Distance = Close } }, Cmd.none)
+            | Close -> ({ model with Enemy = Some { enemy with Distance = Board } }, Cmd.none)
             | Board -> (model, Cmd.none) // TODO: Go to board battle page
 
 
@@ -482,7 +482,7 @@ module View =
 
     let skirmishPage dispatch model =
         Html.div [ header dispatch
-                   Html.p $"{model.EnemyShip.ToString()}"
+                   Html.p $"{model.Enemy.ToString()}"
                    Html.button [ prop.text "Evade"
                                  prop.onClick (fun _ -> dispatch OnSkirmishEvadeClicked) ]
                    Html.button [ prop.text "Chase"

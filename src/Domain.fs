@@ -117,7 +117,7 @@ type ShipDistance =
     | Close
     | Board
 
-type EnemyShip =
+type Enemy =
     { Ship: Ship
       Movement: ShipMovement
       Distance: ShipDistance }
@@ -212,7 +212,7 @@ type Model =
     { Date: Date
       Location: Location
       Player: Player
-      EnemyShip: EnemyShip option
+      Enemy: Enemy option
       Settings: Settings
       CurrentUrl: string list }
 
