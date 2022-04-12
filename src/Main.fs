@@ -40,7 +40,8 @@ module ShipKind =
           OwnedCrew = OwnedCrew.New(20)
           Nationality = British
           Hull = ShipHull.New(5)
-          Sail = ShipSail.New(4) }
+          Sail = ShipSail.New(4)
+          Cannon = ShipCannon.New(4) }
 
     let cutter = primary
 
@@ -51,7 +52,8 @@ module ShipKind =
             CrewCapacity = CrewCapacity.New(40)
             OwnedCrew = OwnedCrew.New(40)
             Hull = ShipHull.New(11)
-            Sail = ShipSail.New(11) }
+            Sail = ShipSail.New(11)
+            Cannon = ShipCannon.New(6) }
 
     let junk =
         { primary with
@@ -60,7 +62,8 @@ module ShipKind =
             CrewCapacity = CrewCapacity.New(35)
             OwnedCrew = OwnedCrew.New(35)
             Hull = ShipHull.New(8)
-            Sail = ShipSail.New(14) }
+            Sail = ShipSail.New(14)
+            Cannon = ShipCannon.New(8) }
 
     let galleon =
         { primary with
@@ -69,7 +72,8 @@ module ShipKind =
             CrewCapacity = CrewCapacity.New(64)
             OwnedCrew = OwnedCrew.New(64)
             Hull = ShipHull.New(15)
-            Sail = ShipSail.New(10) }
+            Sail = ShipSail.New(10)
+            Cannon = ShipCannon.New(10) }
 
     let frigate =
         { primary with
@@ -78,7 +82,8 @@ module ShipKind =
             CrewCapacity = CrewCapacity.New(125)
             OwnedCrew = OwnedCrew.New(125)
             Hull = ShipHull.New(30)
-            Sail = ShipSail.New(17) }
+            Sail = ShipSail.New(17)
+            Cannon = ShipCannon.New(26) }
 
 
 
@@ -183,6 +188,7 @@ let update msg model =
         | None -> (model, Cmd.navigateBack ())
         | Some enemy ->
             let enemyHull = ShipHull.Value(enemy.Ship.Hull)
+            // TODO: Handle sail, crew and cannons
             let enemySail = ShipSail.Value(enemy.Ship.Sail)
 
             if enemyHull < 1 then

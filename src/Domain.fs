@@ -93,6 +93,12 @@ module ShipSail =
     let New (x: int) = ShipSail x
     let Value (ShipSail x) = x
 
+type ShipCannon = private ShipCannon of int
+
+module ShipCannon =
+    let New (x: int) = ShipCannon x
+    let Value (ShipCannon x) = x
+
 type Ship =
     { Id: ShipId
       Name: ShipName
@@ -104,7 +110,8 @@ type Ship =
       OwnedCrew: OwnedCrew
       Nationality: Nationality
       Hull: ShipHull
-      Sail: ShipSail }
+      Sail: ShipSail
+      Cannon: ShipCannon }
 
 type ShipMovement =
     | Chase
