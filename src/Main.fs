@@ -143,11 +143,18 @@ let update msg model =
     | OnSkirmishClicked ->
         // We initialize battle state
         // TODO: Randomize enemy ship data
+
+        let randomizedInitialDistance () =
+            let cases = Reflection.FSharpType.GetUnionCases(typeof<ShipDistance>)
+            let index = System.Random().Next(cases.Length)
+            let case = cases[index]
+            Reflection.FSharpValue.MakeUnion(case, [||]) :?> ShipDistance
+
         let enemyShip =
             Some
             <| { Ship = { ShipKind.junk with Name = ShipName.New("Skeleton Heart") }
                  Movement = Still
-                 Distance = Close }
+                 Distance = randomizedInitialDistance () }
 
 
         ({ model with EnemyShip = enemyShip }, Cmd.navigate "skirmishPage")
