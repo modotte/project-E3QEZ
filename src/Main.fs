@@ -179,8 +179,6 @@ let update msg model =
             | Board -> (model, Cmd.none) // TODO: Go to board battle page
 
 
-            (model, Cmd.none)
-
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
 
