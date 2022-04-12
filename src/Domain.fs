@@ -227,7 +227,8 @@ type Msg =
 
     | OnSkirmishClicked
     | OnSkirmishEvadeClicked
-    | OnSkirmishCloseCliked
+    | OnSkirmishCloseClicked
+    | OnSkirmishBroadsideClicked
 
     | OnDockClicked
     | OnMarketClicked
