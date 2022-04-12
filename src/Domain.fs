@@ -91,7 +91,7 @@ type ShipSail = private ShipSail of int
 
 module ShipSail =
     let New (x: int) = ShipSail x
-    let Value (x: int) = x
+    let Value (ShipSail x) = x
 
 type Ship =
     { Id: ShipId

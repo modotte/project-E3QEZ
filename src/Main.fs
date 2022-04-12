@@ -178,6 +178,9 @@ let update msg model =
             | Close -> ({ model with EnemyShip = Some { enemyShip with Distance = Board } }, Cmd.none)
             | Board -> (model, Cmd.none) // TODO: Go to board battle page
 
+
+            (model, Cmd.none)
+
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
 
@@ -486,7 +489,8 @@ module View =
                                  prop.onClick (fun _ -> dispatch OnSkirmishEvadeClicked) ]
                    Html.button [ prop.text "Chase"
                                  prop.onClick (fun _ -> dispatch OnSkirmishCloseClicked) ]
-                   Html.button [ prop.text "Broadside" ] ]
+                   Html.button [ prop.text "Broadside"
+                                 prop.onClick (fun _ -> dispatch OnSkirmishBroadsideClicked) ] ]
 
     let marketCargosSection dispatch model =
         // TODO: For now, let's just print all data but let's polish it later
