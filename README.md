@@ -1,6 +1,6 @@
 # Hearties
 
-A naval combat & trading text game based in the 1650s.
+A naval combat & trading text game based in the Age of Sail
 
 
 ## Requirements
