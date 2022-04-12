@@ -215,11 +215,20 @@ let currentLocation location =
     | PortRoyal p -> PortName.Value(p.Name)
     | Nassau p -> PortName.Value(p.Name)
 
+
+/// There's no 'win' game state. This
+/// game is practically a sandbox combat &
+/// trading simulation.
+type GameState =
+    | InProgress
+    | Lose
+
 type Model =
     { Date: Date
       Location: Location
       Player: Player
       Enemy: Enemy option
+      State: GameState
       Settings: Settings
       CurrentUrl: string list }
 

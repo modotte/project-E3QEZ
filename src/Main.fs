@@ -129,6 +129,7 @@ let init =
                Coins = PlayerCoins.New(650)
                OwnedShip = ShipKind.sloop }
            Enemy = None
+           State = InProgress
            Settings = { MusicVolume = MusicVolume.New(50) }
            CurrentUrl = Router.currentUrl () },
          Cmd.none)
