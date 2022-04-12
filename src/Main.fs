@@ -142,12 +142,12 @@ let update msg model =
     | OnProfileClicked -> (model, Cmd.navigate "profilePage")
     | OnSkirmishClicked ->
         // We initialize battle state
-        // TODO: Randomize ship and name
+        // TODO: Randomize enemy ship data
         let enemyShip =
             Some
             <| { Ship = { ShipKind.junk with Name = ShipName.New("Skeleton Heart") }
                  Movement = Still
-                 Distance = Far }
+                 Distance = Close }
 
 
         ({ model with EnemyShip = enemyShip }, Cmd.navigate "skirmishPage")
@@ -158,8 +158,8 @@ let update msg model =
             match enemyShip.Distance with
             | Escape -> ({ model with EnemyShip = None }, Cmd.navigate "mainNavigationPage")
             | Far -> ({ model with EnemyShip = Some { enemyShip with Distance = Escape } }, Cmd.none)
-            | Close -> ({ model with EnemyShip = Some enemyShip }, Cmd.none)
-            | Board -> (model, Cmd.none)
+            | Close -> ({ model with EnemyShip = Some { enemyShip with Distance = Far } }, Cmd.none)
+            | Board -> (model, Cmd.none) // TODO: Go to board battle page
 
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
