@@ -168,6 +168,16 @@ let update msg model =
             | Close -> ({ model with EnemyShip = Some { enemyShip with Distance = Far } }, Cmd.none)
             | Board -> (model, Cmd.none) // TODO: Go to board battle page
 
+    | OnSkirmishCloseCliked ->
+        match model.EnemyShip with
+        | None -> (model, Cmd.navigateBack ())
+        | Some enemyShip ->
+            match enemyShip.Distance with
+            | Escape -> ({ model with EnemyShip = Some { enemyShip with Distance = Far } }, Cmd.none)
+            | Far -> ({ model with EnemyShip = Some { enemyShip with Distance = Close } }, Cmd.none)
+            | Close -> ({ model with EnemyShip = Some { enemyShip with Distance = Board } }, Cmd.none)
+            | Board -> (model, Cmd.none) // TODO: Go to board battle page
+
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
 
@@ -474,7 +484,8 @@ module View =
                    Html.p $"{model.EnemyShip.ToString()}"
                    Html.button [ prop.text "Evade"
                                  prop.onClick (fun _ -> dispatch OnSkirmishEvadeClicked) ]
-                   Html.button [ prop.text "Chase" ]
+                   Html.button [ prop.text "Chase"
+                                 prop.onClick (fun _ -> dispatch OnSkirmishCloseCliked) ]
                    Html.button [ prop.text "Broadside" ] ]
 
     let marketCargosSection dispatch model =
