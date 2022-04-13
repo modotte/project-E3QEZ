@@ -194,6 +194,16 @@ type Enemy =
       Movement: ShipMovement
       Distance: ShipDistance }
 
+module Enemy =
+    let inline _ship f p =
+        f p.Ship <&> fun x -> { p with Ship = x }
+
+    let inline _movement f p =
+        f p.Movement <&> fun x -> { p with Movement = x }
+
+    let inline _distance f p =
+        f p.Distance <&> fun x -> { p with Distance = x }
+
 type PortName = private PortName of string
 
 module PortName =
@@ -354,14 +364,6 @@ module Model =
     let inline _currentUrl f p =
         f p.CurrentUrl
         <&> fun x -> { p with CurrentUrl = x }
-
-    let inline _playerShipCargoWoodUnit x =
-        _player
-        << Player._ship
-        << Ship._cargo
-        << Cargo._wood
-        << CargoItem._unit
-        <| x
 
 type Msg =
     | OnFailure of string

@@ -325,18 +325,28 @@ let update msg model =
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
 
     | OnWoodCargoBought location ->
-        let addIntoPlayerCargo ownedCargo port =
-            // TODO: Handle zero coins and cargo
+        let addIntoPlayerCargoG port cargoItem playerCargo model =
             let coins = PlayerCoins.Value(model.Player.Coins)
-            let price = CargoPrice.Value(port.Cargo.Wood.Price)
-            let ownedWoodUnit = CargoUnit.Value(ownedCargo.Wood.Unit)
+
+            let price =
+                CargoPrice.Value(view (Port._cargo << cargoItem << CargoItem._price) port)
+
+            let cargoItemUnit = CargoUnit.Value(playerCargo.Wood.Unit)
+
 
             let ship =
-                setl Ship._cargoWoodUnit (CargoUnit.New(ownedWoodUnit + 1)) model.Player.Ship
+                setl
+                    (Ship._cargo << Cargo._wood << CargoItem._unit)
+                    (CargoUnit.New(cargoItemUnit + 1))
+                    model.Player.Ship
 
             { model.Player with
                 Coins = PlayerCoins.New(coins - price)
                 Ship = ship }
+
+        let addIntoPlayerCargo ownedCargo port =
+            // TODO: Handle zero coins and cargo
+            addIntoPlayerCargoG port Cargo._wood ownedCargo model
 
         let removeFromPortCargo port =
             let portWoodUnit = CargoUnit.Value(port.Cargo.Wood.Unit)
