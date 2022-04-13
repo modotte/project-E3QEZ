@@ -187,7 +187,7 @@ type Player =
       LastName: PlayerLastName
       Age: PlayerAge
       Coins: PlayerCoins
-      OwnedShip: Ship }
+      Ship: Ship }
 
 type MusicVolume = private MusicVolume of int
 
