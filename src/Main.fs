@@ -65,7 +65,7 @@ module ShipKind =
             Crew = ShipCrew.New(40)
             Hull = ShipHull.New(16)
             Sail = ShipSail.New(11)
-            Cannon = ShipCannon.New(6) }
+            Cannon = ShipCannon.New(8) }
 
     let junk =
         { primary with
@@ -75,7 +75,7 @@ module ShipKind =
             Crew = ShipCrew.New(35)
             Hull = ShipHull.New(14)
             Sail = ShipSail.New(14)
-            Cannon = ShipCannon.New(8) }
+            Cannon = ShipCannon.New(7) }
 
     let galleon =
         { primary with
@@ -85,7 +85,7 @@ module ShipKind =
             Crew = ShipCrew.New(64)
             Hull = ShipHull.New(20)
             Sail = ShipSail.New(10)
-            Cannon = ShipCannon.New(10) }
+            Cannon = ShipCannon.New(11) }
 
     let frigate =
         { primary with
@@ -95,7 +95,7 @@ module ShipKind =
             Crew = ShipCrew.New(125)
             Hull = ShipHull.New(38)
             Sail = ShipSail.New(17)
-            Cannon = ShipCannon.New(26) }
+            Cannon = ShipCannon.New(27) }
 
 
 
