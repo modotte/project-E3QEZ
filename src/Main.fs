@@ -329,16 +329,19 @@ let update msg model =
             let coins = PlayerCoins.Value(model.Player.Coins)
 
             let price =
-                CargoPrice.Value(view (Port._cargo << cargoItem << CargoItem._price) port)
+                CargoPrice.Value(
+                    port
+                    ^. (Port._cargo << cargoItem << CargoItem._price)
+                )
 
             let cargoItemUnit = CargoUnit.Value(playerCargo.Wood.Unit)
 
 
             let ship =
-                setl
-                    (Ship._cargo << Cargo._wood << CargoItem._unit)
-                    (CargoUnit.New(cargoItemUnit + 1))
-                    model.Player.Ship
+                model.Player.Ship
+                |> (Ship._cargo << Cargo._wood << CargoItem._unit)
+                   .-> (CargoUnit.New(cargoItemUnit + 1))
+
 
             { model.Player with
                 Coins = PlayerCoins.New(coins - price)
