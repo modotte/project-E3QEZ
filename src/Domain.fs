@@ -209,13 +209,6 @@ module Date =
     let TomorrowAfterToday (Date x) = Date <| x.AddDays(1.0)
     let Formatted (Date x) = string <| x.Format("dd MMMM yyyy")
 
-let currentLocation location =
-    match location with
-    | Barbados p -> PortName.Value(p.Name)
-    | PortRoyal p -> PortName.Value(p.Name)
-    | Nassau p -> PortName.Value(p.Name)
-
-
 /// There's no 'win' game state. This
 /// game is practically a sandbox combat &
 /// trading simulation.

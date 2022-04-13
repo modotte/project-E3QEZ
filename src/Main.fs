@@ -10,6 +10,14 @@ open Domain
 
 importSideEffects "./styles/global.scss"
 
+[<RequireQualifiedAccess>]
+module Utility =
+    let currentLocation =
+        function
+        | Barbados p -> PortName.Value(p.Name)
+        | PortRoyal p -> PortName.Value(p.Name)
+        | Nassau p -> PortName.Value(p.Name)
+
 module Cargo =
     let wood =
         { Name = CargoName.New("Wood")
@@ -568,7 +576,7 @@ module View =
     let metaInfoSection dispatch model =
         // TODO: Simplify below. Seems unnecesarily complicated
         Html.div [ simpleLabel <| Date.Formatted(model.Date)
-                   Html.p [ prop.text $"{currentLocation model.Location}" ]
+                   Html.p [ prop.text $"{Utility.currentLocation model.Location}" ]
 
                    Html.p [ prop.text $"Coins: {PlayerCoins.Value(model.Player.Coins)}" ]
                    let ship = model.Player.OwnedShip
