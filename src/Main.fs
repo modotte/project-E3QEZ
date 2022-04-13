@@ -255,7 +255,7 @@ let update msg model =
     | OnDockClicked -> (model, Cmd.navigate "dockPage")
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
 
-    | OnWoodCargoBought loc ->
+    | OnWoodCargoBought location ->
         let addIntoPlayerCargo ownedCargo port =
             // TODO: Handle zero coins and cargo
             let coins = PlayerCoins.Value(model.Player.Coins)
@@ -279,7 +279,7 @@ let update msg model =
             let portCargo = { port.Cargo with Wood = portWood }
             { port with Cargo = portCargo }
 
-        match loc with
+        match location with
         | PortRoyal p ->
             ({ model with
                 Player = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo p
@@ -297,7 +297,7 @@ let update msg model =
                 Location = PortRoyal(removeFromPortCargo p) },
              Cmd.none)
 
-    | OnSugarCargoBought loc ->
+    | OnSugarCargoBought location ->
         let addIntoPlayerCargo ownedCargo port =
             // TODO: Handle zero coins and cargo
             let coins = PlayerCoins.Value(model.Player.Coins)
@@ -321,7 +321,7 @@ let update msg model =
             let portCargo = { port.Cargo with Sugar = portSugar }
             { port with Cargo = portCargo }
 
-        match loc with
+        match location with
         | PortRoyal p ->
             ({ model with
                 Player = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo p
@@ -339,7 +339,7 @@ let update msg model =
                 Location = PortRoyal(removeFromPortCargo p) },
              Cmd.none)
 
-    | OnWoodCargoSold loc ->
+    | OnWoodCargoSold location ->
         let removeFromPlayerCargo ownedCargo port =
             // TODO: Handle zero coins and cargo
             let coins = PlayerCoins.Value(model.Player.Coins)
@@ -363,7 +363,7 @@ let update msg model =
             let portCargo = { port.Cargo with Wood = portWood }
             { port with Cargo = portCargo }
 
-        match loc with
+        match location with
         | PortRoyal p ->
             ({ model with
                 Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
@@ -381,7 +381,7 @@ let update msg model =
                 Location = PortRoyal(addIntoPortCargo p) },
              Cmd.none)
 
-    | OnSugarCargoSold loc ->
+    | OnSugarCargoSold location ->
         let removeFromPlayerCargo ownedCargo port =
             // TODO: Handle zero coins and cargo
             let coins = PlayerCoins.Value(model.Player.Coins)
@@ -405,7 +405,7 @@ let update msg model =
             let portCargo = { port.Cargo with Sugar = portSugar }
             { port with Cargo = portCargo }
 
-        match loc with
+        match location with
         | PortRoyal p ->
             ({ model with
                 Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
