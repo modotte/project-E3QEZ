@@ -532,10 +532,7 @@ module View =
                    Html.br []
                    simpleLabel "Ship Name"
                    Html.input [ prop.required true
-                                prop.onTextChange (
-                                    dispatch
-                                    << (OnUpdateOwnedShipName << ShipName.New)
-                                ) ]
+                                prop.onTextChange (dispatch << OnUpdateOwnedShipName << ShipName.New) ]
                    Html.br []
                    simpleLabel "Ship Class"
                    Html.select [ prop.children [ Html.option [ prop.value "Sloop"
