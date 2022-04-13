@@ -32,6 +32,12 @@ module Cargo =
           Unit = CargoUnit.New(3) }
 
 [<Literal>]
+let PLAYER_MIN_AGE = 18
+
+[<Literal>]
+let PLAYER_MAX_AGE = 60
+
+[<Literal>]
 let DEFAULT_SHIP_NAME = "Heart of Ocean"
 
 [<Literal>]
@@ -531,8 +537,8 @@ module View =
                    Html.br []
                    simpleLabel "Age"
                    Html.input [ prop.type'.range
-                                prop.min 18
-                                prop.max 75
+                                prop.min PLAYER_MIN_AGE
+                                prop.max PLAYER_MAX_AGE
                                 prop.onChange (fun a ->
                                     dispatch
                                     <| OnNewCharacterEntriesUpdated { model.Player with Age = PlayerAge.New(a) }) ]
