@@ -372,15 +372,21 @@ let update msg model =
                 Coins = PlayerCoins.New(coins - price)
                 Ship = ship }
 
-        let addIntoPlayerCargo ownedCargo port =
-            // TODO: Handle zero coins and cargo
-            addIntoPlayerCargoG port Cargo._wood ownedCargo model
+        let removeFromPortCargoG cargoItem (port: Port) =
+            let cargoItemUnit =
+                CargoUnit.Value(
+                    port
+                    ^.. (Port._cargo << cargoItem << CargoItem._unit)
+                )
 
-        let removeFromPortCargo port =
-            let portWoodUnit = CargoUnit.Value(port.Cargo.Wood.Unit)
-            let portWood = { port.Cargo.Wood with Unit = CargoUnit.New(portWoodUnit - 1) }
-            let portCargo = { port.Cargo with Wood = portWood }
-            { port with Cargo = portCargo }
+            port
+            |> (Port._cargo << cargoItem << CargoItem._unit)
+               .->> CargoUnit.New(cargoItemUnit - 1)
+
+        let addIntoPlayerCargo playerCargo port =
+            addIntoPlayerCargoG port Cargo._wood playerCargo model
+
+        let removeFromPortCargo port = removeFromPortCargoG Cargo._wood port
 
         match location with
         | PortRoyal p ->
