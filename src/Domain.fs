@@ -175,6 +175,9 @@ module Ship =
     let inline _cannon f p =
         f p.Cannon <&> fun x -> { p with Cannon = x }
 
+    let inline _cargoWoodUnit x =
+        _cargo << Cargo._wood << CargoItem._unit <| x
+
 type ShipMovement =
     | Chase
     | Still
@@ -280,6 +283,13 @@ module Player =
 
     let inline _ship f p =
         f p.Ship <&> fun x -> { p with Ship = x }
+
+    let inline _shipCargoWoodUnit x =
+        _ship
+        << Ship._cargo
+        << Cargo._wood
+        << CargoItem._unit
+        <| x
 
 type MusicVolume = private MusicVolume of int
 

@@ -203,6 +203,7 @@ let update msg model =
             else
                 match enemy.Movement with
                 | Chase ->
+
                     let player =
                         ({ model.Player with
                             Ship =
@@ -330,16 +331,12 @@ let update msg model =
             let price = CargoPrice.Value(port.Cargo.Wood.Price)
             let ownedWoodUnit = CargoUnit.Value(ownedCargo.Wood.Unit)
 
-            let ownedCargo =
-                { model.Player.Ship.Cargo.Wood with Unit = CargoUnit.New(ownedWoodUnit + 1) }
-
-            let ownedCargo = { model.Player.Ship.Cargo with Wood = ownedCargo }
-
-            let ownedShip = { model.Player.Ship with Cargo = ownedCargo }
+            let ship =
+                setl Ship._cargoWoodUnit (CargoUnit.New(ownedWoodUnit + 1)) model.Player.Ship
 
             { model.Player with
                 Coins = PlayerCoins.New(coins - price)
-                Ship = ownedShip }
+                Ship = ship }
 
         let removeFromPortCargo port =
             let portWoodUnit = CargoUnit.Value(port.Cargo.Wood.Unit)
