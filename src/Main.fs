@@ -32,6 +32,12 @@ let SHIP_HULL_MINIMUM = 4
 [<Literal>]
 let SHIP_SAIL_MINIMUM = 2
 
+[<Literal>]
+let SHIP_CREW_MINIMUM = 2
+
+[<Literal>]
+let SHIP_CANNON_MINIMUM = 2
+
 module ShipKind =
     let private primary =
         { Id = ShipId.New()
@@ -234,6 +240,7 @@ let update msg model =
                 (model, Cmd.navigate "mainNavigationPage")
             else
                 let updateEnemySail sail ship =
+                    // TODO: Probably redundant check?
                     if enemySail < SHIP_SAIL_MINIMUM then
                         ship
                     else
@@ -245,18 +252,32 @@ let update msg model =
                     else
                         { ship with Hull = ShipHull.New(enemyHull - hull) }
 
-                let updateEnemy sail hull ship =
+                let updateEnemyCrew crew ship =
+                    if enemyCrew < SHIP_CREW_MINIMUM then
+                        ship
+                    else
+                        { ship with OwnedCrew = OwnedCrew.New(enemyCrew - crew) }
+
+                let updateEnemyCannon cannon ship =
+                    if enemyCannon < SHIP_CANNON_MINIMUM then
+                        ship
+                    else
+                        { ship with Cannon = ShipCannon.New(enemyCrew - cannon) }
+
+                let updateEnemy sail hull crew cannon ship =
                     Some
                         { enemy with
                             Ship =
                                 ship
                                 |> updateEnemySail sail
-                                |> updateEnemyHull hull }
+                                |> updateEnemyHull hull
+                                |> updateEnemyCrew crew
+                                |> updateEnemyCannon cannon }
 
                 match enemy.Distance with
-                | Escape -> ({ model with Enemy = enemy.Ship |> updateEnemy 1 1 }, Cmd.none)
-                | Far -> ({ model with Enemy = enemy.Ship |> updateEnemy 2 2 }, Cmd.none)
-                | Close -> ({ model with Enemy = enemy.Ship |> updateEnemy 3 3 }, Cmd.none)
+                | Escape -> ({ model with Enemy = enemy.Ship |> updateEnemy 1 1 1 1 }, Cmd.none)
+                | Far -> ({ model with Enemy = enemy.Ship |> updateEnemy 2 2 2 2 }, Cmd.none)
+                | Close -> ({ model with Enemy = enemy.Ship |> updateEnemy 3 3 3 3 }, Cmd.none)
                 | Board -> (model, Cmd.none)
 
 
