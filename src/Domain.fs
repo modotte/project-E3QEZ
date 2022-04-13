@@ -209,7 +209,7 @@ module Date =
     let TomorrowAfterToday (Date x) = Date <| x.AddDays(1.0)
     let Formatted (Date x) = string <| x.Format("dd MMMM yyyy")
 
-/// There's no 'win' game state. This
+/// There's no Win game state. This
 /// game is practically a sandbox combat &
 /// trading simulation.
 type GameState =
