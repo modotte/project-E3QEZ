@@ -104,10 +104,10 @@ type Ship =
       Name: ShipName
       Size: ShipSize
       Class: ShipClass
-      CargoCapacity: CargoCapacity
       Cargo: Cargo
-      CrewCapacity: CrewCapacity
+      CargoCapacity: CargoCapacity
       Crew: ShipCrew
+      CrewCapacity: CrewCapacity
       Nationality: Nationality
       Hull: ShipHull
       Sail: ShipSail
