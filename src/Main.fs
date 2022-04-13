@@ -49,7 +49,7 @@ module ShipKind =
             { Wood = Cargo.wood
               Sugar = Cargo.sugar }
           CrewCapacity = CrewCapacity.New(20)
-          OwnedCrew = OwnedCrew.New(20)
+          Crew = ShipCrew.New(20)
           Nationality = British
           Hull = ShipHull.New(8)
           Sail = ShipSail.New(4)
@@ -62,7 +62,7 @@ module ShipKind =
             Class = Sloop
             CargoCapacity = CargoCapacity.New(82)
             CrewCapacity = CrewCapacity.New(40)
-            OwnedCrew = OwnedCrew.New(40)
+            Crew = ShipCrew.New(40)
             Hull = ShipHull.New(16)
             Sail = ShipSail.New(11)
             Cannon = ShipCannon.New(6) }
@@ -72,7 +72,7 @@ module ShipKind =
             Class = Junk
             CargoCapacity = CargoCapacity.New(75)
             CrewCapacity = CrewCapacity.New(35)
-            OwnedCrew = OwnedCrew.New(35)
+            Crew = ShipCrew.New(35)
             Hull = ShipHull.New(14)
             Sail = ShipSail.New(14)
             Cannon = ShipCannon.New(8) }
@@ -82,7 +82,7 @@ module ShipKind =
             Class = Galleon
             CargoCapacity = CargoCapacity.New(152)
             CrewCapacity = CrewCapacity.New(64)
-            OwnedCrew = OwnedCrew.New(64)
+            Crew = ShipCrew.New(64)
             Hull = ShipHull.New(20)
             Sail = ShipSail.New(10)
             Cannon = ShipCannon.New(10) }
@@ -92,7 +92,7 @@ module ShipKind =
             Class = Frigate
             CargoCapacity = CargoCapacity.New(300)
             CrewCapacity = CrewCapacity.New(125)
-            OwnedCrew = OwnedCrew.New(125)
+            Crew = ShipCrew.New(125)
             Hull = ShipHull.New(38)
             Sail = ShipSail.New(17)
             Cannon = ShipCannon.New(26) }
@@ -233,7 +233,7 @@ let update msg model =
             let enemyHull = ShipHull.Value(enemy.Ship.Hull)
             // TODO: Handle sail, crew and cannons
             let enemySail = ShipSail.Value(enemy.Ship.Sail)
-            let enemyCrew = OwnedCrew.Value(enemy.Ship.OwnedCrew)
+            let enemyCrew = ShipCrew.Value(enemy.Ship.Crew)
             let enemyCannon = ShipCannon.Value(enemy.Ship.Cannon)
 
             if enemyHull < SHIP_HULL_MINIMUM then
@@ -256,7 +256,7 @@ let update msg model =
                     if enemyCrew < SHIP_CREW_MINIMUM then
                         ship
                     else
-                        { ship with OwnedCrew = OwnedCrew.New(enemyCrew - crew) }
+                        { ship with Crew = ShipCrew.New(enemyCrew - crew) }
 
                 let updateEnemyCannon cannon ship =
                     if enemyCannon < SHIP_CANNON_MINIMUM then

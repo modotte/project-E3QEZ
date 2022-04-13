@@ -75,11 +75,11 @@ module CrewCapacity =
     let New (x: int) = CrewCapacity x
     let Value (CrewCapacity x) = x
 
-type OwnedCrew = private OwnedCrew of int
+type ShipCrew = private ShipCrew of int
 
-module OwnedCrew =
-    let New (x: int) = OwnedCrew x
-    let Value (OwnedCrew x) = x
+module ShipCrew =
+    let New (x: int) = ShipCrew x
+    let Value (ShipCrew x) = x
 
 type ShipHull = private ShipHull of int
 
@@ -107,7 +107,7 @@ type Ship =
       CargoCapacity: CargoCapacity
       OwnedCargo: Cargo
       CrewCapacity: CrewCapacity
-      OwnedCrew: OwnedCrew
+      Crew: ShipCrew
       Nationality: Nationality
       Hull: ShipHull
       Sail: ShipSail
