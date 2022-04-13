@@ -105,7 +105,7 @@ type Ship =
       Size: ShipSize
       Class: ShipClass
       CargoCapacity: CargoCapacity
-      OwnedCargo: Cargo
+      Cargo: Cargo
       CrewCapacity: CrewCapacity
       Crew: ShipCrew
       Nationality: Nationality

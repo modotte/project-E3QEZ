@@ -45,7 +45,7 @@ module ShipKind =
           Size = Light
           Class = Cutter
           CargoCapacity = CargoCapacity.New(20)
-          OwnedCargo =
+          Cargo =
             { Wood = Cargo.wood
               Sugar = Cargo.sugar }
           CrewCapacity = CrewCapacity.New(20)
@@ -292,11 +292,11 @@ let update msg model =
             let ownedWoodUnit = CargoUnit.Value(ownedCargo.Wood.Unit)
 
             let ownedCargo =
-                { model.Player.OwnedShip.OwnedCargo.Wood with Unit = CargoUnit.New(ownedWoodUnit + 1) }
+                { model.Player.OwnedShip.Cargo.Wood with Unit = CargoUnit.New(ownedWoodUnit + 1) }
 
-            let ownedCargo = { model.Player.OwnedShip.OwnedCargo with Wood = ownedCargo }
+            let ownedCargo = { model.Player.OwnedShip.Cargo with Wood = ownedCargo }
 
-            let ownedShip = { model.Player.OwnedShip with OwnedCargo = ownedCargo }
+            let ownedShip = { model.Player.OwnedShip with Cargo = ownedCargo }
 
             { model.Player with
                 Coins = PlayerCoins.New(coins - price)
@@ -311,18 +311,18 @@ let update msg model =
         match location with
         | PortRoyal p ->
             ({ model with
-                Player = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Player = addIntoPlayerCargo model.Player.OwnedShip.Cargo p
                 Location = PortRoyal(removeFromPortCargo p) },
              Cmd.none)
 
         | Barbados p ->
             ({ model with
-                Player = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Player = addIntoPlayerCargo model.Player.OwnedShip.Cargo p
                 Location = PortRoyal(removeFromPortCargo p) },
              Cmd.none)
         | Nassau p ->
             ({ model with
-                Player = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Player = addIntoPlayerCargo model.Player.OwnedShip.Cargo p
                 Location = PortRoyal(removeFromPortCargo p) },
              Cmd.none)
 
@@ -334,11 +334,11 @@ let update msg model =
             let ownedSugarUnit = CargoUnit.Value(ownedCargo.Sugar.Unit)
 
             let ownedCargo =
-                { model.Player.OwnedShip.OwnedCargo.Sugar with Unit = CargoUnit.New(ownedSugarUnit + 1) }
+                { model.Player.OwnedShip.Cargo.Sugar with Unit = CargoUnit.New(ownedSugarUnit + 1) }
 
-            let ownedCargo = { model.Player.OwnedShip.OwnedCargo with Sugar = ownedCargo }
+            let ownedCargo = { model.Player.OwnedShip.Cargo with Sugar = ownedCargo }
 
-            let ownedShip = { model.Player.OwnedShip with OwnedCargo = ownedCargo }
+            let ownedShip = { model.Player.OwnedShip with Cargo = ownedCargo }
 
             { model.Player with
                 Coins = PlayerCoins.New(coins - price)
@@ -353,18 +353,18 @@ let update msg model =
         match location with
         | PortRoyal p ->
             ({ model with
-                Player = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Player = addIntoPlayerCargo model.Player.OwnedShip.Cargo p
                 Location = PortRoyal(removeFromPortCargo p) },
              Cmd.none)
 
         | Barbados p ->
             ({ model with
-                Player = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Player = addIntoPlayerCargo model.Player.OwnedShip.Cargo p
                 Location = PortRoyal(removeFromPortCargo p) },
              Cmd.none)
         | Nassau p ->
             ({ model with
-                Player = addIntoPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Player = addIntoPlayerCargo model.Player.OwnedShip.Cargo p
                 Location = PortRoyal(removeFromPortCargo p) },
              Cmd.none)
 
@@ -376,11 +376,11 @@ let update msg model =
             let ownedWoodUnit = CargoUnit.Value(ownedCargo.Wood.Unit)
 
             let ownedCargo =
-                { model.Player.OwnedShip.OwnedCargo.Wood with Unit = CargoUnit.New(ownedWoodUnit - 1) }
+                { model.Player.OwnedShip.Cargo.Wood with Unit = CargoUnit.New(ownedWoodUnit - 1) }
 
-            let ownedCargo = { model.Player.OwnedShip.OwnedCargo with Wood = ownedCargo }
+            let ownedCargo = { model.Player.OwnedShip.Cargo with Wood = ownedCargo }
 
-            let ownedShip = { model.Player.OwnedShip with OwnedCargo = ownedCargo }
+            let ownedShip = { model.Player.OwnedShip with Cargo = ownedCargo }
 
             { model.Player with
                 Coins = PlayerCoins.New(coins + price)
@@ -395,18 +395,18 @@ let update msg model =
         match location with
         | PortRoyal p ->
             ({ model with
-                Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Player = removeFromPlayerCargo model.Player.OwnedShip.Cargo p
                 Location = PortRoyal(addIntoPortCargo p) },
              Cmd.none)
 
         | Barbados p ->
             ({ model with
-                Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Player = removeFromPlayerCargo model.Player.OwnedShip.Cargo p
                 Location = PortRoyal(addIntoPortCargo p) },
              Cmd.none)
         | Nassau p ->
             ({ model with
-                Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Player = removeFromPlayerCargo model.Player.OwnedShip.Cargo p
                 Location = PortRoyal(addIntoPortCargo p) },
              Cmd.none)
 
@@ -418,11 +418,11 @@ let update msg model =
             let ownedSugarUnit = CargoUnit.Value(ownedCargo.Sugar.Unit)
 
             let ownedCargo =
-                { model.Player.OwnedShip.OwnedCargo.Wood with Unit = CargoUnit.New(ownedSugarUnit - 1) }
+                { model.Player.OwnedShip.Cargo.Wood with Unit = CargoUnit.New(ownedSugarUnit - 1) }
 
-            let ownedCargo = { model.Player.OwnedShip.OwnedCargo with Sugar = ownedCargo }
+            let ownedCargo = { model.Player.OwnedShip.Cargo with Sugar = ownedCargo }
 
-            let ownedShip = { model.Player.OwnedShip with OwnedCargo = ownedCargo }
+            let ownedShip = { model.Player.OwnedShip with Cargo = ownedCargo }
 
             { model.Player with
                 Coins = PlayerCoins.New(coins + price)
@@ -437,18 +437,18 @@ let update msg model =
         match location with
         | PortRoyal p ->
             ({ model with
-                Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Player = removeFromPlayerCargo model.Player.OwnedShip.Cargo p
                 Location = PortRoyal(addIntoPortCargo p) },
              Cmd.none)
 
         | Barbados p ->
             ({ model with
-                Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Player = removeFromPlayerCargo model.Player.OwnedShip.Cargo p
                 Location = PortRoyal(addIntoPortCargo p) },
              Cmd.none)
         | Nassau p ->
             ({ model with
-                Player = removeFromPlayerCargo model.Player.OwnedShip.OwnedCargo p
+                Player = removeFromPlayerCargo model.Player.OwnedShip.Cargo p
                 Location = PortRoyal(addIntoPortCargo p) },
              Cmd.none)
 
@@ -576,7 +576,7 @@ module View =
                    Html.p [ let sn = ShipName.Value(model.Player.OwnedShip.Name)
                             prop.text $"Current ship named {sn} of {ship.Class.ToString()} class" ]
 
-                   Html.p [ prop.text $"Your cargo: ${ship.OwnedCargo.ToString()}" ] ]
+                   Html.p [ prop.text $"Your cargo: ${ship.Cargo.ToString()}" ] ]
 
     let profilePage dispatch model =
         Html.div [ header dispatch
