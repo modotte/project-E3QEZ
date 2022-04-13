@@ -1,5 +1,8 @@
 module Main
 
+open FSharpPlus
+open FSharpPlus.Lens
+
 open Feliz
 open Feliz.UseElmish
 open Feliz.Router
@@ -547,15 +550,17 @@ module View =
                    Html.input [ prop.required true
                                 prop.onTextChange (fun fn ->
                                     dispatch
-                                    <| OnNewCharacterEntriesUpdated
-                                        { model.Player with FirstName = PlayerFirstName.New(fn) }) ]
+                                    <| OnNewCharacterEntriesUpdated(
+                                        setl Player._firstName (PlayerFirstName.New(fn)) model.Player
+                                    )) ]
                    Html.br []
                    simpleLabel "Last Name"
                    Html.input [ prop.required true
                                 prop.onTextChange (fun ln ->
                                     dispatch
-                                    <| OnNewCharacterEntriesUpdated
-                                        { model.Player with LastName = PlayerLastName.New(ln) }) ]
+                                    <| OnNewCharacterEntriesUpdated(
+                                        setl Player._lastName (PlayerLastName.New(ln)) model.Player
+                                    )) ]
                    Html.br []
                    simpleLabel "Age"
                    Html.input [ prop.type'.range
@@ -563,7 +568,7 @@ module View =
                                 prop.max PLAYER_MAX_AGE
                                 prop.onChange (fun a ->
                                     dispatch
-                                    <| OnNewCharacterEntriesUpdated { model.Player with Age = PlayerAge.New(a) }) ]
+                                    <| OnNewCharacterEntriesUpdated(setl Player._age (PlayerAge.New(a)) model.Player)) ]
 
                    Html.br []
                    simpleLabel "Ship Name"

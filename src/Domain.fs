@@ -1,5 +1,8 @@
 module Domain
 
+open FSharpPlus
+open FSharpPlus.Lens
+
 type Nationality =
     | British
     | Spanish
@@ -41,7 +44,28 @@ type CargoItem =
       Price: CargoPrice
       Unit: CargoUnit }
 
+module CargoItem =
+    let inline _name f p =
+        f p.Name <&> fun x -> { p with Name = x }
+
+    let inline _description f p =
+        f p.Description
+        <&> fun x -> { p with Description = x }
+
+    let inline _price f p =
+        f p.Price <&> fun x -> { p with Price = x }
+
+    let inline _unit f u =
+        f u.Unit <&> fun x -> { u with Unit = x }
+
 type Cargo = { Wood: CargoItem; Sugar: CargoItem }
+
+module Cargo =
+    let inline _wood f c =
+        f c.Wood <&> fun x -> { c with Wood = x }
+
+    let inline _sugar f c =
+        f c.Sugar <&> fun x -> { c with Sugar = x }
 
 type ShipId = private ShipId of System.Guid
 
@@ -112,6 +136,45 @@ type Ship =
       Hull: ShipHull
       Sail: ShipSail
       Cannon: ShipCannon }
+
+module Ship =
+    let inline _id f p = f p.Id <&> fun x -> { p with Id = x }
+
+    let inline _name f p =
+        f p.Name <&> fun x -> { p with Name = x }
+
+    let inline _size f p =
+        f p.Size <&> fun x -> { p with Size = x }
+
+    let inline _class f p =
+        f p.Class <&> fun x -> { p with Class = x }
+
+    let inline _cargo f p =
+        f p.Cargo <&> fun x -> { p with Cargo = x }
+
+    let inline _cargoCapacity f p =
+        f p.CargoCapacity
+        <&> fun x -> { p with CargoCapacity = x }
+
+    let inline _crew f p =
+        f p.Crew <&> fun x -> { p with Crew = x }
+
+    let inline _crewCapacity f p =
+        f p.CrewCapacity
+        <&> fun x -> { p with CrewCapacity = x }
+
+    let inline _nationality f p =
+        f p.Nationality
+        <&> fun x -> { p with Nationality = x }
+
+    let inline _hull f p =
+        f p.Hull <&> fun x -> { p with Hull = x }
+
+    let inline _sail f p =
+        f p.Sail <&> fun x -> { p with Sail = x }
+
+    let inline _cannon f p =
+        f p.Cannon <&> fun x -> { p with Cannon = x }
 
 type ShipMovement =
     | Chase
@@ -189,6 +252,19 @@ type Player =
       Coins: PlayerCoins
       Ship: Ship }
 
+module Player =
+    let inline _firstName f p =
+        f p.FirstName
+        <&> fun x -> { p with FirstName = x }
+
+    let inline _lastName f p =
+        f p.LastName <&> fun x -> { p with LastName = x }
+
+    let inline _age f p = f p.Age <&> fun x -> { p with Age = x }
+
+    let inline _ship f p =
+        f p.Ship <&> fun x -> { p with Ship = x }
+
 type MusicVolume = private MusicVolume of int
 
 module MusicVolume =
@@ -224,6 +300,20 @@ type Model =
       State: GameState
       Settings: Settings
       CurrentUrl: string list }
+
+module Model =
+    let inline _player f p =
+        f p.Player <&> fun x -> { p with Player = x }
+
+    let inline _playerFirstName x = _player << Player._firstName <| x
+
+    let inline _playerShipCargoWoodUnit x =
+        _player
+        << Player._ship
+        << Ship._cargo
+        << Cargo._wood
+        << CargoItem._unit
+        <| x
 
 type Msg =
     | OnFailure of string
