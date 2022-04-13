@@ -233,22 +233,30 @@ let update msg model =
             if enemyHull < SHIP_HULL_MINIMUM then
                 (model, Cmd.navigate "mainNavigationPage")
             else
-                let updateSail sail =
+                let updateEnemySail sail ship =
                     if enemySail < SHIP_SAIL_MINIMUM then
-                        enemy.Ship
+                        ship
                     else
-                        { enemy.Ship with Sail = ShipSail.New(enemySail - sail) }
+                        { ship with Sail = ShipSail.New(enemySail - sail) }
 
-                let updateEnemyHull hull =
+                let updateEnemyHull hull ship =
                     if enemyHull < SHIP_HULL_MINIMUM then
-                        enemy.Ship
+                        ship
                     else
-                        { enemy.Ship with Hull = ShipHull.New(enemyHull - hull) }
+                        { ship with Hull = ShipHull.New(enemyHull - hull) }
+
+                let updateEnemy sail hull ship =
+                    Some
+                        { enemy with
+                            Ship =
+                                ship
+                                |> updateEnemySail sail
+                                |> updateEnemyHull hull }
 
                 match enemy.Distance with
-                | Escape -> ({ model with Enemy = Some { enemy with Ship = updateEnemyHull 1 } }, Cmd.none)
-                | Far -> ({ model with Enemy = Some { enemy with Ship = updateEnemyHull 2 } }, Cmd.none)
-                | Close -> ({ model with Enemy = Some { enemy with Ship = updateEnemyHull 3 } }, Cmd.none)
+                | Escape -> ({ model with Enemy = enemy.Ship |> updateEnemy 1 1 }, Cmd.none)
+                | Far -> ({ model with Enemy = enemy.Ship |> updateEnemy 2 2 }, Cmd.none)
+                | Close -> ({ model with Enemy = enemy.Ship |> updateEnemy 3 3 }, Cmd.none)
                 | Board -> (model, Cmd.none)
 
 
