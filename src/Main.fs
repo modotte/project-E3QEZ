@@ -13,6 +13,29 @@ open Domain
 
 importSideEffects "./styles/global.scss"
 
+[<AbstractClass>]
+type Functor<'a>() =
+    abstract member Select<'b> : ('a -> 'b) -> Functor<'b>
+    static member Map(x: Functor<'a>, f: 'a -> 'b) : Functor<'b> = x.Select(f)
+
+type IdentityFunctor<'a>(value: 'a) =
+    inherit Functor<'a>()
+    member __.Run = value
+    override __.Select<'b>(f: 'a -> 'b) = IdentityFunctor(f value) :> Functor<'b>
+
+type ConstFunctor<'p, 'a>(value: 'p) =
+    inherit Functor<'a>()
+    member __.Run = value
+    override __.Select<'b>(f: 'a -> 'b) = ConstFunctor(value) :> Functor<'b>
+
+let setl' optic value (source: 's) : 't =
+    let (x: Functor<'t>) = optic (fun _ -> IdentityFunctor value :> Functor<'v>) source
+    (x :?> IdentityFunctor<'t>).Run
+
+let view' optic (source: 's) : 'a =
+    let (x: Functor<'t>) = optic (fun x -> ConstFunctor x :> Functor<'b>) source
+    (x :?> ConstFunctor<'a, 't>).Run
+
 [<RequireQualifiedAccess>]
 module Utility =
     let currentLocation =
@@ -329,18 +352,16 @@ let update msg model =
             let coins = PlayerCoins.Value(model.Player.Coins)
 
             let price =
-                CargoPrice.Value(
-                    port
-                    ^. (Port._cargo << cargoItem << CargoItem._price)
-                )
+                CargoPrice.Value(view' (Port._cargo << cargoItem << CargoItem._price) port)
 
-            let cargoItemUnit = CargoUnit.Value(playerCargo.Wood.Unit)
+            let cargoItemUnit' =
+                CargoUnit.Value(view' (cargoItem << CargoItem._unit) playerCargo)
 
 
             let ship =
                 model.Player.Ship
                 |> (Ship._cargo << Cargo._wood << CargoItem._unit)
-                   .-> (CargoUnit.New(cargoItemUnit + 1))
+                   .-> (CargoUnit.New(cargoItemUnit' + 1))
 
 
             { model.Player with
