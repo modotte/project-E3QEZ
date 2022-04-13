@@ -237,6 +237,16 @@ let update msg model =
 
             ({ model with Enemy = Some { enemy with Ship = { enemy.Ship with Crew = ShipCrew.New(enemyCrew - 1) } } },
              Cmd.none)
+
+    | OnSkirmishFalconetClicked ->
+        match model.Enemy with
+        | None -> (model, Cmd.navigate "mainNavigationPage")
+        | Some enemy ->
+            let enemyCrew = ShipCrew.Value(enemy.Ship.Crew)
+
+            ({ model with Enemy = Some { enemy with Ship = { enemy.Ship with Crew = ShipCrew.New(enemyCrew - 2) } } },
+             Cmd.none)
+
     | OnSkirmishLootClicked ->
         match model.Enemy with
         | None -> (model, Cmd.navigate "mainNavigationPage")
