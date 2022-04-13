@@ -1,6 +1,5 @@
 module Domain
 
-open FSharpPlus
 open FSharpPlus.Lens
 
 type Nationality =
@@ -216,6 +215,20 @@ type Port =
       Nationality: Nationality
       Cargo: Cargo }
 
+module Port =
+    let inline _name f p =
+        f p.Name <&> fun x -> { p with Name = x }
+
+    let inline _description f p =
+        f p.Description
+        <&> fun x -> { p with Description = x }
+
+    let inline _size f p =
+        f p.Size <&> fun x -> { p with Size = x }
+
+    let inline _cargo f p =
+        f p.Cargo <&> fun x -> { p with Cargo = x }
+
 type Location =
     | Barbados of Port
     | PortRoyal of Port
@@ -262,6 +275,9 @@ module Player =
 
     let inline _age f p = f p.Age <&> fun x -> { p with Age = x }
 
+    let inline _coins f p =
+        f p.Coins <&> fun x -> { p with Coins = x }
+
     let inline _ship f p =
         f p.Ship <&> fun x -> { p with Ship = x }
 
@@ -272,6 +288,11 @@ module MusicVolume =
     let Value (MusicVolume x) = x
 
 type Settings = { MusicVolume: MusicVolume }
+
+module Settings =
+    let inline _musicVolume f p =
+        f p.MusicVolume
+        <&> fun x -> { p with MusicVolume = x }
 
 type Date = private Date of System.DateTime
 
@@ -302,10 +323,27 @@ type Model =
       CurrentUrl: string list }
 
 module Model =
+    let inline _date f p =
+        f p.Date <&> fun x -> { p with Date = x }
+
+    let inline _location f p =
+        f p.Location <&> fun x -> { p with Location = x }
+
     let inline _player f p =
         f p.Player <&> fun x -> { p with Player = x }
 
-    let inline _playerFirstName x = _player << Player._firstName <| x
+    let inline _enemy f p =
+        f p.Enemy <&> fun x -> { p with Enemy = x }
+
+    let inline _state f p =
+        f p.State <&> fun x -> { p with State = x }
+
+    let inline _settings f p =
+        f p.Settings <&> fun x -> { p with Settings = x }
+
+    let inline _currentUrl f p =
+        f p.CurrentUrl
+        <&> fun x -> { p with CurrentUrl = x }
 
     let inline _playerShipCargoWoodUnit x =
         _player
