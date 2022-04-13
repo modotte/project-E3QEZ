@@ -228,7 +228,16 @@ let update msg model =
                     | Escape -> ({ model with Enemy = None }, Cmd.navigate "mainNavigationPage")
                     | Far -> ({ model with Enemy = Some { enemy with Distance = Escape } }, Cmd.none)
                     | Close -> ({ model with Enemy = Some { enemy with Distance = Far } }, Cmd.none)
-                    | Board -> (model, Cmd.none) // TODO: Go to board battle page
+                    | Board -> (model, Cmd.navigate "skirmishBoardBattlePage") // TODO: Go to board battle page
+
+    | OnSkirmishBoardBattle ->
+        match model.Enemy with
+        | None -> (model, Cmd.navigate "mainNavigationPage")
+        | Some enemy -> (model, Cmd.none)
+    | OnSkirmishLootClicked ->
+        match model.Enemy with
+        | None -> (model, Cmd.navigate "mainNavigationPage")
+        | Some enemy -> (model, Cmd.navigate "skirmishLootPage")
 
     | OnSkirmishCloseClicked ->
         match model.Enemy with
@@ -238,7 +247,7 @@ let update msg model =
             | Escape -> ({ model with Enemy = Some { enemy with Distance = Far } }, Cmd.none)
             | Far -> ({ model with Enemy = Some { enemy with Distance = Close } }, Cmd.none)
             | Close -> ({ model with Enemy = Some { enemy with Distance = Board } }, Cmd.none)
-            | Board -> (model, Cmd.none) // TODO: Go to board battle page
+            | Board -> (model, Cmd.navigate "skirmishBoardBattlePage") // TODO: Go to board battle page
 
     | OnSkirmishBroadsideClicked ->
         match model.Enemy with
@@ -596,6 +605,35 @@ module View =
         Html.div [ header dispatch
                    backToMainNavigationButton "Back" dispatch ]
 
+    let skirmishLootPage dispatch model =
+        Html.div [ header dispatch
+                   Html.p $"{model.Enemy.ToString()}"
+                   Html.hr []
+                   Html.p $"{model.Player.OwnedShip.CargoCapacity}"
+                   Html.p $"{model.Player.OwnedShip.Cargo}"
+
+                   backToMainNavigationButton "Continue" dispatch ]
+
+    let skirmishBoardBattlePage dispatch model =
+        Html.div [ header dispatch
+                   match model.Enemy with
+                   | None -> backToMainNavigationButton "Continue" dispatch
+                   | Some enemy ->
+                       Html.p $"{enemy.Ship.Crew.ToString()}"
+                       Html.hr []
+                       Html.p $"{model.Player.OwnedShip.Crew.ToString()}"
+
+                       if ShipCrew.Value(enemy.Ship.Crew) < SHIP_CREW_MINIMUM then
+                           Html.button [ prop.text "Loot enemy ship"
+                                         prop.onClick (fun _ -> dispatch OnSkirmishLootClicked) ]
+                       else
+
+                           Html.button [ prop.text "Sword"
+                                         prop.onClick (fun _ -> dispatch OnSkirmishSwordClicked) ]
+
+                           Html.button [ prop.text "Shoot Falconet"
+                                         prop.onClick (fun _ -> dispatch OnSkirmishFalconetClicked) ] ]
+
     let skirmishPage dispatch model =
         Html.div [ header dispatch
                    Html.p $"{model.Enemy.ToString()}"
@@ -703,6 +741,8 @@ module View =
                                          | [ "mainNavigationPage" ] -> mainNavigationPage dispatch model
                                          | [ "profilePage" ] -> profilePage dispatch model
                                          | [ "skirmishPage" ] -> skirmishPage dispatch model
+                                         | [ "skirmishBoardBattlePage" ] -> skirmishBoardBattlePage dispatch model
+                                         | [ "skirmishLootPage" ] -> skirmishLootPage dispatch model
 
                                          | [ "dockPage" ] -> dockPage dispatch model
                                          | [ "marketPage" ] -> marketPage dispatch model
