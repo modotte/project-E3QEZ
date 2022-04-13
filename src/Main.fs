@@ -36,6 +36,9 @@ let view' optic (source: 's) : 'a =
     let (x: Functor<'t>) = optic (fun x -> ConstFunctor x :> Functor<'b>) source
     (x :?> ConstFunctor<'a, 't>).Run
 
+let (^..) f x = view' x f
+let (.->>) f x = setl' f x
+
 [<RequireQualifiedAccess>]
 module Utility =
     let currentLocation =
@@ -136,8 +139,6 @@ module ShipKind =
             Hull = ShipHull.New(38)
             Sail = ShipSail.New(17)
             Cannon = ShipCannon.New(27) }
-
-
 
 module Port =
     let portRoyal =
@@ -352,16 +353,19 @@ let update msg model =
             let coins = PlayerCoins.Value(model.Player.Coins)
 
             let price =
-                CargoPrice.Value(view' (Port._cargo << cargoItem << CargoItem._price) port)
+                CargoPrice.Value(
+                    port
+                    ^.. (Port._cargo << cargoItem << CargoItem._price)
+                )
 
-            let cargoItemUnit' =
+            let cargoItemUnit =
                 CargoUnit.Value(view' (cargoItem << CargoItem._unit) playerCargo)
 
 
             let ship =
                 model.Player.Ship
-                |> (Ship._cargo << Cargo._wood << CargoItem._unit)
-                   .-> (CargoUnit.New(cargoItemUnit' + 1))
+                |> (Ship._cargo << cargoItem << CargoItem._unit)
+                   .->> (CargoUnit.New(cargoItemUnit + 1))
 
 
             { model.Player with
