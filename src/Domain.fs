@@ -238,7 +238,6 @@ type Msg =
     | OnSkirmishEvadeClicked
     | OnSkirmishCloseClicked
     | OnSkirmishBroadsideClicked
-    | OnSkirmishBoardBattle
     | OnSkirmishSwordClicked
     | OnSkirmishFalconetClicked
     | OnSkirmishLootClicked

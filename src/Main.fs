@@ -229,10 +229,14 @@ let update msg model =
                     | Close -> ({ model with Enemy = Some { enemy with Distance = Far } }, Cmd.none)
                     | Board -> (model, Cmd.navigate "skirmishBoardBattlePage") // TODO: Go to board battle page
 
-    | OnSkirmishBoardBattle ->
+    | OnSkirmishSwordClicked ->
         match model.Enemy with
         | None -> (model, Cmd.navigate "mainNavigationPage")
-        | Some enemy -> (model, Cmd.none)
+        | Some enemy ->
+            let enemyCrew = ShipCrew.Value(enemy.Ship.Crew)
+
+            ({ model with Enemy = Some { enemy with Ship = { enemy.Ship with Crew = ShipCrew.New(enemyCrew - 1) } } },
+             Cmd.none)
     | OnSkirmishLootClicked ->
         match model.Enemy with
         | None -> (model, Cmd.navigate "mainNavigationPage")
