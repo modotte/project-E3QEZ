@@ -25,6 +25,9 @@ let SHIP_CREW_MINIMUM = 2
 [<Literal>]
 let SHIP_CANNON_MINIMUM = 2
 
+module Random =
+    let ofRange min max = System.Random().Next(min, max)
+
 let currentLocation =
     function
     | Barbados p -> PortName.Value(p.Name)

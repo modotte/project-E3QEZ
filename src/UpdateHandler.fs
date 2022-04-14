@@ -113,7 +113,6 @@ let update msg model =
         | None -> (model, Cmd.navigateBack ())
         | Some enemy ->
             let enemyHull = ShipHull.Value(enemy.Ship.Hull)
-            // TODO: Handle sail, crew and cannons
             let enemySail = ShipSail.Value(enemy.Ship.Sail)
             let enemyCrew = ShipCrew.Value(enemy.Ship.Crew)
             let enemyCannon = ShipCannon.Value(enemy.Ship.Cannon)
@@ -291,7 +290,7 @@ let update msg model =
     | OnUpdateLocation location ->
         ({ model with
             Location = location
-            Date = Date.TomorrowAfterToday(model.Date) },
+            Date = Date.TomorrowAfterToday(Utility.Random.ofRange 1 5, model.Date) },
          Cmd.none)
     | OnNewCharacterEntriesUpdated player -> { model with Player = player }, Cmd.none
 
