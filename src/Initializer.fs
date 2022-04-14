@@ -1,4 +1,3 @@
-[<RequireQualifiedAccess>]
 module Initializer
 
 open Feliz

@@ -4,78 +4,7 @@ open Feliz
 open Feliz.Router
 open Elmish
 open Domain
-
-module Cargo =
-    let wood =
-        { Name = CargoName.New("Wood")
-          Description = CargoDescription.New("Used in repairing ship hull and buildings")
-          Price = CargoPrice.New(20)
-          Unit = CargoUnit.New(7) }
-
-    let sugar =
-        { Name = CargoName.New("Sugar")
-          Description = CargoDescription.New("Used in tea and coffee")
-          Price = CargoPrice.New(57)
-          Unit = CargoUnit.New(3) }
-
-module ShipKind =
-    let private primary =
-        { Id = ShipId.New()
-          Name = ShipName.New(Utility.DEFAULT_SHIP_NAME)
-          Size = Light
-          Class = Cutter
-          CargoCapacity = CargoCapacity.New(20)
-          Cargo =
-            { Wood = Cargo.wood
-              Sugar = Cargo.sugar }
-          CrewCapacity = CrewCapacity.New(20)
-          Crew = ShipCrew.New(20)
-          Nationality = British
-          Hull = ShipHull.New(8)
-          Sail = ShipSail.New(4)
-          Cannon = ShipCannon.New(4) }
-
-    let cutter = primary
-
-    let sloop =
-        { primary with
-            Class = Sloop
-            CargoCapacity = CargoCapacity.New(82)
-            CrewCapacity = CrewCapacity.New(40)
-            Crew = ShipCrew.New(40)
-            Hull = ShipHull.New(16)
-            Sail = ShipSail.New(11)
-            Cannon = ShipCannon.New(8) }
-
-    let junk =
-        { primary with
-            Class = Junk
-            CargoCapacity = CargoCapacity.New(75)
-            CrewCapacity = CrewCapacity.New(35)
-            Crew = ShipCrew.New(35)
-            Hull = ShipHull.New(14)
-            Sail = ShipSail.New(14)
-            Cannon = ShipCannon.New(7) }
-
-    let galleon =
-        { primary with
-            Class = Galleon
-            CargoCapacity = CargoCapacity.New(152)
-            CrewCapacity = CrewCapacity.New(64)
-            Crew = ShipCrew.New(64)
-            Hull = ShipHull.New(20)
-            Sail = ShipSail.New(10)
-            Cannon = ShipCannon.New(11) }
-
-    let frigate =
-        { primary with
-            Class = Frigate
-            CargoCapacity = CargoCapacity.New(300)
-            CrewCapacity = CrewCapacity.New(125)
-            Crew = ShipCrew.New(125)
-            Hull = ShipHull.New(38)
-            Sail = ShipSail.New(17)
-            Cannon = ShipCannon.New(27) }
+open Initializer
 
 module Port =
     let portRoyal =
