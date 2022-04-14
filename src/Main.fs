@@ -56,19 +56,23 @@ module Utility =
 
         PlayerCoins.New(PlayerCoins.Value(coins) - price)
 
-    let addIntoPlayerCargoG port cargoItem playerCargo model =
+    let addIntoPlayerCargo cargoItem playerCargo model =
         let cargoItemUnit = CargoUnit.Value(playerCargo ^.. (cargoItem << CargoItem._unit))
-
 
         let ship =
             model.Player.Ship
             |> (Ship._cargo << cargoItem << CargoItem._unit)
                .->> (CargoUnit.New(cargoItemUnit + 1))
 
+        { model.Player with Ship = ship }
 
-        { model.Player with
-            Coins = updatePlayerCoins model.Player.Coins cargoItem port
-            Ship = ship }
+    let addIntoPlayer port cargoItem playerCargo model =
+        let player = addIntoPlayerCargo cargoItem playerCargo model
+
+        player
+        |> Player._coins
+           .->> (updatePlayerCoins player.Coins cargoItem port)
+
 
     let removeFromPortCargoG cargoItem (port: Port) =
         let cargoItemUnit =
@@ -80,11 +84,6 @@ module Utility =
         port
         |> (Port._cargo << cargoItem << CargoItem._unit)
            .->> CargoUnit.New(cargoItemUnit - 1)
-
-    let addIntoPlayerCargo playerCargo port model =
-        addIntoPlayerCargoG port Cargo._wood playerCargo model
-
-    let removeFromPortCargo port = removeFromPortCargoG Cargo._wood port
 
 module Cargo =
     let wood =
@@ -388,52 +387,50 @@ let update msg model =
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
 
     | OnWoodCargoBought location ->
-        let addIntoPlayerCargo playerCargo port model =
-            Utility.addIntoPlayerCargoG port Cargo._wood playerCargo model
-
         let removeFromPortCargo port =
             Utility.removeFromPortCargoG Cargo._wood port
+
+        let playerCargo = model.Player.Ship.Cargo
 
         match location with
         | PortRoyal port ->
             ({ model with
-                Player = addIntoPlayerCargo model.Player.Ship.Cargo port model
+                Player = Utility.addIntoPlayer port Cargo._wood playerCargo model
                 Location = PortRoyal(removeFromPortCargo port) },
              Cmd.none)
 
         | Barbados port ->
             ({ model with
-                Player = addIntoPlayerCargo model.Player.Ship.Cargo port model
+                Player = Utility.addIntoPlayer port Cargo._wood playerCargo model
                 Location = PortRoyal(removeFromPortCargo port) },
              Cmd.none)
         | Nassau port ->
             ({ model with
-                Player = addIntoPlayerCargo model.Player.Ship.Cargo port model
+                Player = Utility.addIntoPlayer port Cargo._wood playerCargo model
                 Location = PortRoyal(removeFromPortCargo port) },
              Cmd.none)
 
     | OnSugarCargoBought location ->
-        let addIntoPlayerCargo playerCargo port model =
-            Utility.addIntoPlayerCargoG port Cargo._sugar playerCargo model
-
         let removeFromPortCargo port =
             Utility.removeFromPortCargoG Cargo._sugar port
+
+        let playerCargo = model.Player.Ship.Cargo
 
         match location with
         | PortRoyal port ->
             ({ model with
-                Player = addIntoPlayerCargo model.Player.Ship.Cargo port model
+                Player = Utility.addIntoPlayer port Cargo._sugar playerCargo model
                 Location = PortRoyal(removeFromPortCargo port) },
              Cmd.none)
 
         | Barbados port ->
             ({ model with
-                Player = addIntoPlayerCargo model.Player.Ship.Cargo port model
+                Player = Utility.addIntoPlayer port Cargo._sugar playerCargo model
                 Location = PortRoyal(removeFromPortCargo port) },
              Cmd.none)
         | Nassau port ->
             ({ model with
-                Player = addIntoPlayerCargo model.Player.Ship.Cargo port model
+                Player = Utility.addIntoPlayer port Cargo._sugar playerCargo model
                 Location = PortRoyal(removeFromPortCargo port) },
              Cmd.none)
 

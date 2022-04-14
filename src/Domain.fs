@@ -175,9 +175,6 @@ module Ship =
     let inline _cannon f p =
         f p.Cannon <&> fun x -> { p with Cannon = x }
 
-    let inline _cargoWoodUnit x =
-        _cargo << Cargo._wood << CargoItem._unit <| x
-
 type ShipMovement =
     | Chase
     | Still
@@ -238,6 +235,10 @@ module Port =
 
     let inline _size f p =
         f p.Size <&> fun x -> { p with Size = x }
+
+    let inline _nationality f p =
+        f p.Nationality
+        <&> fun x -> { p with Nationality = x }
 
     let inline _cargo f p =
         f p.Cargo <&> fun x -> { p with Cargo = x }
