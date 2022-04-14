@@ -275,21 +275,18 @@ let update msg model =
              Cmd.none)
 
     | OnUpdateOwnedShipName name ->
-        let player =
-            let ship = { model.Player.Ship with Name = name }
-            { model.Player with Ship = ship }
-
-        ({ model with Player = player }, Cmd.none)
+        (model
+         |> (Model._player << Player._ship << Ship._name)
+            .->> name,
+         Cmd.none)
 
     | OnUpdateOwnedShipClass shipClass ->
-        let player =
-            let ship = { model.Player.Ship with Class = shipClass }
-
-            { model.Player with Ship = ship }
-
-        ({ model with Player = player }, Cmd.none)
+        (model
+         |> (Model._player << Player._ship << Ship._class)
+            .->> shipClass,
+         Cmd.none)
     | OnLocationTravel location ->
-        let randomizedCargo port =
+        let randomizedCargoUnit port =
             let min = 0
             let max = 500
 
@@ -302,9 +299,9 @@ let update msg model =
         ({ model with
             Location =
                 match location with
-                | PortRoyal port -> PortRoyal(randomizedCargo port)
-                | Barbados port -> Barbados(randomizedCargo port)
-                | Nassau port -> Nassau(randomizedCargo port)
+                | PortRoyal port -> PortRoyal(randomizedCargoUnit port)
+                | Barbados port -> Barbados(randomizedCargoUnit port)
+                | Nassau port -> Nassau(randomizedCargoUnit port)
             Date = Date.Forward(Utility.Random.ofRange 1 5, model.Date) },
          Cmd.none)
     | OnNewCharacterEntriesUpdated player -> { model with Player = player }, Cmd.none
