@@ -1,13 +1,10 @@
 module View.Root
 
 open FSharpPlus.Lens
-open FunctorLens
 
 open Feliz
 open Feliz.UseElmish
 open Feliz.Router
-open Elmish
-open Browser.Dom
 open Fable.Core.JsInterop
 
 open Domain
