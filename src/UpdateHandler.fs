@@ -1,6 +1,5 @@
 module UpdateHandler
 
-open Feliz
 open Feliz.Router
 open Elmish
 open Domain
