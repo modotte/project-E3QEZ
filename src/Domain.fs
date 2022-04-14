@@ -325,7 +325,7 @@ module Date =
 
     let Value (Date x) = x
 
-    let TomorrowAfterToday (duration: int, Date x) = Date <| x.AddDays(duration)
+    let AfterToday (duration: int, Date x) = Date <| x.AddDays(duration)
 
     let Formatted (Date x) = string <| x.Format("dd MMMM yyyy")
 

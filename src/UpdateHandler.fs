@@ -290,7 +290,7 @@ let update msg model =
     | OnUpdateLocation location ->
         ({ model with
             Location = location
-            Date = Date.TomorrowAfterToday(Utility.Random.ofRange 1 5, model.Date) },
+            Date = Date.AfterToday(Utility.Random.ofRange 1 5, model.Date) },
          Cmd.none)
     | OnNewCharacterEntriesUpdated player -> { model with Player = player }, Cmd.none
 
