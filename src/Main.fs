@@ -1,7 +1,7 @@
 module Main
 
-open FSharpPlus
 open FSharpPlus.Lens
+open FunctorLens
 
 open Feliz
 open Feliz.UseElmish
@@ -13,32 +13,6 @@ open Domain
 
 importSideEffects "./styles/global.scss"
 
-[<AbstractClass>]
-type Functor<'a>() =
-    abstract member Select<'b> : ('a -> 'b) -> Functor<'b>
-    static member Map(x: Functor<'a>, f: 'a -> 'b) : Functor<'b> = x.Select(f)
-
-type IdentityFunctor<'a>(value: 'a) =
-    inherit Functor<'a>()
-    member __.Run = value
-    override __.Select<'b>(f: 'a -> 'b) = IdentityFunctor(f value) :> Functor<'b>
-
-type ConstFunctor<'p, 'a>(value: 'p) =
-    inherit Functor<'a>()
-    member __.Run = value
-    override __.Select<'b>(f: 'a -> 'b) = ConstFunctor(value) :> Functor<'b>
-
-let setl' optic value (source: 's) : 't =
-    let (x: Functor<'t>) = optic (fun _ -> IdentityFunctor value :> Functor<'v>) source
-    (x :?> IdentityFunctor<'t>).Run
-
-let view' optic (source: 's) : 'a =
-    let (x: Functor<'t>) = optic (fun x -> ConstFunctor x :> Functor<'b>) source
-    (x :?> ConstFunctor<'a, 't>).Run
-
-let (^..) f x = view' x f
-let (.->>) f x = setl' f x
-
 [<RequireQualifiedAccess>]
 module Utility =
     let currentLocation =
@@ -47,6 +21,7 @@ module Utility =
         | PortRoyal p -> PortName.Value(p.Name)
         | Nassau p -> PortName.Value(p.Name)
 
+    /// `op` should only be either + or - for adding or remove player coins
     let private updatePlayerCoins op coins cargoItem port =
         let price =
             CargoPrice.Value(
@@ -56,7 +31,7 @@ module Utility =
 
         PlayerCoins.New((op) (PlayerCoins.Value(coins)) price)
 
-    let addIntoPlayerCargo cargoItem playerCargo model =
+    let private addIntoPlayerCargo cargoItem playerCargo model =
         let cargoItemUnit = CargoUnit.Value(playerCargo ^.. (cargoItem << CargoItem._unit))
 
         let ship =
@@ -74,7 +49,7 @@ module Utility =
            .->> (updatePlayerCoins (-) player.Coins cargoItem port)
 
 
-    let removeFromPortCargoG cargoItem (port: Port) =
+    let removeFromPortCargo cargoItem (port: Port) =
         let cargoItemUnit =
             CargoUnit.Value(
                 port
@@ -388,7 +363,7 @@ let update msg model =
 
     | OnWoodCargoBought location ->
         let removeFromPortCargo port =
-            Utility.removeFromPortCargoG Cargo._wood port
+            Utility.removeFromPortCargo Cargo._wood port
 
         let playerCargo = model.Player.Ship.Cargo
 
@@ -412,7 +387,7 @@ let update msg model =
 
     | OnSugarCargoBought location ->
         let removeFromPortCargo port =
-            Utility.removeFromPortCargoG Cargo._sugar port
+            Utility.removeFromPortCargo Cargo._sugar port
 
         let playerCargo = model.Player.Ship.Cargo
 
