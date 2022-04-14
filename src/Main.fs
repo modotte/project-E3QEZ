@@ -13,53 +13,6 @@ open Domain
 
 importSideEffects "./styles/global.scss"
 
-[<RequireQualifiedAccess>]
-module Utility =
-    let currentLocation =
-        function
-        | Barbados p -> PortName.Value(p.Name)
-        | PortRoyal p -> PortName.Value(p.Name)
-        | Nassau p -> PortName.Value(p.Name)
-
-    /// `op` should only be either + or - for adding or remove player coins
-    let private updatePlayerCoins op coins cargoItem port =
-        let price =
-            CargoPrice.Value(
-                port
-                ^.. (Port._cargo << cargoItem << CargoItem._price)
-            )
-
-        PlayerCoins.New((op) (PlayerCoins.Value(coins)) price)
-
-    let private addIntoPlayerCargo cargoItem playerCargo model =
-        let cargoItemUnit = CargoUnit.Value(playerCargo ^.. (cargoItem << CargoItem._unit))
-
-        let ship =
-            model.Player.Ship
-            |> (Ship._cargo << cargoItem << CargoItem._unit)
-               .->> (CargoUnit.New(cargoItemUnit + 1))
-
-        { model.Player with Ship = ship }
-
-    let addIntoPlayer port cargoItem playerCargo model =
-        let player = addIntoPlayerCargo cargoItem playerCargo model
-
-        player
-        |> Player._coins
-           .->> (updatePlayerCoins (-) player.Coins cargoItem port)
-
-
-    let removeFromPortCargo cargoItem (port: Port) =
-        let cargoItemUnit =
-            CargoUnit.Value(
-                port
-                ^.. (Port._cargo << cargoItem << CargoItem._unit)
-            )
-
-        port
-        |> (Port._cargo << cargoItem << CargoItem._unit)
-           .->> CargoUnit.New(cargoItemUnit - 1)
-
 module Cargo =
     let wood =
         { Name = CargoName.New("Wood")
@@ -73,31 +26,10 @@ module Cargo =
           Price = CargoPrice.New(57)
           Unit = CargoUnit.New(3) }
 
-[<Literal>]
-let PLAYER_MIN_AGE = 18
-
-[<Literal>]
-let PLAYER_MAX_AGE = 60
-
-[<Literal>]
-let DEFAULT_SHIP_NAME = "Heart of Ocean"
-
-[<Literal>]
-let SHIP_HULL_MINIMUM = 4
-
-[<Literal>]
-let SHIP_SAIL_MINIMUM = 2
-
-[<Literal>]
-let SHIP_CREW_MINIMUM = 2
-
-[<Literal>]
-let SHIP_CANNON_MINIMUM = 2
-
 module ShipKind =
     let private primary =
         { Id = ShipId.New()
-          Name = ShipName.New(DEFAULT_SHIP_NAME)
+          Name = ShipName.New(Utility.DEFAULT_SHIP_NAME)
           Size = Light
           Class = Cutter
           CargoCapacity = CargoCapacity.New(20)
@@ -234,7 +166,7 @@ let update msg model =
         match model.Enemy with
         | None -> (model, Cmd.navigateBack ())
         | Some enemy ->
-            if ShipHull.Value(model.Player.Ship.Hull) < SHIP_HULL_MINIMUM then
+            if ShipHull.Value(model.Player.Ship.Hull) < Utility.SHIP_HULL_MINIMUM then
                 ({ model with State = Lose }, Cmd.navigate "")
             // TODO: Randomize damage
             else
@@ -313,30 +245,30 @@ let update msg model =
             let enemyCrew = ShipCrew.Value(enemy.Ship.Crew)
             let enemyCannon = ShipCannon.Value(enemy.Ship.Cannon)
 
-            if enemyHull < SHIP_HULL_MINIMUM then
+            if enemyHull < Utility.SHIP_HULL_MINIMUM then
                 (model, Cmd.navigate "mainNavigationPage")
             else
                 let updateEnemySail sail ship =
                     // TODO: Probably redundant check?
-                    if enemySail < SHIP_SAIL_MINIMUM then
+                    if enemySail < Utility.SHIP_SAIL_MINIMUM then
                         ship
                     else
                         { ship with Sail = ShipSail.New(enemySail - sail) }
 
                 let updateEnemyHull hull ship =
-                    if enemyHull < SHIP_HULL_MINIMUM then
+                    if enemyHull < Utility.SHIP_HULL_MINIMUM then
                         ship
                     else
                         { ship with Hull = ShipHull.New(enemyHull - hull) }
 
                 let updateEnemyCrew crew ship =
-                    if enemyCrew < SHIP_CREW_MINIMUM then
+                    if enemyCrew < Utility.SHIP_CREW_MINIMUM then
                         ship
                     else
                         { ship with Crew = ShipCrew.New(enemyCrew - crew) }
 
                 let updateEnemyCannon cannon ship =
-                    if enemyCannon < SHIP_CANNON_MINIMUM then
+                    if enemyCannon < Utility.SHIP_CANNON_MINIMUM then
                         ship
                     else
                         { ship with Cannon = ShipCannon.New(enemyCrew - cannon) }
@@ -566,8 +498,8 @@ module View =
                    Html.br []
                    simpleLabel "Age"
                    Html.input [ prop.type'.range
-                                prop.min PLAYER_MIN_AGE
-                                prop.max PLAYER_MAX_AGE
+                                prop.min Utility.PLAYER_MIN_AGE
+                                prop.max Utility.PLAYER_MAX_AGE
                                 prop.onChange (fun a ->
                                     dispatch
                                     <| OnNewCharacterEntriesUpdated(setl Player._age (PlayerAge.New(a)) model.Player)) ]
@@ -643,7 +575,7 @@ module View =
                        Html.hr []
                        Html.p $"{model.Player.Ship.Crew.ToString()}"
 
-                       if ShipCrew.Value(enemy.Ship.Crew) < SHIP_CREW_MINIMUM then
+                       if ShipCrew.Value(enemy.Ship.Crew) < Utility.SHIP_CREW_MINIMUM then
                            Html.button [ prop.text "Loot enemy ship"
                                          prop.onClick (fun _ -> dispatch OnSkirmishLootClicked) ]
                        else
