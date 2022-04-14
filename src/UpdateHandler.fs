@@ -6,53 +6,6 @@ open Elmish
 open Domain
 open Initializer
 
-module Port =
-    let portRoyal =
-        { Name = PortName.New("Port Royal")
-          Description = PortDescription.New("A rich port")
-          Size = Large
-          Nationality = British
-          Cargo =
-            { Wood = { Cargo.wood with Unit = CargoUnit.New(270) }
-              Sugar = { Cargo.sugar with Unit = CargoUnit.New(100) } } }
-
-    let barbados =
-        { Name = PortName.New("Barbados")
-          Description = PortDescription.New("A wealthy port")
-          Size = Medium
-          Nationality = British
-          Cargo =
-            { Wood = { Cargo.wood with Unit = CargoUnit.New(167) }
-              Sugar = { Cargo.sugar with Unit = CargoUnit.New(82) } } }
-
-    let nassau =
-        { Name = PortName.New("Nassau")
-          Description = PortDescription.New("A poor port")
-          Size = Small
-          Nationality = British
-          Cargo =
-            { Wood = { Cargo.wood with Unit = CargoUnit.New(60) }
-              Sugar = { Cargo.sugar with Unit = CargoUnit.New(20) } } }
-
-
-let init =
-    function
-    | Some oldModel -> (oldModel, Cmd.none)
-    | None ->
-        ({ Date = Date.New() // Every location change should pass at least 1 day
-           Location = PortRoyal Port.portRoyal
-           Player =
-             { FirstName = PlayerFirstName.New("Johnathan")
-               LastName = PlayerLastName.New("Smith")
-               Age = PlayerAge.New(18)
-               Coins = PlayerCoins.New(650)
-               Ship = ShipKind.sloop }
-           Enemy = None
-           State = InProgress
-           Settings = { MusicVolume = MusicVolume.New(50) }
-           CurrentUrl = Router.currentUrl () },
-         Cmd.none)
-
 let update msg model =
     match msg with
     | OnFailure err ->
