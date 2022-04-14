@@ -302,7 +302,7 @@ let update msg model =
                 | PortRoyal port -> PortRoyal(randomizedCargo port)
                 | Barbados port -> Barbados(randomizedCargo port)
                 | Nassau port -> Nassau(randomizedCargo port)
-            Date = Date.AfterToday(Utility.Random.ofRange 1 5, model.Date) },
+            Date = Date.Forward(Utility.Random.ofRange 1 5, model.Date) },
          Cmd.none)
     | OnNewCharacterEntriesUpdated player -> { model with Player = player }, Cmd.none
 
