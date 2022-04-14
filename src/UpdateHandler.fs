@@ -290,11 +290,14 @@ let update msg model =
         ({ model with Player = player }, Cmd.none)
     | OnLocationTravel location ->
         let randomizedCargo port =
+            let min = 0
+            let max = 500
+
             port
             |> (Port._cargo << Cargo._wood << CargoItem._unit)
-               .->> CargoUnit.New(Utility.Random.ofRange 0 500)
+               .->> CargoUnit.New(Utility.Random.ofRange min max)
             |> (Port._cargo << Cargo._sugar << CargoItem._unit)
-               .->> CargoUnit.New(Utility.Random.ofRange 0 500)
+               .->> CargoUnit.New(Utility.Random.ofRange min max)
 
         ({ model with
             Location =
