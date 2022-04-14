@@ -1,12 +1,22 @@
 # Hearties
 
-A naval combat & trading text game based in the Age of Sail
+A naval combat & trading text game based in the Age of Sail.
 
+
+## Trading
+
+|  Cargo   |  Base Price   |
+|----------|:-------------:|
+| Wood     |  20           |
+| Sugar    |  27           |
+| Tea      |  25           |
+| Rum      |  26           |
+    
 
 ## Requirements
 
-* [dotnet SDK](https://www.microsoft.com/net/download/core) 2.0.0 or higher
-* [node.js](https://nodejs.org) 10.0.0 or higher
+* [dotnet SDK](https://www.microsoft.com/net/download/core) 6.0.0 or higher
+* [node.js](https://nodejs.org) 14.0.0 or higher
 
 
 ## Editor

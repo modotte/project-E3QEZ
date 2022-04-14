@@ -213,15 +213,16 @@ module PortDescription =
     let New (x: string) = PortDescription x
     let Value (PortDescription x) = x
 
-type PortSize =
-    | Small
-    | Medium
-    | Large
+type PortWealth =
+    | Rich
+    | Prosperous
+    | Average
+    | Poor
 
 type Port =
     { Name: PortName
       Description: PortDescription
-      Size: PortSize
+      Wealth: PortWealth
       Nationality: Nationality
       Cargo: Cargo }
 
@@ -233,8 +234,8 @@ module Port =
         f p.Description
         <&> fun x -> { p with Description = x }
 
-    let inline _size f p =
-        f p.Size <&> fun x -> { p with Size = x }
+    let inline _wealth f p =
+        f p.Wealth <&> fun x -> { p with Wealth = x }
 
     let inline _nationality f p =
         f p.Nationality
