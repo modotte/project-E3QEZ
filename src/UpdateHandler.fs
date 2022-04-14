@@ -285,7 +285,7 @@ let update msg model =
             { model.Player with Ship = ship }
 
         ({ model with Player = player }, Cmd.none)
-    | OnUpdateLocation location ->
+    | OnLocationTravel location ->
         ({ model with
             Location = location
             Date = Date.AfterToday(Utility.Random.ofRange 1 5, model.Date) },

@@ -231,15 +231,15 @@ let mainNavigationPage dispatch model =
                Html.ul [ Html.li [ Html.button [ prop.text "Port Royal"
                                                  prop.onClick (fun _ ->
                                                      dispatch
-                                                     <| OnUpdateLocation(PortRoyal Initializer.Port.portRoyal)) ] ]
+                                                     <| OnLocationTravel(PortRoyal Initializer.Port.portRoyal)) ] ]
                          Html.li [ Html.button [ prop.text "Barbados"
                                                  prop.onClick (fun _ ->
                                                      dispatch
-                                                     <| OnUpdateLocation(Barbados Initializer.Port.barbados)) ] ]
+                                                     <| OnLocationTravel(Barbados Initializer.Port.barbados)) ] ]
                          Html.li [ Html.button [ prop.text "Nassau"
                                                  prop.onClick (fun _ ->
                                                      dispatch
-                                                     <| OnUpdateLocation(Nassau Initializer.Port.nassau)) ] ] ] ]
+                                                     <| OnLocationTravel(Nassau Initializer.Port.nassau)) ] ] ] ]
 
 [<ReactComponent>]
 let MainView () =

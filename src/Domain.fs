@@ -396,7 +396,7 @@ type Msg =
 
     | OnUpdateOwnedShipName of ShipName
     | OnUpdateOwnedShipClass of ShipClass
-    | OnUpdateLocation of Location
+    | OnLocationTravel of Location
     | OnNewCharacterEntriesUpdated of Player
 
     | OnSettingsClicked
