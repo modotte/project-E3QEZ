@@ -3,4 +3,4 @@ module Main
 open Feliz
 open Browser.Dom
 
-ReactDOM.render (View.Root.mainView, document.getElementById "feliz-app")
+ReactDOM.render (View.Root.MainView, document.getElementById "feliz-app")

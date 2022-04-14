@@ -12,7 +12,7 @@ open Fable.Core.JsInterop
 
 open Domain
 
-importSideEffects "./styles/global.scss"
+importSideEffects "../styles/global.scss"
 
 let simpleLabel (text: string) = Html.label [ prop.text text ]
 
@@ -245,7 +245,7 @@ let mainNavigationPage dispatch model =
                                                      <| OnUpdateLocation(Nassau Initializer.Port.nassau)) ] ] ] ]
 
 [<ReactComponent>]
-let mainView () =
+let MainView () =
     let (model, dispatch) =
         // TODO: Turn below into manual save
         React.useElmish (Storage.load >> Initializer.init, Storage.updateStorage UpdateHandler.update, [||])
