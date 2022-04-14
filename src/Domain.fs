@@ -243,6 +243,9 @@ module Port =
     let inline _cargo f p =
         f p.Cargo <&> fun x -> { p with Cargo = x }
 
+    let inline _cargoWoodUnit x =
+        _cargo << Cargo._wood << CargoItem._unit <| x
+
 type Location =
     | Barbados of Port
     | PortRoyal of Port
@@ -294,13 +297,6 @@ module Player =
 
     let inline _ship f p =
         f p.Ship <&> fun x -> { p with Ship = x }
-
-    let inline _shipCargoWoodUnit x =
-        _ship
-        << Ship._cargo
-        << Cargo._wood
-        << CargoItem._unit
-        <| x
 
 type MusicVolume = private MusicVolume of int
 

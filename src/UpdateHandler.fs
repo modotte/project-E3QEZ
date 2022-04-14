@@ -1,5 +1,8 @@
 module UpdateHandler
 
+open FSharpPlus.Lens
+open FunctorLens
+
 open Feliz.Router
 open Elmish
 open Domain
@@ -286,8 +289,19 @@ let update msg model =
 
         ({ model with Player = player }, Cmd.none)
     | OnLocationTravel location ->
+        let randomizedCargo port =
+            port
+            |> (Port._cargo << Cargo._wood << CargoItem._unit)
+               .->> CargoUnit.New(Utility.Random.ofRange 0 500)
+            |> (Port._cargo << Cargo._sugar << CargoItem._unit)
+               .->> CargoUnit.New(Utility.Random.ofRange 0 500)
+
         ({ model with
-            Location = location
+            Location =
+                match location with
+                | PortRoyal port -> PortRoyal(randomizedCargo port)
+                | Barbados port -> Barbados(randomizedCargo port)
+                | Nassau port -> Nassau(randomizedCargo port)
             Date = Date.AfterToday(Utility.Random.ofRange 1 5, model.Date) },
          Cmd.none)
     | OnNewCharacterEntriesUpdated player -> { model with Player = player }, Cmd.none
