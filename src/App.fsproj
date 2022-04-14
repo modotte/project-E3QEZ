@@ -9,7 +9,10 @@
     <Compile Include="Domain.fs" />
     <Compile Include="Utility.fs" />
     <Compile Include="Storage.fs" />
+    <Compile Include="Initializer.fs" />
     <Compile Include="Extensions.fs" />
+    <Compile Include="UpdateHandler.fs" />
+    <Compile Include="View/Root.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
