@@ -23,9 +23,7 @@ let update msg model =
 
         let randomizedInitialDistance () =
             let cases = Reflection.FSharpType.GetUnionCases(typeof<ShipDistance>)
-            let index = System.Random().Next(cases.Length)
-            let case = cases[index]
-            Reflection.FSharpValue.MakeUnion(case, [||]) :?> ShipDistance
+            Reflection.FSharpValue.MakeUnion(Utility.Random.ofChoice (cases), [||]) :?> ShipDistance
 
         let enemy =
             Some
