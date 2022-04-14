@@ -286,6 +286,13 @@ let update msg model =
             .->> shipClass,
          Cmd.none)
     | OnLocationTravel location ->
+        let randomizedCargoPrice port =
+            port
+            |> (Port._cargo << Cargo._wood << CargoItem._price)
+               .->> CargoPrice.New(Utility.Random.ofRange 20 34)
+            |> (Port._cargo << Cargo._sugar << CargoItem._price)
+               .->> CargoPrice.New(Utility.Random.ofRange 27 39)
+
         let randomizedCargoUnit port =
             let min = 0
             let max = 500
@@ -296,12 +303,15 @@ let update msg model =
             |> (Port._cargo << Cargo._sugar << CargoItem._unit)
                .->> CargoUnit.New(Utility.Random.ofRange min max)
 
+        let randomizedCargo port =
+            randomizedCargoPrice port |> randomizedCargoUnit
+
         ({ model with
             Location =
                 match location with
-                | PortRoyal port -> PortRoyal(randomizedCargoUnit port)
-                | Barbados port -> Barbados(randomizedCargoUnit port)
-                | Nassau port -> Nassau(randomizedCargoUnit port)
+                | PortRoyal port -> PortRoyal(randomizedCargo port)
+                | Barbados port -> Barbados(randomizedCargo port)
+                | Nassau port -> Nassau(randomizedCargo port)
             Date = Date.Forward(Utility.Random.ofRange 1 5, model.Date) },
          Cmd.none)
     | OnNewCharacterEntriesUpdated player -> { model with Player = player }, Cmd.none

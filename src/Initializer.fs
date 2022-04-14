@@ -15,7 +15,7 @@ module Cargo =
     let sugar =
         { Name = CargoName.New("Sugar")
           Description = CargoDescription.New("Used in tea and coffee")
-          Price = CargoPrice.New(57)
+          Price = CargoPrice.New(27)
           Unit = CargoUnit.New(3) }
 
 module ShipKind =
