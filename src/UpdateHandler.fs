@@ -167,6 +167,9 @@ let update msg model =
     | OnMarketClicked -> (model, Cmd.navigate "marketPage")
 
     | OnWoodCargoBought location ->
+        let addIntoPlayer port playerCargo =
+            Utility.addIntoPlayer port Cargo._wood playerCargo model
+
         let removeFromPortCargo port =
             Utility.removeFromPortCargo Cargo._wood port
 
@@ -175,22 +178,25 @@ let update msg model =
         match location with
         | PortRoyal port ->
             ({ model with
-                Player = Utility.addIntoPlayer port Cargo._wood playerCargo model
+                Player = addIntoPlayer port playerCargo
                 Location = PortRoyal(removeFromPortCargo port) },
              Cmd.none)
 
         | Barbados port ->
             ({ model with
-                Player = Utility.addIntoPlayer port Cargo._wood playerCargo model
+                Player = addIntoPlayer port playerCargo
                 Location = PortRoyal(removeFromPortCargo port) },
              Cmd.none)
         | Nassau port ->
             ({ model with
-                Player = Utility.addIntoPlayer port Cargo._wood playerCargo model
+                Player = addIntoPlayer port playerCargo
                 Location = PortRoyal(removeFromPortCargo port) },
              Cmd.none)
 
     | OnSugarCargoBought location ->
+        let addIntoPlayer port playerCargo =
+            Utility.addIntoPlayer port Cargo._sugar playerCargo model
+
         let removeFromPortCargo port =
             Utility.removeFromPortCargo Cargo._sugar port
 
@@ -199,103 +205,73 @@ let update msg model =
         match location with
         | PortRoyal port ->
             ({ model with
-                Player = Utility.addIntoPlayer port Cargo._sugar playerCargo model
+                Player = addIntoPlayer port playerCargo
                 Location = PortRoyal(removeFromPortCargo port) },
              Cmd.none)
 
         | Barbados port ->
             ({ model with
-                Player = Utility.addIntoPlayer port Cargo._sugar playerCargo model
+                Player = addIntoPlayer port playerCargo
                 Location = PortRoyal(removeFromPortCargo port) },
              Cmd.none)
         | Nassau port ->
             ({ model with
-                Player = Utility.addIntoPlayer port Cargo._sugar playerCargo model
+                Player = addIntoPlayer port playerCargo
                 Location = PortRoyal(removeFromPortCargo port) },
              Cmd.none)
 
     | OnWoodCargoSold location ->
-        let removeFromPlayerCargo ownedCargo port =
-            // TODO: Handle zero coins and cargo
-            let coins = PlayerCoins.Value(model.Player.Coins)
-            let price = CargoPrice.Value(port.Cargo.Wood.Price)
-            let ownedWoodUnit = CargoUnit.Value(ownedCargo.Wood.Unit)
-
-            let ownedCargo =
-                { model.Player.Ship.Cargo.Wood with Unit = CargoUnit.New(ownedWoodUnit - 1) }
-
-            let ownedCargo = { model.Player.Ship.Cargo with Wood = ownedCargo }
-
-            let ownedShip = { model.Player.Ship with Cargo = ownedCargo }
-
-            { model.Player with
-                Coins = PlayerCoins.New(coins + price)
-                Ship = ownedShip }
+        let removeFromPlayer port playerCargo =
+            Utility.removeFromPlayer port Cargo._wood playerCargo model
 
         let addIntoPortCargo port =
-            let portWoodUnit = CargoUnit.Value(port.Cargo.Wood.Unit)
-            let portWood = { port.Cargo.Wood with Unit = CargoUnit.New(portWoodUnit + 1) }
-            let portCargo = { port.Cargo with Wood = portWood }
-            { port with Cargo = portCargo }
+            Utility.addIntoPortCargo Cargo._wood port
+
+        let playerCargo = model.Player.Ship.Cargo
 
         match location with
-        | PortRoyal p ->
+        | PortRoyal port ->
             ({ model with
-                Player = removeFromPlayerCargo model.Player.Ship.Cargo p
-                Location = PortRoyal(addIntoPortCargo p) },
+                Player = removeFromPlayer port playerCargo
+                Location = PortRoyal(addIntoPortCargo port) },
              Cmd.none)
 
-        | Barbados p ->
+        | Barbados port ->
             ({ model with
-                Player = removeFromPlayerCargo model.Player.Ship.Cargo p
-                Location = PortRoyal(addIntoPortCargo p) },
+                Player = removeFromPlayer port playerCargo
+                Location = PortRoyal(addIntoPortCargo port) },
              Cmd.none)
-        | Nassau p ->
+        | Nassau port ->
             ({ model with
-                Player = removeFromPlayerCargo model.Player.Ship.Cargo p
-                Location = PortRoyal(addIntoPortCargo p) },
+                Player = removeFromPlayer port playerCargo
+                Location = PortRoyal(addIntoPortCargo port) },
              Cmd.none)
 
     | OnSugarCargoSold location ->
-        let removeFromPlayerCargo ownedCargo port =
-            // TODO: Handle zero coins and cargo
-            let coins = PlayerCoins.Value(model.Player.Coins)
-            let price = CargoPrice.Value(port.Cargo.Sugar.Price)
-            let ownedSugarUnit = CargoUnit.Value(ownedCargo.Sugar.Unit)
-
-            let ownedCargo =
-                { model.Player.Ship.Cargo.Wood with Unit = CargoUnit.New(ownedSugarUnit - 1) }
-
-            let ownedCargo = { model.Player.Ship.Cargo with Sugar = ownedCargo }
-
-            let ownedShip = { model.Player.Ship with Cargo = ownedCargo }
-
-            { model.Player with
-                Coins = PlayerCoins.New(coins + price)
-                Ship = ownedShip }
+        let removeFromPlayer port playerCargo =
+            Utility.removeFromPlayer port Cargo._sugar playerCargo model
 
         let addIntoPortCargo port =
-            let portSugarUnit = CargoUnit.Value(port.Cargo.Sugar.Unit)
-            let portSugar = { port.Cargo.Sugar with Unit = CargoUnit.New(portSugarUnit + 1) }
-            let portCargo = { port.Cargo with Sugar = portSugar }
-            { port with Cargo = portCargo }
+            Utility.addIntoPortCargo Cargo._sugar port
+
+        let playerCargo = model.Player.Ship.Cargo
 
         match location with
-        | PortRoyal p ->
+        | PortRoyal port ->
             ({ model with
-                Player = removeFromPlayerCargo model.Player.Ship.Cargo p
-                Location = PortRoyal(addIntoPortCargo p) },
+                Player = removeFromPlayer port playerCargo
+                Location = PortRoyal(addIntoPortCargo port) },
              Cmd.none)
 
-        | Barbados p ->
+        | Barbados port ->
             ({ model with
-                Player = removeFromPlayerCargo model.Player.Ship.Cargo p
-                Location = PortRoyal(addIntoPortCargo p) },
+                Player = removeFromPlayer port playerCargo
+                Location = PortRoyal(addIntoPortCargo port) },
              Cmd.none)
-        | Nassau p ->
+        | Nassau port ->
             ({ model with
-                Player = removeFromPlayerCargo model.Player.Ship.Cargo p
-                Location = PortRoyal(addIntoPortCargo p) },
+                Player = removeFromPlayer port playerCargo
+                Location = PortRoyal(addIntoPortCargo port) },
              Cmd.none)
 
     | OnUpdateOwnedShipName name ->

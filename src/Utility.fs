@@ -41,6 +41,7 @@ let private updatePlayerCoins op coins cargoItem port =
 
     PlayerCoins.New((op) (PlayerCoins.Value(coins)) price)
 
+// Buying
 let private addIntoPlayerCargo cargoItem playerCargo model =
     let cargoItemUnit = CargoUnit.Value(playerCargo ^.. (cargoItem << CargoItem._unit))
 
@@ -69,3 +70,32 @@ let removeFromPortCargo (cargoItem: (CargoItem -> Functor<CargoItem>) -> Cargo -
     port
     |> (Port._cargo << cargoItem << CargoItem._unit)
        .->> CargoUnit.New(cargoItemUnit - 1)
+
+// Selling
+let private removeFromPlayerCargo cargoItem playerCargo model =
+    let cargoItemUnit = CargoUnit.Value(playerCargo ^.. (cargoItem << CargoItem._unit))
+
+    let ship =
+        model.Player.Ship
+        |> (Ship._cargo << cargoItem << CargoItem._unit)
+           .->> (CargoUnit.New(cargoItemUnit - 1))
+
+    { model.Player with Ship = ship }
+
+let removeFromPlayer port cargoItem playerCargo model =
+    let player = addIntoPlayerCargo cargoItem playerCargo model
+
+    player
+    |> Player._coins
+       .->> (updatePlayerCoins (+) player.Coins cargoItem port)
+
+let addIntoPortCargo (cargoItem: (CargoItem -> Functor<CargoItem>) -> Cargo -> Functor<Cargo>) (port: Port) =
+    let cargoItemUnit =
+        CargoUnit.Value(
+            port
+            ^.. (Port._cargo << cargoItem << CargoItem._unit)
+        )
+
+    port
+    |> (Port._cargo << cargoItem << CargoItem._unit)
+       .->> CargoUnit.New(cargoItemUnit + 1)
