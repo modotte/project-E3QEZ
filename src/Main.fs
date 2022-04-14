@@ -47,17 +47,17 @@ module Utility =
         | PortRoyal p -> PortName.Value(p.Name)
         | Nassau p -> PortName.Value(p.Name)
 
-    let addIntoPlayerCargoG port cargoItem playerCargo model =
-        let coins = PlayerCoins.Value(model.Player.Coins)
-
+    let updatePlayerCoins coins cargoItem port =
         let price =
             CargoPrice.Value(
                 port
                 ^.. (Port._cargo << cargoItem << CargoItem._price)
             )
 
-        let cargoItemUnit =
-            CargoUnit.Value(view' (cargoItem << CargoItem._unit) playerCargo)
+        PlayerCoins.New(PlayerCoins.Value(coins) - price)
+
+    let addIntoPlayerCargoG port cargoItem playerCargo model =
+        let cargoItemUnit = CargoUnit.Value(playerCargo ^.. (cargoItem << CargoItem._unit))
 
 
         let ship =
@@ -67,7 +67,7 @@ module Utility =
 
 
         { model.Player with
-            Coins = PlayerCoins.New(coins - price)
+            Coins = updatePlayerCoins model.Player.Coins cargoItem port
             Ship = ship }
 
     let removeFromPortCargoG cargoItem (port: Port) =
