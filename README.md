@@ -11,7 +11,11 @@ A naval combat & trading text game based in the Age of Sail.
 | Sugar    |  27           |
 | Tea      |  25           |
 | Rum      |  26           |
-    
+
+## Buy Low, Sell High
+
+Some ports will make some type of cargo
+on demand (expensive) and some type of other over supplied (cheap) on random. Trade cargo between different ports to make profits.
 
 ## Requirements
 

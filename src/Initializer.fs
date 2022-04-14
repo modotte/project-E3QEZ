@@ -81,7 +81,7 @@ module Port =
     let portRoyal =
         { Name = PortName.New("Port Royal")
           Description = PortDescription.New("A rich port")
-          Wealth = Rich
+          Population = Huge
           Nationality = British
           Cargo =
             { Wood = { Cargo.wood with Unit = CargoUnit.New(270) }
@@ -90,7 +90,7 @@ module Port =
     let barbados =
         { Name = PortName.New("Barbados")
           Description = PortDescription.New("A wealthy port")
-          Wealth = Prosperous
+          Population = Large
           Nationality = British
           Cargo =
             { Wood = { Cargo.wood with Unit = CargoUnit.New(167) }
@@ -99,7 +99,7 @@ module Port =
     let nassau =
         { Name = PortName.New("Nassau")
           Description = PortDescription.New("A poor port")
-          Wealth = Average
+          Population = Medium
           Nationality = British
           Cargo =
             { Wood = { Cargo.wood with Unit = CargoUnit.New(60) }
