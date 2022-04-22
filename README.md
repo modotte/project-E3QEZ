@@ -1,6 +1,11 @@
-# Hearties
+# Project E3QEZ
 
-A naval combat & trading text game based in the Age of Sail.
+A naval combat & trading text game based in the Age of Sail to learn about
+F# lens used in Fable + Feliz environment. I certainly won't finish this project into a complete form and
+something end user could play. The primary goal to learn about basic getter and setter lens is already achieved. Anyways, I'll still release the code as an archive for my own future references especially for FSHarp+ lens and basic functional domain modelling (src/Domain.fs). 
+
+
+Also, a thought came to mind while developing the domain model. Does single discriminated union carries overhead or is it zero cost similar to data declared with Haskell's `newtype`?
 
 
 ## Trading
@@ -59,4 +64,4 @@ npm test
 
 ## License
 
-This software is licensed under the GPL-3.0 license. For more details, please see LICENSE file.
+This software is licensed under the MIT license. For more details, please see LICENSE file.
